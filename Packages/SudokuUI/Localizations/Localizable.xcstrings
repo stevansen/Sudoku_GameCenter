@@ -1817,6 +1817,29 @@
           }
         }
       }
+    },
+    "Damit lässt sich die %lld in %@ eintragen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Damit lässt sich die %lld in %@ eintragen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That lets you place the %1$lld in %2$@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Così puoi inserire il %1$lld in %2$@."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

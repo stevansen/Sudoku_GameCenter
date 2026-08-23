@@ -111,10 +111,18 @@ public struct GameView: View {
                 .font(.footnote)
                 .foregroundStyle(Theme.secondaryText)
                 .fixedSize(horizontal: false, vertical: true)
+            // When the step only rules candidates out there is nothing on the
+            // board to change, so say what it opens up — otherwise "Eintragen"
+            // would place a digit the explanation never mentioned.
+            if hint.placements.isEmpty, let placement = session.hintPlacement {
+                Text(HintText.unlocks(placement))
+                    .font(.footnote.weight(.medium))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             HStack {
                 Button(String(localized: "Verstanden", bundle: .module)) { session.dismissHint() }
                     .buttonStyle(.bordered)
-                if hint.placements.first != nil {
+                if session.hintPlacement != nil {
                     Button(String(localized: "Eintragen", bundle: .module)) {
                         session.applyHint()
                         _ = model.didPlay()

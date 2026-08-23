@@ -44,6 +44,36 @@ public enum LogicalSolver {
         return firstDeduction(in: board, techniques: Technique.byCost)
     }
 
+    /// The next step, together with the digit it makes placeable.
+    ///
+    /// A hint has to end in something the player can do. The board holds digits;
+    /// candidates live in the player's own notes, if they keep any. So a step
+    /// that only rules candidates out — a naked pair, locked candidates, an
+    /// X-wing — leaves the board exactly as it was, and asking again returns the
+    /// very same step. On the tiers defined by needing those techniques that is
+    /// not an edge case: it is where every game ends up.
+    ///
+    /// So the reasoning is followed on from that first step until it produces a
+    /// digit. What gets explained is still the first step, because that is the
+    /// one the player has to see; `unlocks` is what it leads to.
+    public static func nextHint(_ grid: Grid, within steps: Int = 24) -> Hint? {
+        guard var board = CandidateBoard(grid) else { return nil }
+        guard let first = firstDeduction(in: board, techniques: Technique.byCost) else { return nil }
+        if let placement = first.placements.first {
+            return Hint(deduction: first, unlocks: placement)
+        }
+
+        guard apply(first, to: &board) else { return Hint(deduction: first, unlocks: nil) }
+        for _ in 0..<steps {
+            guard let next = firstDeduction(in: board, techniques: Technique.byCost) else { break }
+            if let placement = next.placements.first {
+                return Hint(deduction: first, unlocks: placement)
+            }
+            guard apply(next, to: &board) else { break }
+        }
+        return Hint(deduction: first, unlocks: nil)
+    }
+
     static func firstDeduction(in board: CandidateBoard, techniques: [Technique]) -> Deduction? {
         for technique in techniques {
             if let deduction = find(technique, in: board) { return deduction }

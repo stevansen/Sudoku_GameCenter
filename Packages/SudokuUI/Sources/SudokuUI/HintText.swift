@@ -48,6 +48,12 @@ public enum HintText {
     }
 
     /// The explanation under the headline.
+    /// What an elimination-only step opens up once it has been carried out.
+    public static func unlocks(_ placement: CellDigit) -> String {
+        String(localized: "Damit lässt sich die \(placement.digit) in \(cellName(placement.cell)) eintragen.",
+               bundle: .module)
+    }
+
     public static func explanation(for deduction: Deduction) -> String {
         if let placement = deduction.placements.first {
             let cell = cellName(placement.cell)

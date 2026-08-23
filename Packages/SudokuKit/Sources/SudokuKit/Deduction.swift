@@ -58,3 +58,21 @@ func combinations<T>(_ items: [T], choose k: Int) -> [[T]] {
     }
     return result
 }
+
+
+/// A deduction to show the player, and the digit it lets them write.
+///
+/// The two are not always the same thing. When the next step only rules
+/// candidates out, the explanation is about that step while `unlocks` is the
+/// placement it opens up further along — without it a hint on a hard puzzle has
+/// nothing to offer but the same sentence again.
+public struct Hint: Sendable, Hashable {
+    public let deduction: Deduction
+    /// `nil` only when the grid is finished, contradictory, or beyond the solver.
+    public let unlocks: CellDigit?
+
+    public init(deduction: Deduction, unlocks: CellDigit?) {
+        self.deduction = deduction
+        self.unlocks = unlocks
+    }
+}

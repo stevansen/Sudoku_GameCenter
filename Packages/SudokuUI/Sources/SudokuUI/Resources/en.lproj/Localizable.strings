@@ -10,6 +10,7 @@
 "Bestenlisten & Erfolge" = "Leaderboards & Achievements";
 "Block %lld" = "Box %lld";
 "Dadurch fallen %lld Kandidaten weg." = "That rules out %lld candidates.";
+"Damit lässt sich die %lld in %@ eintragen." = "That lets you place the %1$lld in %2$@.";
 "Die %lld gehört in %@." = "The %1$lld belongs in %2$@.";
 "Die %lld kann in %@ nur in %@ stehen." = "The %1$lld can only go in %3$@ within %2$@.";
 "Diesen übernehmen" = "Use this one";

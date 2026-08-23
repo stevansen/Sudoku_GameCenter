@@ -255,6 +255,20 @@ localisation-free and its tests about logic rather than strings.
   that takes 0.6 s on its own takes eight seconds under that load. The tests
   count attempts instead, which is what the cost is actually made of and does not
   move with the machine.
+- **A hint has to end in something the player can do.** The board holds digits;
+  candidates live in the player's own notes, if they keep any. So a step that
+  only rules candidates out — locked candidates, a naked pair, an X-wing —
+  changes nothing on the board, and the next hint rebuilds its candidates from
+  that same board and finds the very same step. On the tiers *defined* by needing
+  those techniques this is not an edge case but where every game ends up: playing
+  a hard puzzle on hints alone stalled at 33 empty cells after 25 hints.
+
+  `LogicalSolver.nextHint` now follows the reasoning on from that first step until
+  it produces a digit. What gets explained is still the first step, because that
+  is the one worth seeing; the card adds a line saying what it lets you place, so
+  the button never writes a digit the explanation never mentioned. Every tier can
+  now be finished on hints alone, and there is a test per tier that does exactly
+  that.
 - **The generator version exists for exactly this.** `SavedGame` stores only the
   puzzle *id*; the grid is regenerated from it. Changing what a seed produces
   would hand a player in mid-game a different puzzle with their entries scattered

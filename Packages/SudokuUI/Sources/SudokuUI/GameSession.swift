@@ -52,6 +52,9 @@ public final class GameSession {
 
     /// The cell the last hint pointed at, for highlighting.
     public private(set) var hint: Deduction?
+    /// What the current hint lets the player write, which is not always what the
+    /// hint explains — see ``applyHint()``.
+    public private(set) var hintPlacement: CellDigit?
 
     private var undoStack: [Move] = []
     private var redoStack: [Move] = []
@@ -231,23 +234,33 @@ public final class GameSession {
         // Hint from the player's own board, so it follows their work — but only
         // if that work is still correct, otherwise the advice would be nonsense.
         let source = wrongCells(revealAll: true).isEmpty ? grid : puzzle.givens
-        guard let deduction = LogicalSolver.nextDeduction(source) else { return nil }
+        guard let found = LogicalSolver.nextHint(source) else { return nil }
         hintsUsed += 1
-        hint = deduction
-        return deduction
+        hint = found.deduction
+        hintPlacement = found.unlocks
+        return found.deduction
     }
 
-    /// Places what the current hint found.
+    /// Places what the current hint leads to.
+    ///
+    /// Not necessarily what the explanation is about: a step that only rules
+    /// candidates out has nothing to write, so what gets placed is the digit that
+    /// reasoning opens up. Without this a hint on a hard puzzle just repeats
+    /// itself and the game cannot be finished on hints alone.
     public func applyHint() {
-        guard let placement = hint?.placements.first else { return }
+        guard let placement = hint?.placements.first ?? hintPlacement else { return }
         let mode = inputMode
         inputMode = .digit
         enter(placement.digit, at: placement.cell)
         inputMode = mode
         hint = nil
+        hintPlacement = nil
     }
 
-    public func dismissHint() { hint = nil }
+    public func dismissHint() {
+        hint = nil
+        hintPlacement = nil
+    }
 
     // MARK: - Clock
 

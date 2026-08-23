@@ -10,6 +10,7 @@
 "Bestenlisten & Erfolge" = "Classifiche e obiettivi";
 "Block %lld" = "Riquadro %lld";
 "Dadurch fallen %lld Kandidaten weg." = "Così cadono %lld candidati.";
+"Damit lässt sich die %lld in %@ eintragen." = "Così puoi inserire il %1$lld in %2$@.";
 "Die %lld gehört in %@." = "Il %1$lld va in %2$@.";
 "Die %lld kann in %@ nur in %@ stehen." = "In %2$@ il %1$lld può stare solo in %3$@.";
 "Diesen übernehmen" = "Tieni questa";
