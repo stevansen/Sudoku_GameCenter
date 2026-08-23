@@ -83,6 +83,8 @@ public final class AppModel {
         // the game must be ready whether or not they ever finish with it.
         Task { await connectGameCenter() }
 
+        await handlePendingLaunchRequest()
+
         #if DEBUG
         // Apple TV has no pointer, so its screens cannot be driven the way the
         // iOS ones are. This lets a build be launched straight into a game to be
@@ -165,6 +167,19 @@ public final class AppModel {
         await gameCenter.authenticate()
         isSignedInToGameCenter = await gameCenter.isAuthenticated()
         await queue.flush(using: gameCenter)
+    }
+
+    /// Acts on whatever a Shortcuts or Siri intent asked for before the app was
+    /// running. Call it on launch and whenever the app comes to the front.
+    public func handlePendingLaunchRequest() async {
+        #if canImport(AppIntents)
+        guard let request = PendingLaunchRequest.take() else { return }
+        if request == PendingLaunchRequest.Request.daily.rawValue {
+            await startDailyPuzzle()
+        } else if let difficulty = Difficulty(rawValue: request) {
+            await startGame(difficulty: difficulty)
+        }
+        #endif
     }
 
     public var canContinue: Bool { session != nil && session?.completedAt == nil }

@@ -47,7 +47,7 @@ Quellsprache ist Deutsch. Der Katalog
 Wahrheit; `Scripts/generate-strings.py` erzeugt daraus die `.strings`-Dateien,
 die tatsächlich ausgeliefert werden.
 
-Warum nicht der Katalog direkt: Xkode kompiliert `.xcstrings` beim App-Build,
+Warum nicht der Katalog direkt: Xcode kompiliert `.xcstrings` beim App-Build,
 SwiftPM kopiert sie unverarbeitet durch. Läge nur der Katalog im Ressourcenordner,
 fände `swift test` keine Übersetzung und jeder String fiele stillschweigend auf
 seinen deutschen Schlüssel zurück. Lägen beide Formen dort, stritten die zwei

@@ -5,6 +5,7 @@ import SudokuSync
 /// The app's one entry point, shared by every platform.
 public struct RootView: View {
     @State private var model: AppModel
+    @Environment(\.scenePhase) private var scenePhase
 
     public init(model: AppModel = AppModel()) {
         _model = State(initialValue: model)
@@ -47,6 +48,11 @@ public struct RootView: View {
             }
         }
         .task { await model.load() }
+        .onChange(of: scenePhase) { _, phase in
+            // An intent may have run while the app sat in the background.
+            guard phase == .active else { return }
+            Task { await model.handlePendingLaunchRequest() }
+        }
         .alert(
             String(localized: "Anderer Spielstand gefunden", bundle: .module),
             isPresented: .constant(model.pendingConflict != nil),
