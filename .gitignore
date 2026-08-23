@@ -1,0 +1,23 @@
+# Xcode / Swift
+DerivedData/
+build/
+.build/
+.swiftpm/
+*.xcuserstate
+*.xcscmblueprint
+xcuserdata/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+
+# Signing & secrets — never commit
+*.p12
+*.cer
+*.mobileprovision
+AuthKey_*.p8
+ExportOptions.plist
+.env
+
+# macOS
+.DS_Store
