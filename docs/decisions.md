@@ -266,6 +266,22 @@ localisation-free and its tests about logic rather than strings.
   on in Debug would mean nobody without a paid team could build or test the Mac
   app. Release carries them — you cannot ship without a team anyway — and Debug
   takes them on request with `SUDOKU_ENTITLEMENTS=Sudoku.entitlements`.
+- **Every timing above was measured in a debug build, and they are all about
+  thirty times too pessimistic.** The release test run made that plain: the engine
+  suite takes 3.8 s optimised against 165 s unoptimised, and generating a hard
+  puzzle takes 12 ms rather than 375 ms. Evil, the dearest tier, is 23 ms.
+
+  So the twelve-second cold start that started the performance work was a debug
+  artefact. In what ships, the whole warm-up is well under a tenth of a second.
+  The changes still stand — fewer wasted attempts is fewer wasted attempts, and
+  the ordering between tiers held exactly — but the problem they solved was
+  smaller than it looked.
+
+  The parallel attempt batching is kept rather than removed. In release it buys
+  single-digit milliseconds, which would not justify it on its own; in a debug
+  build it is worth a factor of three, and that is the build the tests and every
+  development run use. `Difficulty.generationCost` now carries release figures,
+  because that is what the app actually does.
 - **Totals merge; they are not overwritten.** The obvious way to sync statistics
   is "newest wins", and it loses data: points are a sum of what was earned, not a
   high score. Two devices playing offline for a week, one of them wins, the other

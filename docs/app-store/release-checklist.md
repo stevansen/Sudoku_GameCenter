@@ -56,7 +56,12 @@ Developer-Portal → *Certificates, Identifiers & Profiles*.
       xcodebuild -scheme Sudoku -configuration Debug \
         SUDOKU_ENTITLEMENTS=Sudoku.entitlements build
       ```
-- [ ] `swift test -c release -Xswiftc -enable-testing` grün.
+- [x] `swift test -c release -Xswiftc -enable-testing` grün — 138 Tests, alle vier
+      Pakete. Optimiert läuft die Engine-Suite in 3,8 s statt 165 s.
+- [ ] **[du]** Release-Build der **Mac**-App: geht erst mit gesetztem
+      `DEVELOPMENT_TEAM`. Die Entitlements hängen an der Release-Konfiguration,
+      und macOS baut mit Entitlements ohne Entwicklerzertifikat nicht. iOS und
+      tvOS bauen Release auch ohne Team.
 
 ## D — App Store Connect: Eintrag
 

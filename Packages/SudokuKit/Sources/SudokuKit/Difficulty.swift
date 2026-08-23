@@ -4,20 +4,25 @@ public enum Difficulty: String, CaseIterable, Codable, Sendable, Hashable {
     case easy, medium, hard, expert, evil
 
     /// Roughly what one puzzle of this tier costs to generate, in milliseconds —
-    /// median of five on an Apple silicon Mac.
+    /// median of five on an Apple silicon Mac, **built for release**.
     ///
     /// Not a schedule, a running order: it decides what the factory warms up
-    /// first. The figures are worth keeping because the cost is not what the
-    /// ordering of the tiers suggests. Hard is dearer than expert, because it
-    /// must need more than singles while staying under a chain — a narrower
-    /// target than either neighbour — and evil is dearest of all.
+    /// first. Worth keeping because the cost is not what the ordering of the
+    /// tiers suggests — evil is dearest, hard is dearer than expert, because hard
+    /// must need more than singles while staying under a chain, a narrower target
+    /// than either neighbour.
+    ///
+    /// Unoptimised these are roughly thirty times larger (hard 375 ms, evil
+    /// 561 ms). Every performance measurement in `docs/decisions.md` up to this
+    /// point was taken in a debug build and is that much too pessimistic; the
+    /// ordering held, the absolute figures did not.
     public var generationCost: Int {
         switch self {
-        case .easy: 55
-        case .medium: 95
-        case .expert: 275
-        case .hard: 645
-        case .evil: 1_005
+        case .easy: 1
+        case .medium: 1
+        case .expert: 7
+        case .hard: 12
+        case .evil: 23
         }
     }
 
