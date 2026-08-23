@@ -16,6 +16,9 @@ public final class AppModel {
     public private(set) var stats = PlayerStats()
     public private(set) var lastResult: ScoreBreakdown?
     public private(set) var isPreparing = false
+    /// Whether the board is on screen. Lives here rather than in the view so the
+    /// Mac menu bar can start a game without reaching into a view's state.
+    public var isPlaying = false
 
     public private(set) var isSignedInToGameCenter = false
 
@@ -162,6 +165,7 @@ public final class AppModel {
         defer { isPreparing = false }
         let puzzle = PuzzleGenerator.daily(for: date, difficulty: difficulty)
         await begin(puzzle: puzzle, isDaily: true)
+        isPlaying = true
     }
 
     public func startGame(difficulty: Difficulty) async {
@@ -169,6 +173,7 @@ public final class AppModel {
         defer { isPreparing = false }
         let puzzle = await factory.puzzle(for: difficulty)
         await begin(puzzle: puzzle, isDaily: false)
+        isPlaying = true
         Task.detached(priority: .background) { [factory] in await factory.refill() }
     }
 

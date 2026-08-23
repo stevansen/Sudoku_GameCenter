@@ -168,6 +168,23 @@ localisation-free and its tests about logic rather than strings.
   best times, streak), so the gap is local totals only. This needs CloudKit with
   a proper record per solve, which needs a container that does not exist yet.
 
+## Milestone 5 decisions
+
+- **The board is laid out as real rows and columns**, not one absolutely
+  positioned layer with offsets. `.offset` is a render-time transform: it moves
+  what you see without moving the view's frame, and tvOS's focus engine navigates
+  by frames. The old version would have looked right on Apple TV and been
+  impossible to play.
+- **Navigation state moved into `AppModel`.** The Mac menu bar has to be able to
+  start a game, and reaching into a view's `@State` from a `Commands` block is not
+  possible. `isPlaying` living in the model is the smaller compromise.
+- **The undo/redo menu items replace the system ones.** SwiftUI's built-in items
+  drive an `UndoManager` this game does not use, so they would have been dead.
+- **tvOS and visionOS are written but unverified.** Their platform runtimes are
+  not installed here, so neither has been compiled even once. Claiming them in
+  `SUPPORTED_PLATFORMS` is intent, not evidence — the first thing to do once the
+  runtimes are downloaded is to build both and expect breakage.
+
 ## Known, deliberate, not done yet
 
 - **Generation is a retry loop, not a search.** Roughly one attempt in five is

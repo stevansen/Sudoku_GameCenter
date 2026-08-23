@@ -4,10 +4,11 @@ import SudokuSync
 
 /// The app's one entry point, shared by every platform.
 public struct RootView: View {
-    @State private var model = AppModel()
-    @State private var isPlaying = false
+    @State private var model: AppModel
 
-    public init() {}
+    public init(model: AppModel = AppModel()) {
+        _model = State(initialValue: model)
+    }
 
     static func conflictMessage(_ conflict: AppModel.SyncConflict) -> String {
         let remote = conflict.remote
@@ -23,30 +24,24 @@ public struct RootView: View {
     public var body: some View {
         NavigationStack {
             Group {
-                if isPlaying, let session = model.session {
+                if model.isPlaying, let session = model.session {
                     GameView(session: session, model: model)
                 } else {
                     HomeView(
                         model: model,
                         onStart: { difficulty in
-                            Task {
-                                await model.startGame(difficulty: difficulty)
-                                isPlaying = true
-                            }
+                            Task { await model.startGame(difficulty: difficulty) }
                         },
-                        onContinue: { isPlaying = true },
+                        onContinue: { model.isPlaying = true },
                         onStartDaily: {
-                            Task {
-                                await model.startDailyPuzzle()
-                                isPlaying = true
-                            }
+                            Task { await model.startDailyPuzzle() }
                         })
                 }
             }
             .toolbar {
-                if isPlaying {
+                if model.isPlaying {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button(String(localized: "Zurück")) { isPlaying = false }
+                        Button(String(localized: "Zurück")) { model.isPlaying = false }
                     }
                 }
             }
@@ -70,7 +65,7 @@ public struct RootView: View {
             if let breakdown = model.lastResult, let session = model.session {
                 ResultSheetView(breakdown: breakdown, session: session) {
                     model.dismissResult()
-                    isPlaying = false
+                    model.isPlaying = false
                 }
                 .interactiveDismissDisabled()
             }

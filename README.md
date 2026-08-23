@@ -3,7 +3,9 @@
 A procedurally generated sudoku for every Apple platform, with Game Center
 leaderboards, achievements, and a game that follows you across your devices.
 
-Status: **Milestone 4 complete** — the game follows you between devices, with a daily puzzle.
+Status: **Milestone 5 in progress** — iOS, iPadOS and macOS are built and running.
+tvOS and visionOS code is written but has **never been compiled**: those platforms
+are not installed on the machine it was developed on. See "Platforms" below.
 
 ## Layout
 
@@ -104,6 +106,29 @@ Measured on Apple silicon, release build, 25 puzzles per tier:
 | hard | 28 ms | 97 ms | 25–31 | locked candidates, hidden pair |
 | expert | 62 ms | 141 ms | 25–31 | W-wing, XY-wing, colouring |
 | evil | 29 ms | 64 ms | 22–26 | forcing chain |
+
+## Platforms
+
+| Platform | Code | Built | Run |
+|---|---|---|---|
+| iOS | shared | yes | yes, verified in the simulator |
+| iPadOS | shared + wide layout | yes | portrait verified; landscape layout unverified |
+| macOS | shared + menu bar + keyboard | yes | launches; window contents not verified (no screen-recording permission here) |
+| tvOS | focus-based board | **no** | **no** |
+| visionOS | shared | **no** | **no** |
+| watchOS | not started (Milestone 6) | — | — |
+
+tvOS and visionOS need their platform runtimes, which are a several-gigabyte
+download:
+
+```bash
+xcodebuild -downloadPlatform tvOS
+xcodebuild -downloadPlatform visionOS
+```
+
+Until then, treat both as unwritten rather than working: the board was rebuilt
+with real row-and-column layout precisely so the tvOS focus engine can move
+through it, but that claim is untested.
 
 ## Shipping
 

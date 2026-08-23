@@ -12,30 +12,17 @@ public struct GameView: View {
     }
 
     public var body: some View {
-        VStack(spacing: 16) {
-            header
-            BoardView(session: session)
-                .padding(.horizontal, 4)
-            if let hint = session.hint {
-                hintCard(hint)
+        GeometryReader { geometry in
+            // Wide and short means iPad in landscape, a Mac window or a TV. There
+            // the board should not shrink to make room for a keypad underneath it.
+            let isWide = geometry.size.width > geometry.size.height
+                && geometry.size.width > 700
+            Group {
+                if isWide { wideLayout } else { compactLayout }
             }
-            // Board sits under the header, controls stay at the bottom edge —
-            // without this the whole stack floats in the middle of the screen.
-            Spacer(minLength: 0)
-            ControlBarView(session: session, onPlay: { _ = model.didPlay() })
-            NumberPadView(session: session, onPlay: { _ = model.didPlay() })
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
         .padding()
-        .frame(maxWidth: 560, maxHeight: .infinity, alignment: .top)
-        .frame(maxWidth: .infinity)
-        // Without this the empty large-title area eats a fifth of the screen.
-        .toolbarTitleDisplayMode(.inline)
-        // Handoff: the puzzle id is all another device needs to open the same game.
-        .userActivity("com.sudoku.app.playing") { activity in
-            activity.title = session.puzzle.difficulty.localizedName
-            activity.userInfo = ["puzzleID": session.puzzle.id.description]
-            activity.isEligibleForHandoff = true
-        }
         .task {
             // One clock for the whole screen, stopped when the view goes away.
             while !Task.isCancelled {
@@ -43,10 +30,48 @@ public struct GameView: View {
                 model.tick()
             }
         }
+        #if !os(tvOS)
+        .toolbarTitleDisplayMode(.inline)
+        #endif
+        // Handoff: the puzzle id is all another device needs to open the same game.
+        .userActivity("com.sudoku.app.playing") { activity in
+            activity.title = session.puzzle.difficulty.localizedName
+            activity.userInfo = ["puzzleID": session.puzzle.id.description]
+            activity.isEligibleForHandoff = true
+        }
         #if os(macOS)
         .focusable()
         .onKeyPress { press in handleKey(press) }
         #endif
+    }
+
+    private var compactLayout: some View {
+        VStack(spacing: 16) {
+            header
+            BoardView(session: session)
+                .padding(.horizontal, 4)
+            if let hint = session.hint { hintCard(hint) }
+            Spacer(minLength: 0)
+            ControlBarView(session: session, onPlay: { _ = model.didPlay() })
+            NumberPadView(session: session, onPlay: { _ = model.didPlay() })
+        }
+        .frame(maxWidth: 560)
+        .frame(maxWidth: .infinity)
+    }
+
+    private var wideLayout: some View {
+        HStack(alignment: .top, spacing: 32) {
+            BoardView(session: session)
+                .frame(maxWidth: .infinity)
+            VStack(spacing: 20) {
+                header
+                if let hint = session.hint { hintCard(hint) }
+                Spacer(minLength: 0)
+                ControlBarView(session: session, onPlay: { _ = model.didPlay() })
+                NumberPadView(session: session, onPlay: { _ = model.didPlay() })
+            }
+            .frame(maxWidth: 420)
+        }
     }
 
     private var header: some View {
