@@ -223,11 +223,30 @@ localisation-free and its tests about logic rather than strings.
   is not held while it runs. Yielding between puzzles was not enough on its own,
   because a single hard puzzle takes over two seconds and holds the actor for all
   of it. Warm-up is now 1.8 s and a request behind it waits about 0.3 s.
-- **Hard is the most expensive tier to generate**, at roughly 3.9 s per puzzle —
-  ahead of expert and evil. It retries until the puzzle needs more than singles
-  without needing a chain, which is a narrower target than either neighbour.
-  `Difficulty.generationCost` records the measured figures; it exists to order
-  the warm-up, not as a promise about any particular machine.
+- **Point symmetry was what made the hard tiers slow, and it was not obvious.**
+  Hard took 3.9 s per puzzle — more than evil — and the time was not in rating or
+  solving but in *digging grids and throwing them away*: sixteen attempts, fifteen
+  rejected. Digging in symmetric pairs stops about four givens short of where free
+  digging stops (28 against 24), and at that density the puzzle can be solved with
+  singles alone, which is exactly what the tier rejects. Measured over twelve
+  digs, hard produced **nothing usable while symmetric and five in twelve
+  without**, at the same cost per dig.
+
+  So from generator version 2, the symmetry is kept only for the tiers that
+  require no particular technique — easy and medium. Hard fell from 3.9 s to
+  0.19 s, evil from 1.25 s to 0.54 s, expert from 1.15 s to 0.86 s.
+
+  The trade is real and worth naming: hard, expert and evil grids are no longer
+  point-symmetric. They are less pretty. A tier defined by the techniques it
+  demands cannot also be defined by its shape — the shape was quietly preventing
+  it from being what it claimed to be.
+- **The generator version exists for exactly this.** `SavedGame` stores only the
+  puzzle *id*; the grid is regenerated from it. Changing what a seed produces
+  would hand a player in mid-game a different puzzle with their entries scattered
+  over it. So `PuzzleID.currentVersion` went to 2 and version 1 keeps its old
+  symmetry rule for good. A test asserts a stored v1 id still names its own grid,
+  and that v2 makes something different of the same seed — otherwise the test
+  would be checking nothing.
 - **The cost of extra platforms is disk, not code.** Each runtime plus its
   simulator data runs to several gigabytes. Nothing in the app had to change for
   visionOS; the machine had to.

@@ -5,7 +5,7 @@
 public struct PuzzleID: Sendable, Hashable, Codable, CustomStringConvertible {
     /// Bump this whenever a generator change would alter the puzzle a seed produces.
     /// Older versions must keep working so existing IDs stay valid.
-    public static let currentVersion = 1
+    public static let currentVersion = 2
 
     public let version: Int
     public let difficulty: Difficulty

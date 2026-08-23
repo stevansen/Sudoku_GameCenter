@@ -59,10 +59,33 @@ struct GeneratorTests {
 
     @Test func puzzleIdRoundTripsThroughItsStringForm() throws {
         let id = PuzzleID(difficulty: .expert, seed: 0x3F9A_12C4_0B7E_5518)
-        #expect(id.description == "v1-expert-3f9a12c40b7e5518")
+        #expect(id.description
+            == "v\(PuzzleID.currentVersion)-expert-3f9a12c40b7e5518")
         #expect(PuzzleID(id.description) == id)
         let data = try JSONEncoder().encode(id)
         #expect(try JSONDecoder().decode(PuzzleID.self, from: data) == id)
         #expect(PuzzleID("nonsense") == nil)
+    }
+
+    /// An id written by an older build still has to name the same grid. The
+    /// puzzle is not stored anywhere — only its id is — so if a version change
+    /// altered what a seed produces, a game in progress would come back as a
+    /// different puzzle with the player's entries scattered over it.
+    @Test func anOlderIdStillNamesItsOwnGrid() throws {
+        let stored = "v1-hard-000000000000007b"
+        let id = try #require(PuzzleID(stored))
+        #expect(id.version == 1)
+        #expect(id.description == stored)
+
+        let first = PuzzleGenerator.generate(id)
+        let again = PuzzleGenerator.generate(id)
+        #expect(first.givens == again.givens)
+        #expect(first.id.description == stored)
+
+        // And it is not simply the same as what version 2 makes of that seed.
+        let current = PuzzleGenerator.generate(
+            PuzzleID(difficulty: .hard, seed: 0x7B, version: 2))
+        #expect(current.givens != first.givens,
+                "sonst prüft dieser Test nichts")
     }
 }

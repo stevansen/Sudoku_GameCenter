@@ -8,7 +8,7 @@ public struct GeneratorOptions: Sendable {
         case rotational180
     }
 
-    /// `nil` picks per difficulty: symmetric up to expert, free-form for evil.
+    /// `nil` picks per difficulty and generator version.
     public var symmetry: Symmetry?
     /// How many seeds to try before settling for the closest match. Digging a
     /// puzzle that genuinely needs its tier's techniques succeeds in roughly one
@@ -22,8 +22,22 @@ public struct GeneratorOptions: Sendable {
 
     public static let `default` = GeneratorOptions()
 
-    func symmetry(for difficulty: Difficulty) -> Symmetry {
-        symmetry ?? (difficulty == .evil ? .none : .rotational180)
+    /// Point symmetry makes a prettier grid and stops the digging about four
+    /// givens short of where it would otherwise stop — and at that density the
+    /// puzzle can be solved with singles alone. For the tiers that must *require*
+    /// a technique that is fatal: measured over twelve attempts, hard produced
+    /// nothing usable while symmetric and five in twelve without, at the same
+    /// cost per dig. So from version 2 the symmetry is kept only where no
+    /// technique is required of the puzzle — easy and medium.
+    ///
+    /// Version 1 keeps its old rule so that ids already stored still regenerate
+    /// the grid they were saved with.
+    func symmetry(for difficulty: Difficulty, version: Int) -> Symmetry {
+        if let symmetry { return symmetry }
+        if version <= 1 {
+            return difficulty == .evil ? .none : .rotational180
+        }
+        return difficulty.requiredTechniqueTier == nil ? .rotational180 : .none
     }
 }
 
@@ -46,7 +60,8 @@ public enum PuzzleGenerator {
             var rng = SplitMix64(seed: seed)
 
             let solution = solvedGrid(using: &rng)
-            let givens = dig(from: solution, difficulty: id.difficulty, options: options, using: &rng)
+            let givens = dig(from: solution, difficulty: id.difficulty, options: options,
+                             version: id.version, using: &rng)
 
             // Cheap rejection before the expensive part. Four attempts in five
             // miss the tier, and deciding that with a singles-only solve costs a
@@ -80,7 +95,8 @@ public enum PuzzleGenerator {
         // cannot loop.
         var rng = SplitMix64(seed: mix(id.seed, 0xFFFF))
         let solution = solvedGrid(using: &rng)
-        let givens = dig(from: solution, difficulty: .easy, options: options, using: &rng)
+        let givens = dig(from: solution, difficulty: .easy, options: options,
+                         version: id.version, using: &rng)
         let rating = DifficultyRater.rate(givens)
         return Puzzle(
             id: id, givens: givens, solution: solution,
@@ -147,13 +163,14 @@ public enum PuzzleGenerator {
     /// it gets, and greedy removal pushes it to whichever of the two binds first.
     static func dig(
         from solution: Grid, difficulty: Difficulty,
-        options: GeneratorOptions, using rng: inout SplitMix64
+        options: GeneratorOptions, version: Int = PuzzleID.currentVersion,
+        using rng: inout SplitMix64
     ) -> Grid {
         var grid = solution
         var remaining = 81
         digPass(&grid, remaining: &remaining, ceiling: difficulty.techniqueCeiling,
                 floor: difficulty.minimumGivens, order: (0..<81).shuffled(using: &rng),
-                symmetry: options.symmetry(for: difficulty))
+                symmetry: options.symmetry(for: difficulty, version: version))
         return grid
     }
 
