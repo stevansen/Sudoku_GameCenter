@@ -6,15 +6,12 @@ Zeichengrenzen von Apple stehen in Klammern. Der Prüfbefehl in
 ## Name (max. 30)
 
 ```
-Sudoku
+Sudoku GameCenter
 ```
 
-Falls „Sudoku" als Name bereits vergeben ist — sehr wahrscheinlich —, ist die
-Ausweichvariante:
-
-```
-Sudoku Kern
-```
+Entschieden und im Store eingetragen. „Sudoku" allein war der ursprüngliche
+Vorschlag und ist mit hoher Wahrscheinlichkeit vergeben; die frühere
+Ausweichvariante „Sudoku Kern" ist damit hinfällig.
 
 ## Untertitel (max. 30)
 
@@ -103,5 +100,5 @@ Die erste Version.
 ## Copyright
 
 ```
-2026 <TODO: dein Name oder deine Firma>
+2026 Stefan Hellweger
 ```
