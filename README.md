@@ -3,12 +3,14 @@
 A procedurally generated sudoku for every Apple platform, with Game Center
 leaderboards, achievements, and a game that follows you across your devices.
 
-Status: **Milestone 1 complete** — `SudokuKit`, the engine. No app target yet.
+Status: **Milestone 2 complete** — a playable iOS/macOS/visionOS app on top of the engine.
 
 ## Layout
 
 ```
+App/                    the Xcode project and app target (com.sudoku.app)
 Packages/SudokuKit/     the engine: grid, solvers, generator, rating, scoring
+Packages/SudokuUI/      game state, persistence and the shared SwiftUI screens
 Configuration/          entitlements, privacy manifest, Info.plist and export templates
 docs/decisions.md       why things are the way they are, with the measurements
 docs/gamecenter-setup.md   the leaderboard and achievement IDs to enter in App Store Connect
@@ -16,13 +18,18 @@ docs/app-store/         release checklist, metadata (de/en), age rating, review 
 docs/privacy/           privacy policy (de/en) and the App Privacy questionnaire answers
 ```
 
-Planned, per the build plan: `SudokuStore` (SwiftData + CloudKit),
-`SudokuGameCenter` (GameKit), `SudokuUI` (shared SwiftUI), and the app targets.
+Planned, per the build plan: `SudokuGameCenter` (GameKit, Milestone 3) and
+CloudKit-backed storage (Milestone 4), then tvOS and watchOS targets.
 
 ## Build and test
 
 ```bash
 cd Packages/SudokuKit && swift test
+cd Packages/SudokuUI && swift test
+
+# the app
+cd App && xcodebuild -scheme Sudoku \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
 ```
 
 Performance budgets only assert in a release build, because a debug build is an

@@ -21,3 +21,7 @@ ExportOptions.plist
 
 # macOS
 .DS_Store
+
+# Xcode user state inside the project
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/

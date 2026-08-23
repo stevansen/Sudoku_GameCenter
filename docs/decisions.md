@@ -101,6 +101,21 @@ localisation-free and its tests about logic rather than strings.
   naked singles by the time they are looked for. The reference puzzle from the
   Wikipedia article needs nothing but naked singles.
 
+## Milestone 2 deviations
+
+- **A JSON file, not SwiftData, for now.** The plan called for SwiftData without
+  CloudKit at this stage. A `Codable` file store is a fraction of the code, needs
+  no model container to test, and Milestone 4 replaces it wholesale when CloudKit
+  mirroring arrives — writing SwiftData twice would have been the wasteful path.
+  `GameStore` is an actor with four methods, so the swap is contained.
+- **No string catalogue yet.** `Bundle.module` only exists for packages that ship
+  resources, and localisation is Milestone 6. German is the source language and
+  every user-facing string already goes through `String(localized:)`, so adding
+  the catalogue later is mechanical.
+- **`Info.plist` lives beside the target folder, not inside it.** Xcode's
+  synchronized file groups copy everything in the folder as a resource, which
+  collides with the generated one. Keeping it one level up is the fix.
+
 ## Known, deliberate, not done yet
 
 - **Generation is a retry loop, not a search.** Roughly one attempt in five is
