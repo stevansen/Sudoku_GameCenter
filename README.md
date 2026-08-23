@@ -8,9 +8,8 @@ run at least once, in German, Italian and English, with a daily-puzzle widget,
 Shortcuts and Siri intents, onboarding and an accessibility pass behind it.
 watchOS and visionOS are deliberately out of scope.
 
-Not yet done: statistics and history do not sync between devices, there are no
-store screenshots, and nobody has played it with VoiceOver switched on for real —
-the simulator cannot run it. See `docs/accessibility.md` and
+Not yet done: nobody has played it with VoiceOver switched on for real — the
+simulator cannot run it. See `docs/accessibility.md` and
 `docs/app-store/release-checklist.md`.
 
 ## Layout
@@ -28,8 +27,9 @@ docs/app-store/         release checklist, metadata (de/en), age rating, review 
 docs/privacy/           privacy policy (de/en) and the App Privacy questionnaire answers
 ```
 
-Statistics and history do **not** sync between devices yet — only the game in
-progress follows you. See `docs/decisions.md`.
+Statistics merge between devices rather than overwriting each other: what is
+stored is the evidence, and the totals are derived from it, so two devices that
+played offline both end up with both weeks. See `docs/decisions.md`.
 
 ## Build and test
 

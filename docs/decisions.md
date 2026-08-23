@@ -266,6 +266,31 @@ localisation-free and its tests about logic rather than strings.
   on in Debug would mean nobody without a paid team could build or test the Mac
   app. Release carries them — you cannot ship without a team anyway — and Debug
   takes them on request with `SUDOKU_ENTITLEMENTS=Sudoku.entitlements`.
+- **Totals merge; they are not overwritten.** The obvious way to sync statistics
+  is "newest wins", and it loses data: points are a sum of what was earned, not a
+  high score. Two devices playing offline for a week, one of them wins, the other
+  week is gone.
+
+  So `PlayerStats` stores no aggregates. It stores the evidence — which puzzles
+  were solved, for how many points, in what time, on which days — as sets and
+  per-key dictionaries, and derives everything the player sees from it. Merging
+  is union, maximum and minimum: commutative, associative and idempotent, so it
+  does not matter which device merges first or how many times. Streaks are runs
+  through the set of days, which is why two devices alternating days produce one
+  streak rather than two of length one.
+
+  Solving the same puzzle on both devices counts once, because the evidence is
+  keyed by puzzle id.
+
+  One case is not exact: points from a stats file written before this existed
+  cannot be attributed to any puzzle, so they ride along as a single number and
+  merge by maximum rather than sum. It can only affect data that predates the
+  model.
+- **Publishing has to publish the union.** Reading is not enough and neither is
+  writing. The first version pushed this device's totals on finishing a game, and
+  overwrote whatever the other device had published since — the integration test
+  caught it immediately: two devices, two games, and each ended up with only its
+  own. Both directions now happen in one step.
 - **A hint has to end in something the player can do.** The board holds digits;
   candidates live in the player's own notes, if they keep any. So a step that
   only rules candidates out — locked candidates, a naked pair, an X-wing —

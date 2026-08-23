@@ -121,4 +121,68 @@ struct SyncIntegrationTests {
         #expect(phone.session?.puzzle.id == mac.session?.puzzle.id)
         #expect(phone.session?.puzzle.givens == mac.session?.puzzle.givens)
     }
+
+    /// Two devices, each finishing something the other never saw. Both totals
+    /// have to end up holding both games — not the newer one's.
+    @Test func totalsFromTwoDevicesMeetInTheMiddle() async {
+        let cloud = InMemoryKeyValueStore()
+        let (phone, phoneDirectory) = makeDevice(sharing: cloud, seed: 11)
+        let (mac, macDirectory) = makeDevice(sharing: cloud, seed: 22)
+        defer {
+            try? FileManager.default.removeItem(at: phoneDirectory)
+            try? FileManager.default.removeItem(at: macDirectory)
+        }
+
+        await phone.load()
+        await mac.load()
+
+        await finishAGame(on: phone, difficulty: .easy)
+        let phonePoints = phone.stats.totalPoints
+        #expect(phonePoints > 0)
+
+        await finishAGame(on: mac, difficulty: .medium)
+        // The Mac merged the phone's totals in on the way, so it already holds both.
+        #expect(mac.stats.totalPoints > phonePoints)
+        #expect(mac.stats.solvedPuzzleIDs.count == 2)
+
+        // And the phone catches up the next time it looks.
+        await phone.load()
+        #expect(phone.stats.totalPoints == mac.stats.totalPoints)
+        #expect(phone.stats.solvedPuzzleIDs == mac.stats.solvedPuzzleIDs)
+    }
+
+    /// Nothing is counted twice, however many times the two meet.
+    @Test func repeatedSyncsDoNotInflateTheTotals() async {
+        let cloud = InMemoryKeyValueStore()
+        let (phone, phoneDirectory) = makeDevice(sharing: cloud, seed: 33)
+        let (mac, macDirectory) = makeDevice(sharing: cloud, seed: 44)
+        defer {
+            try? FileManager.default.removeItem(at: phoneDirectory)
+            try? FileManager.default.removeItem(at: macDirectory)
+        }
+
+        await phone.load()
+        await finishAGame(on: phone, difficulty: .easy)
+        let settled = phone.stats.totalPoints
+
+        for _ in 0..<4 {
+            await mac.load()
+            await phone.load()
+        }
+        #expect(phone.stats.totalPoints == settled)
+        #expect(mac.stats.totalPoints == settled)
+        #expect(phone.stats.solvedPuzzleIDs.count == 1)
+    }
+
+    private func finishAGame(on model: AppModel, difficulty: Difficulty) async {
+        await model.startGame(difficulty: difficulty)
+        guard let session = model.session else { return }
+        for cell in 0..<81 where session.entries[cell] == 0 {
+            session.enter(Int(session.puzzle.solution[cell]), at: cell)
+        }
+        // didPlay hands back the task that folds the game into the totals; the
+        // stats are not there until it has run.
+        await model.didPlay()?.value
+        await model.flushPendingWritesForTesting()
+    }
 }

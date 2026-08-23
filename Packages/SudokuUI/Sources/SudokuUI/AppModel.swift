@@ -94,6 +94,7 @@ public final class AppModel {
     /// another device.
     public func load() async {
         stats = await store.loadStats()
+        await reconcileStats()
         let local = await store.loadCurrentGame()
         await adopt(local: local)
         watchForRemoteChanges()
@@ -202,9 +203,37 @@ public final class AppModel {
         // Ignore anything that arrives mid-game with the board already open:
         // swapping the grid under the player's hands is worse than being a
         // little out of date. It is picked up the next time they come back.
+        // The totals merge whatever the board is doing, so they are taken even
+        // mid-game: there is nothing to swap under the player's hands.
+        await reconcileStats()
+
         guard pendingConflict == nil else { return }
         let local = session.map { $0.saved(deviceName: Self.deviceName, moveCount: moveCount) }
         await adopt(local: local)
+    }
+
+    /// Folds the totals together in both directions.
+    ///
+    /// Reading is not enough and neither is writing. A device that only wrote
+    /// would overwrite whatever another one had published since it last looked —
+    /// which is exactly what happened first time round: finishing a game
+    /// published this device's view alone and dropped the other's games on the
+    /// floor. So the union is computed and the union is what goes up.
+    ///
+    /// Merging is idempotent, so this may run as often as it likes.
+    private func reconcileStats() async {
+        var union = stats
+        if let payload = await sync.remoteStats(),
+           let remote = try? JSONDecoder().decode(PlayerStats.self, from: payload) {
+            union = stats.merged(with: remote)
+        }
+
+        if union != stats {
+            stats = union
+            await store.save(union)
+        }
+        guard let payload = try? JSONEncoder().encode(union) else { return }
+        await sync.pushStats(payload)
     }
 
     /// Signs in and sends anything that was earned offline. Never blocks play.
@@ -407,6 +436,7 @@ public final class AppModel {
         stats = updated
         lastResult = breakdown
         await store.save(updated)
+        await reconcileStats()
         await store.clearCurrentGame()
         await sync.push(nil)
         await reportToGameCenter(session: session, breakdown: breakdown, totals: updated.totals)

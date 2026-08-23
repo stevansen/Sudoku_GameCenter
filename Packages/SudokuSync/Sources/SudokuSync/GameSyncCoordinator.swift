@@ -8,6 +8,9 @@ public actor GameSyncCoordinator {
     /// ignored rather than misread.
     static let schemaVersion = 1
     static let currentGameKey = "current-game.v1"
+    /// The version lives in the key rather than in an envelope: a change of shape
+    /// simply becomes a different key, and an older build never sees it.
+    static let statsKey = "stats.v1"
 
     private struct Envelope: Codable, Sendable {
         var version: Int
@@ -40,6 +43,21 @@ public actor GameSyncCoordinator {
               envelope.version == Self.schemaVersion
         else { return nil }
         return envelope.game
+    }
+
+    /// Publishes the totals.
+    ///
+    /// What is in the payload is the app's business — this actor owns the key,
+    /// the versioning and the store, not the shape of anybody's statistics.
+    /// Unlike the running game there is no conflict to resolve: the totals merge,
+    /// so the last writer simply publishes the union of everything it has seen.
+    public func pushStats(_ payload: Data?) {
+        store.set(payload, forKey: Self.statsKey)
+    }
+
+    /// The totals another device last published, if any.
+    public func remoteStats() -> Data? {
+        store.data(forKey: Self.statsKey)
     }
 
     /// What should happen to the local game given what is out there.
