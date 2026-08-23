@@ -1,4 +1,5 @@
 import SwiftUI
+import SudokuGameCenter
 import SudokuKit
 
 /// Difficulty picker and the way back into a running game.
@@ -6,6 +7,7 @@ public struct HomeView: View {
     var model: AppModel
     var onStart: (Difficulty) -> Void
     var onContinue: () -> Void
+    @State private var showsGameCenter = false
 
     public init(model: AppModel, onStart: @escaping (Difficulty) -> Void, onContinue: @escaping () -> Void) {
         self.model = model
@@ -17,6 +19,7 @@ public struct HomeView: View {
         ScrollView {
             VStack(spacing: 24) {
                 statsHeader
+                gameCenterButton
 
                 if model.canContinue, let session = model.session {
                     Button(action: onContinue) {
@@ -62,6 +65,29 @@ public struct HomeView: View {
             .frame(maxWidth: .infinity)
         }
         .navigationTitle("Sudoku")
+        #if canImport(GameKit) && !os(watchOS)
+        .sheet(isPresented: $showsGameCenter) {
+            GameCenterDashboard(page: .leaderboards)
+        }
+        #endif
+    }
+
+    @ViewBuilder
+    private var gameCenterButton: some View {
+        #if canImport(GameKit) && !os(watchOS)
+        Button { showsGameCenter = true } label: {
+            Label(
+                model.isSignedInToGameCenter
+                    ? String(localized: "Bestenlisten & Erfolge")
+                    : String(localized: "Bei Game Center anmelden"),
+                systemImage: "trophy")
+                .font(.subheadline)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.06)))
+        }
+        .buttonStyle(.plain)
+        #endif
     }
 
     private var statsHeader: some View {

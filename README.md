@@ -3,7 +3,7 @@
 A procedurally generated sudoku for every Apple platform, with Game Center
 leaderboards, achievements, and a game that follows you across your devices.
 
-Status: **Milestone 2 complete** — a playable iOS/macOS/visionOS app on top of the engine.
+Status: **Milestone 3 complete** — playable, with Game Center leaderboards and achievements.
 
 ## Layout
 
@@ -11,6 +11,7 @@ Status: **Milestone 2 complete** — a playable iOS/macOS/visionOS app on top of
 App/                    the Xcode project and app target (com.sudoku.app)
 Packages/SudokuKit/     the engine: grid, solvers, generator, rating, scoring
 Packages/SudokuUI/      game state, persistence and the shared SwiftUI screens
+Packages/SudokuGameCenter/  GameKit behind a protocol, achievement rules, offline retry queue
 Configuration/          entitlements, privacy manifest, Info.plist and export templates
 docs/decisions.md       why things are the way they are, with the measurements
 docs/gamecenter-setup.md   the leaderboard and achievement IDs to enter in App Store Connect
@@ -18,14 +19,15 @@ docs/app-store/         release checklist, metadata (de/en), age rating, review 
 docs/privacy/           privacy policy (de/en) and the App Privacy questionnaire answers
 ```
 
-Planned, per the build plan: `SudokuGameCenter` (GameKit, Milestone 3) and
-CloudKit-backed storage (Milestone 4), then tvOS and watchOS targets.
+Planned, per the build plan: CloudKit-backed storage (Milestone 4), then tvOS
+and watchOS targets (Milestone 5) and the polish pass (Milestone 6).
 
 ## Build and test
 
 ```bash
 cd Packages/SudokuKit && swift test
 cd Packages/SudokuUI && swift test
+cd Packages/SudokuGameCenter && swift test
 
 # the app
 cd App && xcodebuild -scheme Sudoku \
@@ -58,6 +60,17 @@ identical worldwide without a server:
 ```swift
 let today = PuzzleGenerator.daily(for: .now, difficulty: .medium)
 ```
+
+Game Center goes through one protocol, so nothing else in the app touches
+GameKit — which matters because GameKit cannot be driven from a test:
+
+```swift
+let progress = AchievementEvaluator.progress(for: event, totals: totals)
+await queue.send(scores: submissions, achievements: progress, using: service)
+```
+
+Anything that cannot be sent is kept on disk and goes out at the next sign-in,
+compacted to the best value per leaderboard.
 
 Solving, hinting and scoring:
 

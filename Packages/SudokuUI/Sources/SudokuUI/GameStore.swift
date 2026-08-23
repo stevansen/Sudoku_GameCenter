@@ -1,4 +1,5 @@
 import Foundation
+import SudokuGameCenter
 import SudokuKit
 
 /// A game in progress, in the form that survives quitting the app.
@@ -33,14 +34,58 @@ public struct PlayerStats: Codable, Sendable, Equatable {
     /// Day of the last completed puzzle, as `yyyy-MM-dd` in the local calendar.
     public var lastPlayedDay: String?
 
+    // Counters the achievements need. They arrived after the first release of
+    // this type, which is why decoding below tolerates their absence.
+    public var solvedWithoutHints: Int = 0
+    public var dailySolved: Int = 0
+    public var flawlessStreakDays: Int = 0
+    public var lastFlawlessDay: String?
+    /// Device kinds a puzzle has been solved on.
+    public var platforms: Set<String> = []
+
     public init() {}
+
+    /// Hand-written so that a stats file written by an older build still loads.
+    /// Synthesised decoding would reject it for every key added since, and the
+    /// player would silently lose their totals.
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        totalPoints = try container.decodeIfPresent(Int.self, forKey: .totalPoints) ?? 0
+        solvedPuzzleIDs = try container.decodeIfPresent(Set<String>.self, forKey: .solvedPuzzleIDs) ?? []
+        solvedCountByDifficulty = try container.decodeIfPresent([String: Int].self, forKey: .solvedCountByDifficulty) ?? [:]
+        bestSecondsByDifficulty = try container.decodeIfPresent([String: Int].self, forKey: .bestSecondsByDifficulty) ?? [:]
+        streakDays = try container.decodeIfPresent(Int.self, forKey: .streakDays) ?? 0
+        longestStreakDays = try container.decodeIfPresent(Int.self, forKey: .longestStreakDays) ?? 0
+        lastPlayedDay = try container.decodeIfPresent(String.self, forKey: .lastPlayedDay)
+        solvedWithoutHints = try container.decodeIfPresent(Int.self, forKey: .solvedWithoutHints) ?? 0
+        dailySolved = try container.decodeIfPresent(Int.self, forKey: .dailySolved) ?? 0
+        flawlessStreakDays = try container.decodeIfPresent(Int.self, forKey: .flawlessStreakDays) ?? 0
+        lastFlawlessDay = try container.decodeIfPresent(String.self, forKey: .lastFlawlessDay)
+        platforms = try container.decodeIfPresent(Set<String>.self, forKey: .platforms) ?? []
+    }
+
+    /// The shape ``SudokuGameCenter`` works in.
+    public var totals: PlayerTotals {
+        PlayerTotals(
+            totalPoints: totalPoints,
+            solvedCount: solvedPuzzleIDs.count,
+            solvedByDifficulty: Dictionary(uniqueKeysWithValues: solvedCountByDifficulty
+                .compactMap { key, value in Difficulty(rawValue: key).map { ($0, value) } }),
+            solvedWithoutHints: solvedWithoutHints,
+            dailySolved: dailySolved,
+            streakDays: streakDays,
+            flawlessStreakDays: flawlessStreakDays,
+            bestSecondsByDifficulty: Dictionary(uniqueKeysWithValues: bestSecondsByDifficulty
+                .compactMap { key, value in Difficulty(rawValue: key).map { ($0, value) } }),
+            platforms: platforms)
+    }
 
     public func hasSolved(_ id: PuzzleID) -> Bool { solvedPuzzleIDs.contains(id.description) }
 
     /// Folds a finished game into the totals and returns what it scored.
     public mutating func record(
         puzzle: Puzzle, session: GameSession, on date: Date = .now,
-        calendar: Calendar = .current
+        calendar: Calendar = .current, deviceName: String = "", isDaily: Bool = false
     ) -> ScoreBreakdown {
         let today = Self.day(of: date, calendar: calendar)
         if let last = lastPlayedDay, last != today {
@@ -63,6 +108,22 @@ public struct PlayerStats: Codable, Sendable, Equatable {
         let best = bestSecondsByDifficulty[tier]
         if best == nil || session.elapsedSeconds < best! {
             bestSecondsByDifficulty[tier] = session.elapsedSeconds
+        }
+
+        if session.hintsUsed == 0 { solvedWithoutHints += 1 }
+        if isDaily { dailySolved += 1 }
+        if !deviceName.isEmpty { platforms.insert(deviceName) }
+
+        // A flawless day extends the perfect-week run; a day with a mistake in it
+        // does not, and a gap ends it.
+        if session.mistakes == 0 {
+            if let last = lastFlawlessDay, last == today {
+                // already counted today
+            } else {
+                let yesterday = Self.day(of: date.addingTimeInterval(-86_400), calendar: calendar)
+                flawlessStreakDays = lastFlawlessDay == yesterday ? flawlessStreakDays + 1 : 1
+                lastFlawlessDay = today
+            }
         }
         return breakdown
     }

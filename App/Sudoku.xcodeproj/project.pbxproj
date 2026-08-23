@@ -25,6 +25,7 @@
 			files = (
 				A1000061 /* SudokuUI in Frameworks */,
 				A1000062 /* SudokuKit in Frameworks */,
+				A1000063 /* SudokuGameCenter in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +34,7 @@
 /* Begin PBXBuildFile section */
 		A1000061 /* SudokuUI in Frameworks */ = {isa = PBXBuildFile; productRef = A1000051 /* SudokuUI */; };
 		A1000062 /* SudokuKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1000052 /* SudokuKit */; };
+		A1000063 /* SudokuGameCenter in Frameworks */ = {isa = PBXBuildFile; productRef = A1000055 /* SudokuGameCenter */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXGroup section */
@@ -74,6 +76,7 @@
 			packageProductDependencies = (
 				A1000051 /* SudokuUI */,
 				A1000052 /* SudokuKit */,
+				A1000055 /* SudokuGameCenter */,
 			);
 			productName = Sudoku;
 			productReference = A1000020 /* Sudoku.app */;
@@ -127,6 +130,7 @@
 			packageReferences = (
 				A1000053 /* XCLocalSwiftPackageReference "../Packages/SudokuUI" */,
 				A1000054 /* XCLocalSwiftPackageReference "../Packages/SudokuKit" */,
+				A1000056 /* XCLocalSwiftPackageReference "../Packages/SudokuGameCenter" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A1000001 /* Products */;
@@ -147,6 +151,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../Packages/SudokuKit;
 		};
+		A1000056 /* XCLocalSwiftPackageReference "../Packages/SudokuGameCenter" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Packages/SudokuGameCenter;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -157,6 +165,10 @@
 		A1000052 /* SudokuKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SudokuKit;
+		};
+		A1000055 /* SudokuGameCenter */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SudokuGameCenter;
 		};
 /* End XCSwiftPackageProductDependency section */
 

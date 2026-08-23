@@ -22,8 +22,8 @@ public struct GameView: View {
             // Board sits under the header, controls stay at the bottom edge —
             // without this the whole stack floats in the middle of the screen.
             Spacer(minLength: 0)
-            ControlBarView(session: session, onPlay: model.didPlay)
-            NumberPadView(session: session, onPlay: model.didPlay)
+            ControlBarView(session: session, onPlay: { _ = model.didPlay() })
+            NumberPadView(session: session, onPlay: { _ = model.didPlay() })
         }
         .padding()
         .frame(maxWidth: 560, maxHeight: .infinity, alignment: .top)
@@ -81,7 +81,7 @@ public struct GameView: View {
                 if hint.placements.first != nil {
                     Button(String(localized: "Eintragen")) {
                         session.applyHint()
-                        model.didPlay()
+                        _ = model.didPlay()
                     }
                     .buttonStyle(.borderedProminent)
                 }
@@ -102,7 +102,7 @@ public struct GameView: View {
         case .downArrow: session.selection = min(80, selection + 9); return .handled
         case .leftArrow: session.selection = max(0, selection - 1); return .handled
         case .rightArrow: session.selection = min(80, selection + 1); return .handled
-        case .delete, .deleteForward: session.clear(); model.didPlay(); return .handled
+        case .delete, .deleteForward: session.clear(); _ = model.didPlay(); return .handled
         case .space: session.isPaused ? session.resume() : session.pause(); return .handled
         default: break
         }
@@ -111,7 +111,7 @@ public struct GameView: View {
             if press.modifiers.contains(.shift) { session.inputMode = .note }
             session.enter(digit)
             session.inputMode = mode
-            model.didPlay()
+            _ = model.didPlay()
             return .handled
         }
         return .ignored

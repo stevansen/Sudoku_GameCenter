@@ -116,6 +116,27 @@ localisation-free and its tests about logic rather than strings.
   synchronized file groups copy everything in the folder as a resource, which
   collides with the generated one. Keeping it one level up is the fix.
 
+## Milestone 3 decisions
+
+- **Achievement rules are a pure function.** `AchievementEvaluator` takes the
+  facts of a finished game plus the player's totals and returns progress. No
+  GameKit, no clock, no I/O — because the rules are the part that can be wrong,
+  and this way each one is a test instead of a bug report from a player.
+- **Everything queues.** Scores go through `SubmissionQueue` even when signed in.
+  A win earned on a train is still a win; sending directly would lose it. The
+  queue survives relaunching and compacts a backlog to the best value per board.
+- **The point budget is asserted.** Apple caps achievement points at 1000 for an
+  app's lifetime. A test pins the total at 880, so adding an achievement without
+  rebalancing fails the build rather than the submission.
+- **`authenticate()` resumes on the first callback.** GameKit's handler fires more
+  than once and may only hand over a sign-in screen. Waiting for a final answer
+  means waiting for the player to finish typing — with the app not yet loaded
+  behind it. Sign-in now runs in its own task and `isAuthenticated()` is the
+  source of truth afterwards.
+- **`PlayerStats` decodes by hand.** Milestone 3 added five counters to it.
+  Synthesised decoding would reject every file written by the earlier build and
+  the player would silently lose their totals.
+
 ## Known, deliberate, not done yet
 
 - **Generation is a retry loop, not a search.** Roughly one attempt in five is

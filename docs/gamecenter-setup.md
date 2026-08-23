@@ -71,7 +71,7 @@ Präfix für alle IDs: `com.sudoku.achievement.`
 | `daily_10` | Tagesrätsel-Fan I | Daily Fan I | 10 Tagesrätsel gelöst | 15 | nein |
 | `daily_100` | Tagesrätsel-Fan II | Daily Fan II | 100 Tagesrätsel gelöst | 50 | nein |
 | `night_owl` | Nachteule | Night Owl | Rätsel zwischen 0 und 4 Uhr gelöst | 5 | **ja** |
-| `early_bird` | Frühaufsteher | Early Bird | Rätsel vor 6 Uhr gelöst | 5 | **ja** |
+| `early_bird` | Frühaufsteher | Early Bird | Rätsel zwischen 4 und 6 Uhr gelöst | 5 | **ja** |
 | `points_10k` | Punktejäger I | Point Hunter I | 10.000 Gesamtpunkte | 35 | nein |
 | `points_100k` | Punktejäger II | Point Hunter II | 100.000 Gesamtpunkte | 80 | nein |
 | `all_platforms` | Überall zu Hause | At Home Everywhere | Je ein Rätsel auf iPhone, iPad und Mac | 20 | nein |
@@ -87,6 +87,12 @@ JPEG, ohne Alphakanal**. Siehe [assets-spec.md](app-store/assets-spec.md).
 ---
 
 ## Umsetzung im Code
+
+**Umgesetzt in Meilenstein 3.** Die IDs stehen als `enum` in
+`Packages/SudokuGameCenter/Sources/SudokuGameCenter/Identifiers.swift`; ein
+Tippfehler ist dort ein Compilerfehler. Ein Test rechnet die Punktesumme nach und
+schlägt fehl, sobald sie von 880 abweicht — diese Tabelle und der Code können
+also nicht auseinanderlaufen, ohne dass es auffällt.
 
 - IDs als `enum` mit `String`-Rohwerten in `SudokuGameCenter`, damit ein Tippfehler
   ein Compilerfehler ist.

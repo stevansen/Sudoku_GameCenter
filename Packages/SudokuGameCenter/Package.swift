@@ -2,27 +2,25 @@
 import PackageDescription
 
 let package = Package(
-    name: "SudokuUI",
-    defaultLocalization: "de",
+    name: "SudokuGameCenter",
     platforms: [
         .iOS(.v18), .macOS(.v15), .tvOS(.v18), .watchOS(.v11), .visionOS(.v2),
     ],
     products: [
-        .library(name: "SudokuUI", targets: ["SudokuUI"]),
+        .library(name: "SudokuGameCenter", targets: ["SudokuGameCenter"]),
     ],
     dependencies: [
         .package(path: "../SudokuKit"),
-        .package(path: "../SudokuGameCenter"),
     ],
     targets: [
         .target(
-            name: "SudokuUI",
-            dependencies: ["SudokuKit", "SudokuGameCenter"],
+            name: "SudokuGameCenter",
+            dependencies: ["SudokuKit"],
             swiftSettings: [.swiftLanguageMode(.v6)]
         ),
         .testTarget(
-            name: "SudokuUITests",
-            dependencies: ["SudokuUI"],
+            name: "SudokuGameCenterTests",
+            dependencies: ["SudokuGameCenter"],
             swiftSettings: [.swiftLanguageMode(.v6)]
         ),
     ]
