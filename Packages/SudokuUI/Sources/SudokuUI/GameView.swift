@@ -70,7 +70,7 @@ public struct GameView: View {
                 ControlBarView(session: session, onPlay: { _ = model.didPlay() })
                 NumberPadView(session: session, onPlay: { _ = model.didPlay() })
             }
-            .frame(maxWidth: 420)
+            .frame(maxWidth: Theme.sidebarMaxWidth)
         }
     }
 
@@ -82,6 +82,8 @@ public struct GameView: View {
                 Text(String(localized: "Fehler \(session.mistakes) · Hinweise \(session.hintsUsed)"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             }
             Spacer()
             Button {

@@ -82,6 +82,17 @@ public final class AppModel {
         // Not awaited: signing in can put a screen in front of the player, and
         // the game must be ready whether or not they ever finish with it.
         Task { await connectGameCenter() }
+
+        #if DEBUG
+        // Apple TV has no pointer, so its screens cannot be driven the way the
+        // iOS ones are. This lets a build be launched straight into a game to be
+        // looked at. Debug only — it never ships.
+        if let index = ProcessInfo.processInfo.arguments.firstIndex(of: "-open-game"),
+           index + 1 < ProcessInfo.processInfo.arguments.count,
+           let difficulty = Difficulty(rawValue: ProcessInfo.processInfo.arguments[index + 1]) {
+            await startGame(difficulty: difficulty)
+        }
+        #endif
     }
 
     /// Applies whatever the resolver decides about the local and remote records.

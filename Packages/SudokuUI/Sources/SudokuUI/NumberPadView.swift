@@ -6,8 +6,22 @@ struct NumberPadView: View {
     @Bindable var session: GameSession
     var onPlay: () -> Void
 
+    /// Nine across is fine under a thumb. On a television the same row would be
+    /// nine tiny targets to steer a focus ring through, so it wraps instead.
     private var columns: [GridItem] {
+        #if os(tvOS)
+        Array(repeating: GridItem(.flexible(), spacing: 16), count: 5)
+        #else
         Array(repeating: GridItem(.flexible(), spacing: 8), count: 9)
+        #endif
+    }
+
+    private var minimumButtonHeight: CGFloat {
+        #if os(tvOS)
+        72
+        #else
+        48
+        #endif
     }
 
     var body: some View {
@@ -19,7 +33,7 @@ struct NumberPadView: View {
                 } label: {
                     Text(String(digit))
                         .font(.system(size: 28, weight: .medium, design: .rounded))
-                        .frame(maxWidth: .infinity, minHeight: 48)
+                        .frame(maxWidth: .infinity, minHeight: minimumButtonHeight)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(session.inputMode == .note

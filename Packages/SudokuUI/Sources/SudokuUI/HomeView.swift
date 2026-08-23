@@ -69,7 +69,7 @@ public struct HomeView: View {
                 }
             }
             .padding()
-            .frame(maxWidth: 520)
+            .frame(maxWidth: Theme.contentMaxWidth)
             .frame(maxWidth: .infinity)
         }
         .navigationTitle("Sudoku")

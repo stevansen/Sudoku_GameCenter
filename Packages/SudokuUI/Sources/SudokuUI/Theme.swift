@@ -20,6 +20,29 @@ public enum Theme {
     public static let thinLine: CGFloat = 1
     public static let thickLine: CGFloat = 2.5
     public static let boardCornerRadius: CGFloat = 6
+
+    /// How wide the controls beside the board may get. A television needs more:
+    /// its buttons carry a focus halo and are read from across a room.
+    public static var sidebarMaxWidth: CGFloat {
+        #if os(tvOS)
+        620
+        #else
+        420
+        #endif
+    }
+
+    /// How wide a column of content may get.
+    ///
+    /// A television is far away and its screen is wide: the phone's 520 points
+    /// leave the middle third of a 16:9 display carrying everything while two
+    /// thirds sit empty.
+    public static var contentMaxWidth: CGFloat {
+        #if os(tvOS)
+        1000
+        #else
+        520
+        #endif
+    }
 }
 
 extension Int {

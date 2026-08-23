@@ -3,9 +3,8 @@
 A procedurally generated sudoku for every Apple platform, with Game Center
 leaderboards, achievements, and a game that follows you across your devices.
 
-Status: **Milestone 5 in progress** — iOS, iPadOS and macOS are built and running.
-tvOS and visionOS code is written but has **never been compiled**: those platforms
-are not installed on the machine it was developed on. See "Platforms" below.
+Status: **Milestone 5 complete except visionOS** — iOS, iPadOS, macOS and tvOS
+build and run. visionOS could not be installed for lack of disk space.
 
 ## Layout
 
@@ -114,21 +113,18 @@ Measured on Apple silicon, release build, 25 puzzles per tier:
 | iOS | shared | yes | yes, verified in the simulator |
 | iPadOS | shared + wide layout | yes | portrait verified; landscape layout unverified |
 | macOS | shared + menu bar + keyboard | yes | launches; window contents not verified (no screen-recording permission here) |
-| tvOS | focus-based board | **no** | **no** |
+| tvOS | focus-based board, wider layout, 5x2 keypad | yes | yes, verified in the simulator |
 | visionOS | shared | **no** | **no** |
 | watchOS | not started (Milestone 6) | — | — |
 
-tvOS and visionOS need their platform runtimes, which are a several-gigabyte
-download:
+visionOS still needs its platform runtime, which failed to install for lack of
+disk space (it wants 7.3 GB):
 
 ```bash
-xcodebuild -downloadPlatform tvOS
 xcodebuild -downloadPlatform visionOS
 ```
 
-Until then, treat both as unwritten rather than working: the board was rebuilt
-with real row-and-column layout precisely so the tvOS focus engine can move
-through it, but that claim is untested.
+Until it has been built once, treat visionOS as unwritten rather than working.
 
 ## Shipping
 

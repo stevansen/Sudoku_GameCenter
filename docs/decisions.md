@@ -180,10 +180,18 @@ localisation-free and its tests about logic rather than strings.
   possible. `isPlaying` living in the model is the smaller compromise.
 - **The undo/redo menu items replace the system ones.** SwiftUI's built-in items
   drive an `UndoManager` this game does not use, so they would have been dead.
-- **tvOS and visionOS are written but unverified.** Their platform runtimes are
-  not installed here, so neither has been compiled even once. Claiming them in
-  `SUPPORTED_PLATFORMS` is intent, not evidence — the first thing to do once the
-  runtimes are downloaded is to build both and expect breakage.
+- **tvOS is verified.** Once the runtime was installed it built first try and
+  ran, and the focus ring moves across the board — which is the payoff for the
+  layout change above. Three things needed fixing that only a television shows:
+  the content column was sized for a phone and left two thirds of a 16:9 screen
+  empty, the header wrapped mid-word, and nine keypad buttons in a row became
+  nine tiny targets to steer a focus ring through (now five across, two rows).
+- **A debug-only launch argument** (`-open-game <tier>`) opens the app straight
+  into a game. Apple TV has no pointer, so its screens cannot be driven the way
+  the iOS ones are; without this the board could not be looked at at all. Wrapped
+  in `#if DEBUG`, so it never ships.
+- **visionOS is still unverified.** Its runtime needs 7.3 GB and the disk had
+  700 MB free. Claiming it in `SUPPORTED_PLATFORMS` is intent, not evidence.
 
 ## Known, deliberate, not done yet
 
