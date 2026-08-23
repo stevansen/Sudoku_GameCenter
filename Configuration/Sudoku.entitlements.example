@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.developer.game-center</key>
+	<true/>
+
+	<key>com.apple.developer.icloud-services</key>
+	<array>
+		<string>CloudKit</string>
+	</array>
+	<key>com.apple.developer.icloud-container-identifiers</key>
+	<array>
+		<string>iCloud.com.sudoku.app</string>
+	</array>
+
+	<!-- Schnell-Sync der laufenden Partie. Das Präfix ist die Team-ID und wird
+	     von Xcode eingesetzt. -->
+	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
+	<string>$(TeamIdentifierPrefix)com.sudoku.app</string>
+
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.sudoku.app</string>
+	</array>
+
+	<!-- Stille Benachrichtigungen für CloudKit-Änderungen. -->
+	<key>aps-environment</key>
+	<string>development</string>
+</dict>
+</plist>

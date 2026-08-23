@@ -9,7 +9,11 @@ Status: **Milestone 1 complete** — `SudokuKit`, the engine. No app target yet.
 
 ```
 Packages/SudokuKit/     the engine: grid, solvers, generator, rating, scoring
+Configuration/          entitlements, privacy manifest, Info.plist and export templates
 docs/decisions.md       why things are the way they are, with the measurements
+docs/gamecenter-setup.md   the leaderboard and achievement IDs to enter in App Store Connect
+docs/app-store/         release checklist, metadata (de/en), age rating, review notes, asset specs
+docs/privacy/           privacy policy (de/en) and the App Privacy questionnaire answers
 ```
 
 Planned, per the build plan: `SudokuStore` (SwiftData + CloudKit),
@@ -66,12 +70,13 @@ Measured on Apple silicon, release build, 25 puzzles per tier:
 | expert | 62 ms | 141 ms | 25–31 | W-wing, XY-wing, colouring |
 | evil | 29 ms | 64 ms | 22–26 | forcing chain |
 
-## Before the app can ship
+## Shipping
 
-These cannot be done from code and need an Apple Developer account:
+Everything that can be prepared without a built app is prepared — start at
+[docs/app-store/release-checklist.md](docs/app-store/release-checklist.md), which
+is ordered end to end and marks the steps only a human with an Apple account can
+do. Submission itself has to wait for the app targets (Milestones 2–6).
 
-- App IDs `com.sudoku.app` (+ `.tv`, `.watchkitapp`, `.widgets`) with the
-  Game Center, iCloud and App Groups capabilities.
-- The iCloud container `iCloud.com.sudoku.app`.
-- Every leaderboard and achievement created in App Store Connect. The IDs will
-  live in `docs/gamecenter-setup.md`, written in Milestone 3.
+Not preparable here, because they need your account, your money or your design:
+the Developer Program membership and Team ID, a public privacy-policy and support
+URL, the app icon and screenshots, and the tax and banking details.

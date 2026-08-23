@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Exportkonformität: die App verwendet ausschließlich Apples
+	     Standardverschlüsselung (HTTPS, CloudKit). Mit diesem Schlüssel entfällt
+	     die Rückfrage bei jedem Upload. -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.puzzle-games</string>
+
+	<!-- Handoff zwischen den Plattformen. -->
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>com.sudoku.app.playing</string>
+	</array>
+
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+
+	<key>CFBundleDisplayName</key>
+	<string>Sudoku</string>
+</dict>
+</plist>
