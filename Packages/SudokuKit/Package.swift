@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "SudokuKit",
     platforms: [
-        .iOS(.v18), .macOS(.v15), .tvOS(.v18), .watchOS(.v11), .visionOS(.v2),
+        .iOS(.v18), .macOS(.v15), .tvOS(.v18), .watchOS(.v11),
     ],
     products: [
         .library(name: "SudokuKit", targets: ["SudokuKit"]),

@@ -78,7 +78,7 @@ public final class GameKitService: GameCenterService {
 
     @MainActor
     private static func present(_ viewController: PlatformViewController) {
-        #if os(iOS) || os(tvOS) || os(visionOS)
+        #if os(iOS) || os(tvOS)
         let scene = UIApplication.shared.connectedScenes
             .compactMap { $0 as? UIWindowScene }
             .first { $0.activationState == .foregroundActive }

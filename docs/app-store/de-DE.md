@@ -26,7 +26,7 @@ Klassisch, klar, unendlich
 
 ```
 Jeden Tag ein neues Rätsel für alle — und ab jetzt geht jede Partie auf dem
-iPhone, iPad, Mac und in der Vision Pro nahtlos weiter.
+iPhone, iPad, Mac und Apple TV nahtlos weiter.
 ```
 
 ## Beschreibung (max. 4000)

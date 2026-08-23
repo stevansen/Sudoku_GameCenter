@@ -95,8 +95,8 @@ xcodebuild -exportArchive -archivePath build/Sudoku-iOS.xcarchive \
 
 Für den direkten Upload `destination` in der `ExportOptions.plist` auf `upload`
 setzen; sonst entsteht ein `.ipa`, das über die **Transporter**-App hochgeladen
-wird. Für macOS, tvOS und visionOS dasselbe mit
-`-destination 'generic/platform=macOS'` und so weiter.
+wird. Für macOS und tvOS dasselbe mit `-destination 'generic/platform=macOS'`
+beziehungsweise `'generic/platform=tvOS'`.
 
 - [ ] Build erscheint in App Store Connect (dauert 5 bis 30 Minuten).
 - [ ] Etwaige E-Mail über „ITMS"-Warnungen gelesen — fehlende Symbole und

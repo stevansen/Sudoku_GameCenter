@@ -305,8 +305,6 @@ public final class AppModel {
         return "Apple TV"
         #elseif os(watchOS)
         return "Apple Watch"
-        #elseif os(visionOS)
-        return "Vision Pro"
         #else
         return "Unbekannt"
         #endif

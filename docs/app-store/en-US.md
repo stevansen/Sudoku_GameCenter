@@ -22,7 +22,7 @@ Classic, clear, endless
 
 ```
 A new puzzle every day for everyone — and from now on every game continues right
-where you left it, on iPhone, iPad, Mac and Vision Pro.
+where you left it, on iPhone, iPad, Mac and Apple TV.
 ```
 
 ## Description (max 4000)

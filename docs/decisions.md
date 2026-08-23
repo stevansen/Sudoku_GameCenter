@@ -190,14 +190,16 @@ localisation-free and its tests about logic rather than strings.
   into a game. Apple TV has no pointer, so its screens cannot be driven the way
   the iOS ones are; without this the board could not be looked at at all. Wrapped
   in `#if DEBUG`, so it never ships.
-- **visionOS needed nothing but its icon.** Once the runtime was installed it
-  built and ran unchanged, and the wide layout turned out to be right for a
-  window floating in a room too. The only platform-specific work was a solid
-  image stack for the icon — three icon shapes now live in the asset catalog,
-  picked by SDK-conditional build settings, because no two of these platform
-  families accept the same one.
-- **The cost of five platforms is disk, not code.** The runtimes and their
-  simulator data come to roughly 40 GB. Nothing in the app had to change for
+- **visionOS was built, then dropped.** It ran unchanged once its runtime was
+  installed — the wide layout written for iPad landscape suited a window floating
+  in a room, and the only platform-specific work was an icon. It was then taken
+  out of scope by decision, not by difficulty, and the SDK removed with it.
+  Should it ever come back: add `.visionOS(.v2)` to the four package manifests,
+  put `xros xrsimulator` back in `SUPPORTED_PLATFORMS` with device family 7, and
+  add a solid image stack named `AppIcon-vision` with an
+  `ASSETCATALOG_COMPILER_APPICON_NAME[sdk=xr*]` setting pointing at it.
+- **The cost of extra platforms is disk, not code.** Each runtime plus its
+  simulator data runs to several gigabytes. Nothing in the app had to change for
   visionOS; the machine had to.
 
 ## Known, deliberate, not done yet

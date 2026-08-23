@@ -3,8 +3,8 @@
 A procedurally generated sudoku for every Apple platform, with Game Center
 leaderboards, achievements, and a game that follows you across your devices.
 
-Status: **Milestone 5 complete** — one codebase, five platforms, all built and
-run at least once.
+Status: **Milestone 5 complete** — one codebase, four platforms, all built and
+run at least once. visionOS is deliberately out of scope.
 
 ## Layout
 
@@ -114,16 +114,15 @@ Measured on Apple silicon, release build, 25 puzzles per tier:
 | iPadOS | shared + wide layout | yes | portrait verified; landscape layout unverified |
 | macOS | shared + menu bar + keyboard | yes | launches; window contents not verified (no screen-recording permission here) |
 | tvOS | focus-based board, wider layout, 5x2 keypad | yes | yes, verified in the simulator |
-| visionOS | shared, wide layout | yes | yes, verified in the simulator |
 | watchOS | not started (Milestone 6) | — | — |
+| visionOS | **out of scope** | — | — |
 
 Each platform family needs its own icon shape, which is why the asset catalog
-carries three: a flat `AppIcon` for iOS and macOS, a layered image stack with
-top-shelf images for tvOS, and a solid image stack for visionOS, selected by
-SDK-conditional build settings.
+carries two: a flat `AppIcon` for iOS and macOS, and a layered image stack with
+top-shelf images for tvOS, selected by an SDK-conditional build setting.
 
-Building for all five needs roughly 40 GB of platform runtimes and simulator
-data. Worth knowing before starting.
+Building for all of them needs a substantial amount of disk for platform
+runtimes and simulator data. Worth knowing before starting.
 
 ## Shipping
 
