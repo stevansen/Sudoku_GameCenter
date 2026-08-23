@@ -3,8 +3,8 @@
 A procedurally generated sudoku for every Apple platform, with Game Center
 leaderboards, achievements, and a game that follows you across your devices.
 
-Status: **Milestone 5 complete except visionOS** — iOS, iPadOS, macOS and tvOS
-build and run. visionOS could not be installed for lack of disk space.
+Status: **Milestone 5 complete** — one codebase, five platforms, all built and
+run at least once.
 
 ## Layout
 
@@ -114,17 +114,16 @@ Measured on Apple silicon, release build, 25 puzzles per tier:
 | iPadOS | shared + wide layout | yes | portrait verified; landscape layout unverified |
 | macOS | shared + menu bar + keyboard | yes | launches; window contents not verified (no screen-recording permission here) |
 | tvOS | focus-based board, wider layout, 5x2 keypad | yes | yes, verified in the simulator |
-| visionOS | shared | **no** | **no** |
+| visionOS | shared, wide layout | yes | yes, verified in the simulator |
 | watchOS | not started (Milestone 6) | — | — |
 
-visionOS still needs its platform runtime, which failed to install for lack of
-disk space (it wants 7.3 GB):
+Each platform family needs its own icon shape, which is why the asset catalog
+carries three: a flat `AppIcon` for iOS and macOS, a layered image stack with
+top-shelf images for tvOS, and a solid image stack for visionOS, selected by
+SDK-conditional build settings.
 
-```bash
-xcodebuild -downloadPlatform visionOS
-```
-
-Until it has been built once, treat visionOS as unwritten rather than working.
+Building for all five needs roughly 40 GB of platform runtimes and simulator
+data. Worth knowing before starting.
 
 ## Shipping
 
