@@ -31,7 +31,7 @@ public enum Theme {
     /// under the 4.5:1 that normal-size text is meant to meet, and Xcode's
     /// accessibility audit flags every label using it. This sits near 7:1 and
     /// still reads as secondary.
-    public static let secondaryText = Color.primary.opacity(0.65)
+    public static let secondaryText = Color.primary.opacity(0.75)
 
     public static let thinLine: CGFloat = 1
     public static let thickLine: CGFloat = 2.5

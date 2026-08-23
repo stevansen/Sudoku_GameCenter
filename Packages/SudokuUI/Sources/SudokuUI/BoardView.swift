@@ -65,22 +65,21 @@ public struct BoardView: View {
             isSameDigit: isSameDigit(index),
             isWrong: isWrong,
             isConflicting: isConflicting,
-            isHinted: isHinted)
+            isHinted: isHinted,
+            row: Units.rowOf[index],
+            column: Units.columnOf[index])
 
-        // Without its coordinates a cell read aloud is just a digit with no
-        // place — VoiceOver users navigate the grid by row and column.
-        let positioned = view.accessibilityValue(
-            String(localized: "Zeile \(Units.rowOf[index] + 1), Spalte \(Units.columnOf[index] + 1)",
-                   bundle: .module))
+        let positioned = view
 
-        #if os(tvOS)
-        // The remote has no pointer: every cell has to be somewhere focus can go.
+        // A real button on every platform, not a tap gesture. A gesture gives
+        // VoiceOver nothing to activate: the audit reports "Action is missing",
+        // and in practice a cell could be heard but never chosen. The remote on
+        // tvOS needs it to be a focus target anyway.
         Button { session.selection = index } label: { positioned }
             .buttonStyle(.plain)
+            #if os(tvOS)
             .focused($focusedCell, equals: index)
-        #else
-        positioned.onTapGesture { session.selection = index }
-        #endif
+            #endif
     }
 
     @ViewBuilder

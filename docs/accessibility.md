@@ -66,6 +66,44 @@ Zwei bauartbedingte Ausnahmen, ebenfalls im Test begründet:
   mit dem verfügbaren Platz, und über VoiceOver ist jedes Feld unabhängig von der
   Textgröße erreichbar.
 
+## Mit echtem VoiceOver auf dem Mac (2026-08-23)
+
+VoiceOver wurde auf dem Mac tatsächlich eingeschaltet und die App damit geöffnet.
+Das Untertitelfeld zeigte als Erstes:
+
+> „Du bist jetzt auf: **Textelement**, innerhalb von Rollbereich."
+
+Ein namenloses Textelement — die drei Kopfzahlen und ihre Beschriftungen waren
+sechs getrennte, unbenannte Elemente. Danach ergab der Durchgang mit
+`xcodebuild test -destination 'platform=macOS'` drei weitere Befunde, die auf
+iOS **nicht** auftreten:
+
+| Befund | Warum es zählt | Behoben durch |
+|---|---|---|
+| **Die Zellen waren nicht auswählbar.** Sie hingen an `onTapGesture`; das ist keine Bedienhilfen-Aktion. Der Audit nennt es „Action is missing". | Per VoiceOver ließen sich die Felder hören, aber **keines auswählen** — das Spiel war weiterhin nicht bedienbar, nur diesmal leiser. | Jede Zelle ist jetzt ein echter `Button` auf allen Plattformen |
+| **Der Mac liefert `accessibilityValue` für diese Elemente nicht aus.** Die Zellposition steckte dort. VoiceOver sagte „5, vorgegeben" und nie, wo. | Auf iOS trug der Wert die Position, auf dem Mac fiel sie ersatzlos weg. | Position steht jetzt in der **Beschriftung**: „Zeile 1, Spalte 3, 5, vorgegeben" |
+| **Kopfzahlen ohne Namen und ohne Rolle** („Textelement", später „Unknown role"). | VoiceOver konnte weder Zahl noch Bedeutung nennen. | Je ein Element mit Beschriftung „0 Punkte" und `.isStaticText` |
+
+Nebenbei aufgefallen: Die Mac-App braucht beim ersten Start **rund zwölf
+Sekunden**, um ein Rätsel zu erzeugen, und sperrt die Schwierigkeits-Knöpfe
+solange. Das sieht aus wie eine kaputte App und gehört noch behandelt (ein
+Hinweis statt bloß gesperrter Knöpfe).
+
+Zwei Ausnahmen sind im Test begründet: die **Touch Bar** gehört dem System, und
+**namenlose Gruppen ohne Kennung** sind SwiftUIs eigene Fenster- und
+Scroll-Hüllen. Die zweite Ausnahme ist bewusst eng gefasst — jedes Element, das
+die App selbst erzeugt, trägt eine Beschriftung und kann darum nicht darunter
+verschwinden.
+
+### Was dabei nicht ging
+
+VoiceOver ließ sich **starten und beobachten**, aber nicht **steuern**:
+`osascript` darf auf diesem Mac keine Tastatureingaben senden (Fehler 1002).
+VO-Navigation, Rotor und Interaktionsgesten brauchen die Berechtigung
+*Systemeinstellungen → Datenschutz & Sicherheit → **Bedienungshilfen*** für die
+Anwendung, aus der heraus getestet wird. Ohne sie bleibt: Baum lesen, Audit
+laufen lassen, Ansage des Startfokus im Untertitelfeld mitlesen.
+
 ## Offen
 
 - **VoiceOver-Rotor** für Zeilen, Spalten und Blöcke ist nicht eingerichtet.

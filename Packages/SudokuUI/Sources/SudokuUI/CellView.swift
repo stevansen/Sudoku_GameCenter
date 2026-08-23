@@ -13,6 +13,8 @@ struct CellView: View {
     let isWrong: Bool
     let isConflicting: Bool
     let isHinted: Bool
+    let row: Int
+    let column: Int
 
     var body: some View {
         ZStack {
@@ -47,6 +49,7 @@ struct CellView: View {
         .contentShape(Rectangle())
         .accessibilityElement()
         .accessibilityLabel(accessibilityLabel)
+        // The button around this supplies the role; this only adds the state.
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
     }
 
@@ -86,7 +89,19 @@ struct CellView: View {
         .padding(1)
     }
 
+    /// Position first, then what is in the cell.
+    ///
+    /// This used to be split — content in the label, position in the value —
+    /// which reads well on iOS. The Mac does not surface `accessibilityValue`
+    /// for these at all, so VoiceOver there announced "5, vorgegeben" and never
+    /// said where. One label works on both.
     private var accessibilityLabel: String {
+        let position = String(localized: "Zeile \(row + 1), Spalte \(column + 1)",
+                              bundle: .module)
+        return "\(position), \(contentDescription)"
+    }
+
+    private var contentDescription: String {
         if value != 0 {
             let kind = isGiven
                 ? String(localized: "vorgegeben", bundle: .module)

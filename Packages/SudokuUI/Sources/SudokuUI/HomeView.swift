@@ -147,5 +147,13 @@ public struct HomeView: View {
             Text(label).font(.caption).foregroundStyle(Theme.secondaryText)
         }
         .frame(maxWidth: .infinity)
+        // The number and its caption were two separate unnamed elements. On the
+        // Mac, VoiceOver announced the first of them as "Textelement" — no
+        // number, no name, nothing to go on. As one element it reads "0 Punkte".
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(value) \(label)")
+        // Without a role the Mac audit reports "Unknown role": an element with a
+        // name but nothing saying what kind of thing it is.
+        .accessibilityAddTraits(.isStaticText)
     }
 }

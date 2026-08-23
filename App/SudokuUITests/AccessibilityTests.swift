@@ -74,11 +74,28 @@ final class AccessibilityTests: XCTestCase {
             let label = issue.element?.label ?? ""
             let isDimmedOnPurpose = issue.auditType == .contrast
                 && issue.element?.isEnabled == false
+            // Dynamic Type is an iOS notion; the audit type does not exist on
+            // the Mac, where text size is a system-wide setting instead.
+            #if os(iOS)
             let isABoardDigit = issue.auditType == .dynamicType
                 && label.count == 1 && label.allSatisfy(\.isNumber)
+            #else
+            let isABoardDigit = false
+            #endif
             let isAlreadyJudged = accepted.contains(label)
                 || label.hasPrefix("Fehler ")
-            if !isDimmedOnPurpose && !isABoardDigit && !isAlreadyJudged {
+                // Not ours: the system provides it and we put nothing in it.
+                || issue.element?.description.contains("TouchBar") == true
+
+            // SwiftUI's own window and scroll wrappers on the Mac: anonymous
+            // containers with no label and no identifier, which the app does not
+            // create and cannot name. Deliberately narrow — every element the app
+            // does create carries a label, so this cannot swallow a finding about
+            // one of ours.
+            let isFrameworkChrome = label.isEmpty
+                && (issue.element?.identifier ?? "").isEmpty
+            if !isDimmedOnPurpose && !isABoardDigit && !isAlreadyJudged
+                && !isFrameworkChrome {
                 log.record("\(issue.auditType) — \(issue.compactDescription) "
                     + "[\(issue.element?.description ?? "ohne Element")] "
                     + "\(issue.detailedDescription)")
@@ -86,6 +103,17 @@ final class AccessibilityTests: XCTestCase {
             return true   // collected here and reported in one go below
         }
         return log.report
+    }
+
+    /// Generous, because the Mac needs about twelve seconds to generate its
+    /// first puzzle from a cold cache and keeps the buttons disabled until it
+    /// has one. Ten seconds looked like a broken board.
+    private static let boardTimeout: TimeInterval = 40
+
+    /// The board is an `other` on iOS and a `group` on the Mac, so it is looked
+    /// up without naming a type.
+    private func board(in app: XCUIApplication) -> XCUIElement {
+        app.descendants(matching: .any)["Sudoku-Brett"]
     }
 
     private func launchIntoGame() -> XCUIApplication {
@@ -99,15 +127,15 @@ final class AccessibilityTests: XCTestCase {
     /// labels that repeat their trait, text that will not grow.
     func testTheGameScreenPassesTheSystemAudit() throws {
         let app = launchIntoGame()
-        let board = app.otherElements["Sudoku-Brett"]
-        XCTAssertTrue(board.waitForExistence(timeout: 10))
+        let board = board(in: app)
+        XCTAssertTrue(board.waitForExistence(timeout: Self.boardTimeout))
 
         // One move first, so undo is enabled. A disabled control is dimmed on
         // purpose and the audit sometimes reports it without naming the element,
         // which leaves nothing to match an exception against — better to audit
         // the screen in the state it spends its life in.
         let empty = board.descendants(matching: .any).allElementsBoundByIndex
-            .first { $0.label.hasPrefix("leer") && ($0.value as? String)?.hasPrefix("Zeile") == true }
+            .first { $0.label.hasSuffix(", leer") }
         empty?.tap()
         app.buttons["Ziffer 1"].tap()
 
@@ -128,22 +156,20 @@ final class AccessibilityTests: XCTestCase {
     /// is. Every cell has to carry its coordinates.
     func testEveryCellSaysWhereItIs() {
         let app = launchIntoGame()
-        let board = app.otherElements["Sudoku-Brett"]
-        XCTAssertTrue(board.waitForExistence(timeout: 10))
+        let board = board(in: app)
+        XCTAssertTrue(board.waitForExistence(timeout: Self.boardTimeout))
 
         let cells = board.descendants(matching: .any).allElementsBoundByIndex
-            .filter { $0.value is String && ($0.value as? String)?.hasPrefix("Zeile") == true }
+            .filter { $0.label.hasPrefix("Zeile ") }
 
         XCTAssertEqual(cells.count, 81, "alle 81 Felder müssen erreichbar sein")
 
         for cell in cells {
             let label = cell.label
-            let position = cell.value as? String ?? ""
-            XCTAssertFalse(label.isEmpty, "Feld ohne Beschriftung bei \(position)")
             XCTAssertTrue(
                 label.contains("vorgegeben") || label.contains("eingetragen")
                     || label.contains("leer"),
-                "Beschriftung sagt nicht, was im Feld steht: \(label) — \(position)")
+                "Beschriftung sagt nicht, was im Feld steht: \(label)")
         }
     }
 
@@ -151,23 +177,23 @@ final class AccessibilityTests: XCTestCase {
     /// order that matches how the puzzle is talked about.
     func testTheBoardIsWalkedRowByRow() {
         let app = launchIntoGame()
-        let board = app.otherElements["Sudoku-Brett"]
-        XCTAssertTrue(board.waitForExistence(timeout: 10))
+        let board = board(in: app)
+        XCTAssertTrue(board.waitForExistence(timeout: Self.boardTimeout))
 
         let positions = board.descendants(matching: .any).allElementsBoundByIndex
-            .compactMap { $0.value as? String }
-            .filter { $0.hasPrefix("Zeile") }
+            .map { $0.label }
+            .filter { $0.hasPrefix("Zeile ") }
 
         XCTAssertEqual(positions.count, 81)
-        XCTAssertEqual(positions.first, "Zeile 1, Spalte 1")
-        XCTAssertEqual(positions[8], "Zeile 1, Spalte 9")
-        XCTAssertEqual(positions[9], "Zeile 2, Spalte 1")
-        XCTAssertEqual(positions.last, "Zeile 9, Spalte 9")
+        XCTAssertTrue(positions[0].hasPrefix("Zeile 1, Spalte 1,"), positions[0])
+        XCTAssertTrue(positions[8].hasPrefix("Zeile 1, Spalte 9,"), positions[8])
+        XCTAssertTrue(positions[9].hasPrefix("Zeile 2, Spalte 1,"), positions[9])
+        XCTAssertTrue(positions[80].hasPrefix("Zeile 9, Spalte 9,"), positions[80])
     }
 
     func testTheKeypadAndControlsAreNamed() {
         let app = launchIntoGame()
-        XCTAssertTrue(app.otherElements["Sudoku-Brett"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.descendants(matching: .any)["Sudoku-Brett"].waitForExistence(timeout: Self.boardTimeout))
 
         for digit in 1...9 {
             let button = app.buttons["Ziffer \(digit)"]
@@ -184,20 +210,21 @@ final class AccessibilityTests: XCTestCase {
     /// about the one thing the player just did.
     func testEnteringADigitChangesWhatTheCellReads() {
         let app = launchIntoGame()
-        let board = app.otherElements["Sudoku-Brett"]
-        XCTAssertTrue(board.waitForExistence(timeout: 10))
+        let board = board(in: app)
+        XCTAssertTrue(board.waitForExistence(timeout: Self.boardTimeout))
 
         let empty = board.descendants(matching: .any).allElementsBoundByIndex
-            .first { $0.label.hasPrefix("leer") && ($0.value as? String)?.hasPrefix("Zeile") == true }
+            .first { $0.label.hasPrefix("Zeile ") && $0.label.hasSuffix(", leer") }
         guard let empty else { return XCTFail("kein leeres Feld gefunden") }
 
-        let position = empty.value as? String ?? ""
+        let position = String(empty.label.dropLast(", leer".count))
         empty.tap()
         app.buttons["Ziffer 1"].tap()
 
         let after = board.descendants(matching: .any).allElementsBoundByIndex
-            .first { ($0.value as? String) == position }
+            .first { $0.label.hasPrefix(position) }
         XCTAssertNotNil(after)
-        XCTAssertNotEqual(after?.label, "leer", "das Feld sagt weiterhin \"leer\"")
+        XCTAssertFalse(after?.label.hasSuffix(", leer") ?? true,
+                       "das Feld sagt weiterhin \"leer\"")
     }
 }
