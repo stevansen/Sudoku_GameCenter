@@ -84,6 +84,17 @@ Präfix für alle IDs: `com.sudoku.achievement.`
 Für jeden Erfolg braucht App Store Connect ein **Bild, 512 × 512 px, PNG oder
 JPEG, ohne Alphakanal**. Siehe [assets-spec.md](app-store/assets-spec.md).
 
+Erzeugt mit `Scripts/render-achievements.swift` — ein System statt dreißig
+Einfällen: derselbe Blauverlauf wie das App-Symbol, ein weißes SF-Symbol in der
+Mitte, und wo ein Erfolg eine Stufe in einer Reihe ist, die Zahl darunter. Die
+Bilder landen in `~/Developer/Sudoku-Achievements` und **nicht im Repo**.
+
+Bestenlisten, Erfolge und ihre Bilder sind über die App-Store-Connect-API
+angelegt, nicht abgetippt. Zwei Eigenheiten dabei: `gameCenterAchievementImages`
+kennt **keine** `sourceFileChecksum` (anders als Screenshots — dort ist sie
+Pflicht), und die Bilder hängen an der **Lokalisierung**, nicht am Erfolg, also
+zweimal je Erfolg bei zwei Sprachen.
+
 ---
 
 ## Umsetzung im Code
