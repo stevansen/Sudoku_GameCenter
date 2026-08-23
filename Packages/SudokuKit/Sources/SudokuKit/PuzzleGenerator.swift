@@ -54,39 +54,40 @@ public enum PuzzleGenerator {
     /// quietly break sync and the shared daily puzzle.
     public static func generate(_ id: PuzzleID, options: GeneratorOptions = .default) -> Puzzle {
         var fallback: Puzzle?
+        let total = max(1, options.maxAttempts)
 
-        for attempt in 0..<max(1, options.maxAttempts) {
-            let seed = attempt == 0 ? id.seed : mix(id.seed, UInt64(attempt))
-            var rng = SplitMix64(seed: seed)
+        // The attempts are independent — each is a pure function of the id and
+        // its index — so they are evaluated a batch at a time across the cores
+        // instead of one after another. Hard needs about sixteen attempts before
+        // one is characteristic of its tier, and waiting for those in sequence is
+        // where the seconds went.
+        //
+        // The result does not change. Batches are taken in order and the lowest
+        // index that succeeds is returned, which is the same attempt the
+        // sequential loop would have stopped at. That matters more than the
+        // speed: the id *is* the puzzle, and a stored id must keep naming the
+        // grid it named before.
+        // The first attempt is taken alone. Easy and medium succeed on it almost
+        // every time, and running a batch of eight to find that out costs them
+        // eight times the work for nothing — measured, it tripled them. Only once
+        // the first attempt has failed is it worth spreading out.
+        var start = 0
+        while start < total {
+            let width = start == 0 ? 1 : batchSize
+            let count = min(width, total - start)
+            let outcomes = evaluate(attempts: start..<(start + count), of: id, options: options)
 
-            let solution = solvedGrid(using: &rng)
-            let givens = dig(from: solution, difficulty: id.difficulty, options: options,
-                             version: id.version, using: &rng)
-
-            // Cheap rejection before the expensive part. Four attempts in five
-            // miss the tier, and deciding that with a singles-only solve costs a
-            // fraction of a full rating, which has to try every technique at
-            // every step. Equivalent to ``meetsTier``: the solver always takes
-            // the cheapest step available, so being solvable within a lower
-            // ceiling means exactly that nothing above it was ever required.
-            if let below = id.difficulty.techniqueTierBelowRequirement,
-               LogicalSolver.solve(givens, ceiling: below).solved {
-                continue
+            for offset in 0..<count {
+                switch outcomes[offset] {
+                case .met(let puzzle):
+                    return puzzle
+                case .missed(let puzzle):
+                    if fallback == nil { fallback = puzzle }
+                case .rejected:
+                    continue
+                }
             }
-            guard let rating = DifficultyRater.rate(givens) else { continue }
-
-            if meetsTier(id.difficulty, rating: rating) {
-                return Puzzle(
-                    id: id, givens: givens, solution: solution, difficulty: id.difficulty,
-                    rating: rating.score, techniques: rating.techniques)
-            }
-            // Not characteristic of the tier yet — keep the first near miss in
-            // case every attempt falls short, and report what it actually is.
-            if fallback == nil {
-                fallback = Puzzle(
-                    id: id, givens: givens, solution: solution, difficulty: rating.difficulty,
-                    rating: rating.score, techniques: rating.techniques)
-            }
+            start += count
         }
         if let fallback { return fallback }
 
@@ -102,6 +103,91 @@ public enum PuzzleGenerator {
             id: id, givens: givens, solution: solution,
             difficulty: rating?.difficulty ?? .easy, rating: rating?.score ?? 0,
             techniques: rating?.techniques ?? [])
+    }
+
+    /// How one attempt turned out.
+    enum Outcome {
+        /// Characteristic of the tier it was built for.
+        case met(Puzzle)
+        /// A real puzzle, but of some other tier. Kept in case nothing fits.
+        case missed(Puzzle)
+        /// Not worth rating, or not ratable.
+        case rejected
+    }
+
+    /// How many attempts to run at once. One per core, but never so many that a
+    /// tier needing a single attempt pays for a crowd of them.
+    static var batchSize: Int {
+        max(1, min(8, ProcessInfo.processInfo.activeProcessorCount))
+    }
+
+    /// Runs a batch of attempts concurrently and returns them in index order.
+    static func evaluate(
+        attempts: Range<Int>, of id: PuzzleID, options: GeneratorOptions
+    ) -> [Outcome] {
+        let count = attempts.count
+        if count == 1 {
+            return [attempt(attempts.lowerBound, of: id, options: options)]
+        }
+
+        let results = Results(count: count)
+        DispatchQueue.concurrentPerform(iterations: count) { offset in
+            let outcome = attempt(attempts.lowerBound + offset, of: id, options: options)
+            results.set(outcome, at: offset)
+        }
+        return results.ordered()
+    }
+
+    /// Somewhere for concurrent attempts to put their results. Each writes its
+    /// own slot; the lock is only there to satisfy the compiler that they do.
+    private final class Results: @unchecked Sendable {
+        private let lock = NSLock()
+        private var slots: [Outcome?]
+
+        init(count: Int) { slots = Array(repeating: nil, count: count) }
+
+        func set(_ outcome: Outcome, at index: Int) {
+            lock.lock(); defer { lock.unlock() }
+            slots[index] = outcome
+        }
+
+        func ordered() -> [Outcome] {
+            lock.lock(); defer { lock.unlock() }
+            return slots.map { $0 ?? .rejected }
+        }
+    }
+
+    /// One attempt: build a grid, dig it, and decide what it turned out to be.
+    static func attempt(
+        _ index: Int, of id: PuzzleID, options: GeneratorOptions
+    ) -> Outcome {
+        let seed = index == 0 ? id.seed : mix(id.seed, UInt64(index))
+        var rng = SplitMix64(seed: seed)
+
+        let solution = solvedGrid(using: &rng)
+        let givens = dig(from: solution, difficulty: id.difficulty, options: options,
+                         version: id.version, using: &rng)
+
+        // Cheap rejection before the expensive part. Four attempts in five miss
+        // the tier, and deciding that with a singles-only solve costs a fraction
+        // of a full rating, which has to try every technique at every step.
+        // Equivalent to ``meetsTier``: the solver always takes the cheapest step
+        // available, so being solvable within a lower ceiling means exactly that
+        // nothing above it was ever required.
+        if let below = id.difficulty.techniqueTierBelowRequirement,
+           LogicalSolver.solve(givens, ceiling: below).solved {
+            return .rejected
+        }
+        guard let rating = DifficultyRater.rate(givens) else { return .rejected }
+
+        if meetsTier(id.difficulty, rating: rating) {
+            return .met(Puzzle(
+                id: id, givens: givens, solution: solution, difficulty: id.difficulty,
+                rating: rating.score, techniques: rating.techniques))
+        }
+        return .missed(Puzzle(
+            id: id, givens: givens, solution: solution, difficulty: rating.difficulty,
+            rating: rating.score, techniques: rating.techniques))
     }
 
     /// Whether a rated puzzle is characteristic of the tier it was built for.

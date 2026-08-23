@@ -5,7 +5,15 @@
 public struct PuzzleID: Sendable, Hashable, Codable, CustomStringConvertible {
     /// Bump this whenever a generator change would alter the puzzle a seed produces.
     /// Older versions must keep working so existing IDs stay valid.
-    public static let currentVersion = 2
+    ///
+    /// Back at 1 deliberately. Version 2 dropped the point symmetry from the
+    /// harder tiers to make them cheaper to generate; the symmetry was wanted
+    /// more than the speed, and the speed was recovered another way — by
+    /// evaluating the attempts across cores rather than one after another. Since
+    /// the rule we want *is* version 1's rule, minting a version 3 that behaves
+    /// identically to version 1 would be noise. Version 2 stays supported for any
+    /// id saved while it was current.
+    public static let currentVersion = 1
 
     public let version: Int
     public let difficulty: Difficulty

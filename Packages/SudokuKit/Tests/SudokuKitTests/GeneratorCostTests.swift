@@ -2,29 +2,42 @@ import Foundation
 import Testing
 @testable import SudokuKit
 
-/// Generation used to be dominated by attempts that were thrown away.
+/// Generation is dominated by attempts that get thrown away.
 ///
 /// Digging in point-symmetric pairs stops about four givens short of where free
 /// digging stops, and at that density the puzzle can be solved with singles
-/// alone — which is exactly what the tiers requiring a technique reject. Hard
-/// took sixteen attempts and nearly four seconds. Measured over twelve digs it
-/// produced *nothing* usable while symmetric and five in twelve without.
+/// alone — which is exactly what the tiers requiring a technique reject. So hard
+/// needs around sixteen attempts before one is characteristic of its tier.
 ///
-/// Timings are machine-dependent, so the bounds here are generous. They exist to
-/// catch a return of that shape, not to police milliseconds.
+/// That cost is the price of the symmetry, and the symmetry is wanted: it was
+/// dropped once, for speed, and put back. What pays for it is running the
+/// attempts across cores rather than one after another. These tests watch the
+/// count, which is what the cost is made of.
 @Suite("Generation cost", .serialized)
 struct GeneratorCostTests {
+    /// Counted, not timed.
+    ///
+    /// A wall-clock budget cannot be asserted here: the suites run alongside each
+    /// other, and generation now spreads its attempts across the same cores the
+    /// rest of the tests are using. Under that load a tier that takes 0.6 s alone
+    /// takes eight. The attempt count is what the cost is actually made of, and
+    /// it does not move with the machine.
     @Test(arguments: [
-        (Difficulty.easy, 1.0), (.medium, 1.0), (.hard, 1.5), (.expert, 4.0), (.evil, 4.0),
+        (Difficulty.easy, 2), (.medium, 4), (.hard, 40), (.expert, 40), (.evil, 40),
     ])
-    func aTierIsProducedWithoutAPileOfWastedAttempts(difficulty: Difficulty, budget: Double) {
-        let start = Date()
-        let puzzle = PuzzleGenerator.generate(difficulty: difficulty, seed: 20260823)
-        let elapsed = Date().timeIntervalSince(start)
+    func aTierIsFoundWithinSoManyAttempts(difficulty: Difficulty, budget: Int) {
+        let id = PuzzleID(difficulty: difficulty, seed: 20260823)
+        let options = GeneratorOptions.default
+        var used = 0
 
-        #expect(puzzle.difficulty == difficulty)
-        #expect(elapsed < budget,
-                "\(difficulty.rawValue) brauchte \(elapsed)s, Budget \(budget)s")
+        for index in 0..<options.maxAttempts {
+            used = index + 1
+            if case .met = PuzzleGenerator.attempt(index, of: id, options: options) { break }
+        }
+
+        #expect(used <= budget,
+                "\(difficulty.rawValue) brauchte \(used) Versuche, erlaubt \(budget)")
+        #expect(PuzzleGenerator.generate(id).difficulty == difficulty)
     }
 
     /// The measurement behind the change, kept as a test so the reasoning does

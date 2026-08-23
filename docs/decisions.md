@@ -232,14 +232,29 @@ localisation-free and its tests about logic rather than strings.
   digs, hard produced **nothing usable while symmetric and five in twelve
   without**, at the same cost per dig.
 
-  So from generator version 2, the symmetry is kept only for the tiers that
-  require no particular technique — easy and medium. Hard fell from 3.9 s to
-  0.19 s, evil from 1.25 s to 0.54 s, expert from 1.15 s to 0.86 s.
+  Version 2 dropped the symmetry for those tiers and took hard from 3.9 s to
+  0.19 s. **It was reverted**: the symmetry is wanted more than the speed. The
+  grids are prettier with it and that is a real part of the thing.
 
-  The trade is real and worth naming: hard, expert and evil grids are no longer
-  point-symmetric. They are less pretty. A tier defined by the techniques it
-  demands cannot also be defined by its shape — the shape was quietly preventing
-  it from being what it claimed to be.
+  So the cost stands — hard needs about sixteen attempts — and it is paid for
+  differently: see below.
+- **The attempts run across cores, not one after another.** Each attempt is a
+  pure function of the id and its index, so there is nothing to serialise them
+  for. Generation takes the first attempt alone — easy and medium succeed on it
+  almost every time, and running a batch of eight to discover that tripled their
+  cost — and only spreads out once that has failed. Medians, symmetry restored:
+  easy 55 ms, medium 95 ms, expert 275 ms, hard 645 ms, evil 1005 ms. Hard was
+  3.9 s.
+
+  Batches are taken in order and the lowest index that succeeds is returned,
+  which is the attempt the sequential loop would have stopped at. That matters
+  more than the speed — a stored id has to keep naming the grid it named before —
+  and there is a test that runs both and compares.
+- **Generation timing cannot be asserted in the test suite.** The suites run
+  alongside each other and generation now uses the same cores they do; a tier
+  that takes 0.6 s on its own takes eight seconds under that load. The tests
+  count attempts instead, which is what the cost is actually made of and does not
+  move with the machine.
 - **The generator version exists for exactly this.** `SavedGame` stores only the
   puzzle *id*; the grid is regenerated from it. Changing what a seed produces
   would hand a player in mid-game a different puzzle with their entries scattered

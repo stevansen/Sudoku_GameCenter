@@ -3,23 +3,21 @@
 public enum Difficulty: String, CaseIterable, Codable, Sendable, Hashable {
     case easy, medium, hard, expert, evil
 
-    /// Roughly what one puzzle of this tier costs to generate, in milliseconds,
-    /// measured on an Apple silicon Mac with generator version 2.
+    /// Roughly what one puzzle of this tier costs to generate, in milliseconds —
+    /// median of five on an Apple silicon Mac.
     ///
-    /// Not a schedule — a running order, used to decide what to warm up first.
-    ///
-    /// Under version 1 hard was the most expensive of the five at nearly four
-    /// seconds, ahead of evil, because point symmetry stopped the digging four
-    /// givens short and almost every attempt came out solvable with singles and
-    /// had to be thrown away. Dropping the symmetry for the tiers that require a
-    /// technique took it to under two hundred milliseconds.
+    /// Not a schedule, a running order: it decides what the factory warms up
+    /// first. The figures are worth keeping because the cost is not what the
+    /// ordering of the tiers suggests. Hard is dearer than expert, because it
+    /// must need more than singles while staying under a chain — a narrower
+    /// target than either neighbour — and evil is dearest of all.
     public var generationCost: Int {
         switch self {
-        case .easy: 25
-        case .medium: 55
-        case .hard: 190
-        case .evil: 540
-        case .expert: 860
+        case .easy: 55
+        case .medium: 95
+        case .expert: 275
+        case .hard: 645
+        case .evil: 1_005
         }
     }
 
