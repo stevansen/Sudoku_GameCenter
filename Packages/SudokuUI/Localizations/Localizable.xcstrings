@@ -1485,13 +1485,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Row %1$lld, column %2$lld"
+            "value": "row %1$lld, column %2$lld"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Riga %1$lld, colonna %2$lld"
+            "value": "riga %1$lld, colonna %2$lld"
           }
         }
       }

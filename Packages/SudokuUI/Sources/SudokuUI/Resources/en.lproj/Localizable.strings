@@ -70,7 +70,7 @@
 "Wiederholen" = "Redo";
 "Wings und Färben" = "Wings and colouring";
 "Zeile %lld" = "Row %lld";
-"Zeile %lld, Spalte %lld" = "Row %1$lld, column %2$lld";
+"Zeile %lld, Spalte %lld" = "row %1$lld, column %2$lld";
 "Zeitfaktor" = "Time factor";
 "Ziffer %lld" = "Digit %lld";
 "Zum Ankommen" = "To settle in";

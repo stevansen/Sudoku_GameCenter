@@ -124,6 +124,7 @@ public final class AppModel {
            index + 1 < ProcessInfo.processInfo.arguments.count,
            let difficulty = Difficulty(rawValue: ProcessInfo.processInfo.arguments[index + 1]) {
             await startGame(difficulty: difficulty)
+            stageForScreenshot()
         }
         #endif
     }
@@ -227,6 +228,69 @@ public final class AppModel {
             return false
         }
     }
+
+    #if DEBUG
+    /// Puts the game into a known state for a store screenshot.
+    ///
+    /// Screenshots have to show the app doing something, and driving it there
+    /// through the interface for every language and device takes hundreds of
+    /// taps. These arguments set the state directly:
+    ///
+    /// - `-prefill N` — fill N empty cells with the right digits
+    /// - `-with-notes` — pencil candidates into a few of the empty ones
+    /// - `-show-hint` — ask for a hint and leave the card up
+    ///
+    /// Debug only, like `-open-game`; none of it ships.
+    private func stageForScreenshot() {
+        guard let session else { return }
+        let arguments = ProcessInfo.processInfo.arguments
+
+        if let index = arguments.firstIndex(of: "-prefill"),
+           index + 1 < arguments.count,
+           let wanted = Int(arguments[index + 1]) {
+            // Scattered, not top-down: filling in cell order leaves the first
+            // rows complete and the last ones untouched, which looks like a bug
+            // rather than a game in progress. Stepping by a number coprime with
+            // 81 visits every cell in a spread-out order.
+            var filled = 0
+            var cell = 0
+            for _ in 0..<81 where filled < wanted {
+                if session.entries[cell] == 0 {
+                    session.enter(Int(session.puzzle.solution[cell]), at: cell)
+                    filled += 1
+                }
+                cell = (cell + 23) % 81
+            }
+        }
+
+        if arguments.contains("-with-notes") {
+            let mode = session.inputMode
+            session.inputMode = .note
+            for cell in (0..<81) where session.entries[cell] == 0 {
+                guard cell % 3 == 0 else { continue }
+                for digit in candidatesForScreenshot(at: cell, in: session) {
+                    session.enter(digit, at: cell)
+                }
+            }
+            session.inputMode = mode
+            session.selection = nil
+        }
+
+        if arguments.contains("-show-hint") {
+            _ = session.requestHint()
+        }
+    }
+
+    /// A believable few candidates: the digits that are actually still possible.
+    private func candidatesForScreenshot(at cell: Int, in session: GameSession) -> [Int] {
+        var possible: [Int] = []
+        for digit in 1...9 {
+            let clashes = Units.peers[cell].contains { session.entries[$0] == UInt8(digit) }
+            if !clashes { possible.append(digit) }
+        }
+        return Array(possible.prefix(3))
+    }
+    #endif
 
     /// Acts on whatever a Shortcuts or Siri intent asked for before the app was
     /// running. Call it on launch and whenever the app comes to the front.

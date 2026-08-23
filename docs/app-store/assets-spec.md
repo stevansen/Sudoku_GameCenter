@@ -18,6 +18,17 @@ Zurückweisung beim Upload.
 
 ## Screenshots
 
+> Erzeugt mit `Scripts/capture-screenshots.sh` — vier Motive je Sprache
+> (de/en/it) und Gerätefamilie, 45 Bilder. Sie landen standardmäßig in
+> `~/Developer/Sudoku-Screenshots` und **nicht im Repo**: rund 70 MB.
+>
+> Die Zustände stellt das Skript über Debug-Startargumente her (`-prefill`,
+> `-with-notes`, `-show-hint`), nicht durch Tippen — über die Oberfläche wären
+> es hunderte Schritte je Sprache. Zwei Fallen, beide dort behandelt: der
+> tvOS-Simulator liefert **ohne offenes Simulator-Fenster keinen Bildpuffer**,
+> und die Simulator-PNGs tragen einen **Alphakanal**, obwohl jedes Pixel deckend
+> ist — App Store Connect weist sie dafür zurück.
+
 Pro Sprache und Gerätefamilie sind bis zu 10 möglich; **mindestens einer ist
 Pflicht**, empfohlen sind drei bis fünf. Apple skaliert von der größten Größe auf
 kleinere Geräte herunter — es reicht also je Familie ein Satz.
