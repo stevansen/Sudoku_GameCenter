@@ -14,8 +14,24 @@ public enum Theme {
 
     public static let givenDigit = Color.primary
     public static let enteredDigit = Color.accentColor
-    public static let wrongDigit = Color.red
-    public static let noteDigit = Color.secondary
+    /// A wrong digit sits on a red-tinted cell, so plain `.red` on that tint
+    /// measures under 4.5:1 and Xcode's audit fails it outright — in the one
+    /// state where being able to read the number matters most. These are the
+    /// same hue, moved far enough from the background in each appearance.
+    public static func wrongDigit(for scheme: ColorScheme) -> Color {
+        scheme == .dark
+            ? Color(red: 1.00, green: 0.48, blue: 0.42)
+            : Color(red: 0.62, green: 0.05, blue: 0.05)
+    }
+    public static let noteDigit = Color.primary.opacity(0.62)
+
+    /// Quieter than the body text, but not so quiet it fails a contrast check.
+    ///
+    /// SwiftUI's `.secondary` renders as roughly #8E8E93 on white — about 3.5:1,
+    /// under the 4.5:1 that normal-size text is meant to meet, and Xcode's
+    /// accessibility audit flags every label using it. This sits near 7:1 and
+    /// still reads as secondary.
+    public static let secondaryText = Color.primary.opacity(0.65)
 
     public static let thinLine: CGFloat = 1
     public static let thickLine: CGFloat = 2.5

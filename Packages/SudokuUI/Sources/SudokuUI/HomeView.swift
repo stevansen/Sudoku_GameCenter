@@ -9,6 +9,7 @@ public struct HomeView: View {
     var onContinue: () -> Void
     var onStartDaily: () -> Void
     @State private var showsGameCenter = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     public init(
         model: AppModel,
@@ -36,7 +37,7 @@ public struct HomeView: View {
                                 .font(.headline)
                             Text("\(session.puzzle.difficulty.localizedName) · \(session.elapsedSeconds.asClock) · \(session.filledCount)/81")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Theme.secondaryText)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
@@ -52,13 +53,14 @@ public struct HomeView: View {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(difficulty.localizedName).font(.headline)
                                     Text(difficulty.localizedSubtitle)
+                                        .fixedSize(horizontal: false, vertical: true)
                                         .font(.caption)
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(Theme.secondaryText)
                                 }
                                 Spacer()
                                 Text(String(model.stats.solvedCountByDifficulty[difficulty.rawValue] ?? 0))
                                     .font(.system(.subheadline, design: .rounded).monospacedDigit())
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Theme.secondaryText)
                             }
                             .padding()
                             .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
@@ -89,7 +91,10 @@ public struct HomeView: View {
                         ? String(localized: "Heute schon gelöst", bundle: .module)
                         : String(localized: "Für alle das gleiche · doppelte Punkte", bundle: .module))
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.secondaryText)
+                        // At the larger text sizes this line is cut off rather
+                        // than wrapped, which the dynamic type audit catches.
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer()
                 Image(systemName: model.hasSolvedTodaysPuzzle ? "checkmark.circle.fill" : "calendar")
@@ -121,7 +126,15 @@ public struct HomeView: View {
     }
 
     private var statsHeader: some View {
-        HStack(spacing: 0) {
+        // Three columns across a phone works until the text gets big, at which
+        // point each column is too narrow for its own single word and "Punkte"
+        // is hyphenated into "Punkt-/e". At the accessibility sizes the three
+        // stack instead.
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12))
+            : AnyLayout(HStackLayout(spacing: 0))
+
+        return layout {
             statistic(String(localized: "Punkte", bundle: .module), String(model.stats.totalPoints))
             statistic(String(localized: "Gelöst", bundle: .module), String(model.stats.solvedPuzzleIDs.count))
             statistic(String(localized: "Serie", bundle: .module), String(model.stats.streakDays))
@@ -131,7 +144,7 @@ public struct HomeView: View {
     private func statistic(_ label: String, _ value: String) -> some View {
         VStack(spacing: 2) {
             Text(value).font(.system(.title2, design: .rounded).monospacedDigit())
-            Text(label).font(.caption).foregroundStyle(.secondary)
+            Text(label).font(.caption).foregroundStyle(Theme.secondaryText)
         }
         .frame(maxWidth: .infinity)
     }

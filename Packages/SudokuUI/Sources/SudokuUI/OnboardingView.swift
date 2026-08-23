@@ -56,7 +56,7 @@ struct OnboardingView: View {
                             Text(point.title).font(.headline)
                             Text(point.detail)
                                 .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Theme.secondaryText)
                         }
                     }
                     .accessibilityElement(children: .combine)

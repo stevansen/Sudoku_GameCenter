@@ -81,9 +81,12 @@ public struct GameView: View {
                     .font(.headline)
                 Text(String(localized: "Fehler \(session.mistakes) · Hinweise \(session.hintsUsed)", bundle: .module))
                     .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
+                    .foregroundStyle(Theme.secondaryText)
+                    // No line limit and no shrinking: forcing this onto one
+                    // line means shrinking it below the size the reader asked
+                    // for, which is what the dynamic type audit objects to. It
+                    // may take two lines at the accessibility sizes.
+                    .fixedSize(horizontal: false, vertical: true)
             }
             Spacer()
             Button {
@@ -106,7 +109,7 @@ public struct GameView: View {
                 .font(.subheadline.weight(.semibold))
             Text(HintText.explanation(for: hint))
                 .font(.footnote)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.secondaryText)
                 .fixedSize(horizontal: false, vertical: true)
             HStack {
                 Button(String(localized: "Verstanden", bundle: .module)) { session.dismissHint() }

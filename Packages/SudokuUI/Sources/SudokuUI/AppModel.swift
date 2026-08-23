@@ -106,6 +106,14 @@ public final class AppModel {
             || flags.flag(forKey: Self.onboardingKey)
         showsOnboarding = !seen
 
+        #if DEBUG
+        // The UI tests would otherwise spend every launch dismissing a sheet
+        // they are not there to test. Debug only, like -open-game.
+        if ProcessInfo.processInfo.arguments.contains("-skip-onboarding") {
+            showsOnboarding = false
+        }
+        #endif
+
         await handlePendingLaunchRequest()
 
         #if DEBUG

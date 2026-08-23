@@ -3,6 +3,7 @@ import SudokuKit
 
 /// One square of the board.
 struct CellView: View {
+    @Environment(\.colorScheme) private var colorScheme
     let value: UInt8
     let notes: Candidates
     let isGiven: Bool
@@ -38,7 +39,7 @@ struct CellView: View {
                         path.addLine(to: CGPoint(x: 0, y: geometry.size.height - size))
                         path.closeSubpath()
                     }
-                    .fill(Theme.wrongDigit)
+                    .fill(Theme.wrongDigit(for: colorScheme))
                 }
                 .allowsHitTesting(false)
             }
@@ -63,7 +64,7 @@ struct CellView: View {
     }
 
     private var digitColor: Color {
-        if isWrong || isConflicting { return Theme.wrongDigit }
+        if isWrong || isConflicting { return Theme.wrongDigit(for: colorScheme) }
         return isGiven ? Theme.givenDigit : Theme.enteredDigit
     }
 

@@ -30,15 +30,53 @@ seine Fehler sagt, ist ein anderes, schlechteres Spiel.
   Pfeiltasten, Ziffern, ⌘Z, Leertaste, plus Menübefehle.
 - **Focus Engine**: Auf dem Apple TV ist jede Zelle ein Fokusziel.
 
+## Was der Testlauf gefunden hat (2026-08-23)
+
+`App/SudokuUITests/AccessibilityTests.swift` liest den Baum, den VoiceOver
+vorliest, und lässt Xcodes eigene Prüfung (`performAccessibilityAudit`) über
+beide Bildschirme laufen. **VoiceOver selbst läuft im Simulator nicht** — der
+Dienst `com.apple.VoiceOverTouch` ist vorhanden, startet aber nicht; es gibt
+weder Cursor noch Ansage. Der Test prüft daher die Daten, nicht die Sprachausgabe.
+
+Er fand auf Anhieb sechs Sachen, davon zwei schwerwiegend:
+
+| Befund | Warum es zählt | Behoben durch |
+|---|---|---|
+| **Das Brett war ein einziges Element.** `.accessibilityLabel` auf dem Container versteckt alle Kinder — VoiceOver las „Sudoku-Brett" und bot keinen Weg hinein. Alle 81 Felder unerreichbar. | Das Spiel war per Screenreader **nicht spielbar**. Die Beschriftungen an den Zellen waren gesetzt, halfen aber niemandem. | `.accessibilityElement(children: .contain)` |
+| **Falsche Ziffer rot auf rot getöntem Grund**, unter 4,5:1 — „Contrast failed", nicht nur knapp. | Ausgerechnet der Fehlerzustand war der am schlechtesten lesbare. | Eigene Rotwerte je Erscheinungsbild |
+| Sekundärtext durchgehend bei ~3,5:1 (SwiftUIs `.secondary` ist rund #8E8E93 auf Weiß). | Betraf jede Beschriftung auf beiden Bildschirmen. | `Theme.secondaryText` bei ~7:1 |
+| Notizmodus wurde **nur über die Tönung** angezeigt. | Für einen Screenreader gar nicht vorhanden. | `.isSelected`-Merkmal |
+| Kopfzeile mit `.lineLimit(1)` und `.minimumScaleFactor(0.7)`. | Erzwang eine Zeile und schrumpfte den Text unter die gewählte Größe. | Beides entfernt, Umbruch erlaubt |
+| Bei größter Textgröße: **das Brett schrumpfte auf ein Drittel**, während „Rückgängig" als „Rüc/kgä/ngig" drei Zeilen fraß. Die Kopfzeile trennte „Punkte" zu „Punkt-/e". | Das Spielfeld ist der Zweck der App. | Bedienleiste nur mit Symbolen, Kopfzeile stapelt vertikal |
+
+Angesehen und als Prüfungs-Vorsicht eingestuft, nicht als Fehler — jeweils bei
+größter Textgröße mit eigenen Augen kontrolliert, der Text ist vollständig
+lesbar und lediglich mit deutscher Silbentrennung umbrochen:
+„Für alle das gleiche · doppelte Punkte", „Wings und Färben",
+„Fehler … · Hinweise …" sowie der System-Zurück-Knopf. Sie stehen als benannte
+Ausnahmen im Test; alles andere lässt ihn fehlschlagen, damit ein **neuer**
+Befund nicht stillschweigend mit durchrutscht.
+
+Zwei bauartbedingte Ausnahmen, ebenfalls im Test begründet:
+
+- **Deaktivierte Bedienelemente** sind absichtlich gedimmt; WCAG nimmt inaktive
+  Komponenten vom Kontrastkriterium aus.
+- **Die Brettziffern folgen nicht der Textgröße.** Sie sind auf die Zelle
+  bemessen; ein 9×9-Raster kann nicht umbrechen. Stattdessen skaliert das Brett
+  mit dem verfügbaren Platz, und über VoiceOver ist jedes Feld unabhängig von der
+  Textgröße erreichbar.
+
 ## Offen
 
 - **VoiceOver-Rotor** für Zeilen, Spalten und Blöcke ist nicht eingerichtet.
   Navigiert wird derzeit Zelle für Zelle, was auf 81 Feldern mühsam ist.
 - **Farbenblinden-Palette** als Einstellung fehlt; die Formmarkierung deckt den
   wichtigsten Fall ab, ersetzt sie aber nicht.
-- **Mit echtem VoiceOver ungeprüft.** Die Labels sind gesetzt und im Code
-  nachvollziehbar, aber niemand hat die App mit eingeschaltetem Screenreader
-  bedient. Das gehört vor die Einreichung.
+- **Mit echtem VoiceOver auf einem Gerät weiterhin ungeprüft.** Der Baum stimmt
+  und wird bei jedem Lauf geprüft, aber Sprachausgabe, Gesten und der Rotor
+  lassen sich im Simulator nicht ausprobieren. Auf dem Mac ginge es mit echtem
+  VoiceOver — das übernimmt allerdings die ganze Maschine und gehört deshalb dem
+  Nutzer selbst überlassen.
 
 ## Lokalisierung
 

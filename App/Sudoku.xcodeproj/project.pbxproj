@@ -12,6 +12,11 @@
 			path = Sudoku;
 			sourceTree = "<group>";
 		};
+		A1000210 /* SudokuUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SudokuUITests;
+			sourceTree = "<group>";
+		};
 		A1000110 /* SudokuWidgets */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -34,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		A1000020 /* Sudoku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sudoku.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1000220 /* SudokuUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SudokuUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1000120 /* SudokuWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SudokuWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -46,6 +52,13 @@
 				A1000062 /* SudokuKit in Frameworks */,
 				A1000063 /* SudokuGameCenter in Frameworks */,
 				A1000064 /* SudokuSync in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1000242 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +95,7 @@
 			children = (
 				A1000020 /* Sudoku.app */,
 				A1000120 /* SudokuWidgets.appex */,
+				A1000220 /* SudokuUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,10 +154,40 @@
 			productReference = A1000120 /* SudokuWidgets.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		A1000240 /* SudokuUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1000260 /* Build configuration list for PBXNativeTarget "SudokuUITests" */;
+			buildPhases = (
+				A1000241 /* Sources */,
+				A1000242 /* Frameworks */,
+				A1000243 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A1000233 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A1000210 /* SudokuUITests */,
+			);
+			name = SudokuUITests;
+			packageProductDependencies = (
+			);
+			productName = SudokuUITests;
+			productReference = A1000220 /* SudokuUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A1000031 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1000241 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -174,6 +218,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		A1000233 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A1000040 /* Sudoku */;
+			targetProxy = A1000234 /* PBXContainerItemProxy */;
+		};
 		A1000133 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilters = (
@@ -186,6 +235,13 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXContainerItemProxy section */
+		A1000234 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1000002 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A1000040;
+			remoteInfo = Sudoku;
+		};
 		A1000134 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A1000002 /* Project object */;
@@ -197,6 +253,13 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		A1000032 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1000243 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -226,6 +289,10 @@
 					A1000140 = {
 						CreatedOnToolsVersion = 26.6;
 					};
+					A1000240 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = A1000040;
+					};
 				};
 			};
 			buildConfigurationList = A1000081 /* Build configuration list for PBXProject "Sudoku" */;
@@ -252,6 +319,7 @@
 			targets = (
 				A1000040 /* Sudoku */,
 				A1000140 /* SudokuWidgets */,
+				A1000240 /* SudokuUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -435,6 +503,38 @@
 			};
 			name = Release;
 		};
+		A1000261 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sudoku.app.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Sudoku;
+			};
+			name = Debug;
+		};
+		A1000262 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sudoku.app.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Sudoku;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -461,6 +561,15 @@
 			buildConfigurations = (
 				A1000161 /* Debug */,
 				A1000162 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1000260 /* Build configuration list for PBXNativeTarget "SudokuUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1000261 /* Debug */,
+				A1000262 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

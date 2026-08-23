@@ -34,7 +34,10 @@ struct NumberPadView: View {
                     Text(String(digit))
                         // Scales with the system text size instead of ignoring it.
                         .font(.system(.title2, design: .rounded).weight(.medium))
-                        .minimumScaleFactor(0.6)
+                        // A single digit cannot wrap, so it may shrink — but
+                        // only a little, or the largest text setting produces a
+                        // keypad smaller than the default one.
+                        .minimumScaleFactor(0.85)
                         .frame(maxWidth: .infinity, minHeight: minimumButtonHeight)
                         .background(
                             RoundedRectangle(cornerRadius: 10)

@@ -22,7 +22,7 @@ public struct ResultSheetView: View {
                 Text(String(localized: "Gelöst", bundle: .module))
                     .font(.largeTitle.weight(.semibold))
                 Text("\(session.puzzle.difficulty.localizedName) · \(session.elapsedSeconds.asClock)")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.secondaryText)
             }
 
             VStack(spacing: 0) {
@@ -46,7 +46,7 @@ public struct ResultSheetView: View {
             if let hardest = session.puzzle.hardestTechnique {
                 Text(String(localized: "Schwerste nötige Technik: \(HintText.name(for: hardest))", bundle: .module))
                     .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.secondaryText)
             }
 
             Button(String(localized: "Fertig", bundle: .module), action: onDone)

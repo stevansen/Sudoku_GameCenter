@@ -47,6 +47,10 @@ public struct BoardView: View {
             if let new { session.selection = new }
         }
         #endif
+        // `.contain`, not the default. Giving a container a label turns the whole
+        // grid into one element and hides all 81 cells behind it — VoiceOver
+        // would read "Sudoku board" and offer no way in.
+        .accessibilityElement(children: .contain)
         .accessibilityLabel(String(localized: "Sudoku-Brett", bundle: .module))
     }
 
