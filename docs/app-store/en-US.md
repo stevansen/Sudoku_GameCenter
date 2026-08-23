@@ -60,11 +60,12 @@ After every puzzle you see exactly how your score came about: base value, time
 bonus, deductions, streak bonus. Pencil notes are free — they are part of playing.
 
 ALSO
-• Notes with optional automatic candidates
+• Candidate notes, fillable automatically on the Mac
 • Unlimited undo and redo
-• Error checking immediately, at the end, or never — your call
+• Wrong digits marked by shape as well as colour
 • Fully playable offline
-• VoiceOver, Dynamic Type, colour-blind friendly palettes
+• VoiceOver and Dynamic Type
+• German, Italian, English
 • No ads, no in-app purchases, no accounts
 ```
 

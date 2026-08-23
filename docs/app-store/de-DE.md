@@ -66,11 +66,12 @@ Nach jedem Rätsel siehst du genau, wie deine Punkte zustande kamen: Grundwert,
 Zeitbonus, Abzüge, Serienbonus. Notizen kosten nichts — sie gehören zum Spiel.
 
 AUSSERDEM
-• Notizen mit optionaler automatischer Kandidatenliste
+• Notizen für Kandidaten, am Mac auch automatisch ausfüllbar
 • Unbegrenztes Rückgängig und Wiederholen
-• Fehlerprüfung sofort, am Ende oder gar nicht — du entscheidest
+• Falsche Ziffern werden über Farbe und Form markiert
 • Vollständig offline spielbar
-• VoiceOver, Dynamic Type, farbenblindfreundliche Paletten
+• VoiceOver und Dynamic Type
+• Deutsch, Italienisch, Englisch
 • Keine Werbung, keine Käufe im Programm, keine Konten
 ```
 

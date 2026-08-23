@@ -4,7 +4,7 @@ Bestenlisten und Erfolge lassen sich **nicht aus dem Code anlegen**. Diese Datei
 ist die Vorlage zum Abtippen in App Store Connect → *Dienste → Game Center*.
 Die IDs hier sind verbindlich — der Code referenziert exakt diese Zeichenketten.
 
-Anlegen unter der App `com.sudoku.app`. Alle vier Plattform-Targets teilen sich
+Anlegen unter der App `com.hellweger.sudoku.app`. Alle vier Plattform-Targets teilen sich
 dieselbe Game-Center-Konfiguration, wenn sie zur selben App gehören.
 
 ---

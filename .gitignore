@@ -25,3 +25,7 @@ ExportOptions.plist
 # Xcode user state inside the project
 *.xcodeproj/project.xcworkspace/
 *.xcodeproj/xcuserdata/
+
+# Archive und Exporte für den Store — nicht ins Repo
+build/
+Configuration/ExportOptions.plist

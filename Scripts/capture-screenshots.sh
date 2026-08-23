@@ -56,9 +56,9 @@ capture_simulator() {  # $1 Gerätename, $2 Präfix, $3 App-Pfad, $4 "mit-punkte
         3-stufen)  ;;
         4-punkte)  args+=(-open-game hard -prefill 81) ;;
       esac
-      xcrun simctl terminate "$udid" com.sudoku.app 2>/dev/null || true
+      xcrun simctl terminate "$udid" com.hellweger.sudoku.app 2>/dev/null || true
       sleep 1
-      xcrun simctl launch "$udid" com.sudoku.app \
+      xcrun simctl launch "$udid" com.hellweger.sudoku.app \
         -AppleLanguages "($lang)" -AppleLocale "$lang" "${args[@]}" >/dev/null
       sleep 6
       xcrun simctl io "$udid" screenshot "$OUT/$2-$lang-$motif.png" >/dev/null 2>&1

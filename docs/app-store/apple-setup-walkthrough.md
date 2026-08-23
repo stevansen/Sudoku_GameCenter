@@ -27,7 +27,7 @@ developer.apple.com → *Certificates, Identifiers & Profiles* → **Identifiers
 | Feld | Wert |
 |---|---|
 | Description | `Sudoku` |
-| Bundle ID | **Explicit**, `com.sudoku.app` |
+| Bundle ID | **Explicit**, `com.hellweger.sudoku.app` |
 
 Capabilities ankreuzen:
 
@@ -38,8 +38,8 @@ Capabilities ankreuzen:
 
 Nur diese vier. Alles andere bleibt aus.
 
-> Die IDs für tvOS, Watch und Widgets (`com.sudoku.app.tv`,
-> `com.sudoku.app.watchkitapp`, `com.sudoku.app.widgets`) erst anlegen, wenn die
+> Die IDs für tvOS, Watch und Widgets (`com.hellweger.sudoku.app.tv`,
+> `com.hellweger.sudoku.app.watchkitapp`, `com.hellweger.sudoku.app.widgets`) erst anlegen, wenn die
 > Targets existieren — sonst hängen unbenutzte Identifier herum.
 
 ## 3 — iCloud-Container und App-Group  ·  5 Minuten
@@ -51,16 +51,16 @@ Immer noch unter *Identifiers*:
 | Feld | Wert |
 |---|---|
 | Description | `Sudoku` |
-| Identifier | `iCloud.com.sudoku.app` |
+| Identifier | `iCloud.com.hellweger.sudoku.app` |
 
 **App Groups** → **+**
 
 | Feld | Wert |
 |---|---|
 | Description | `Sudoku` |
-| Identifier | `group.com.sudoku.app` |
+| Identifier | `group.com.hellweger.sudoku.app` |
 
-Danach zurück zur App-ID `com.sudoku.app`, dort bei *iCloud* und *App Groups*
+Danach zurück zur App-ID `com.hellweger.sudoku.app`, dort bei *iCloud* und *App Groups*
 auf **Configure** und die eben erstellten Einträge zuordnen. Dieser Zuordnungs-
 schritt wird gern vergessen; ohne ihn schlägt später das Signieren fehl.
 
@@ -73,7 +73,7 @@ appstoreconnect.apple.com → *Apps* → **+** → *Neue App*.
 | Plattformen | iOS, macOS *(weitere später ergänzbar)* |
 | Name | `Sudoku` — falls vergeben: `Sudoku Kern` |
 | Primärsprache | **Deutsch** |
-| Bundle-ID | `com.sudoku.app` (aus Schritt 2) |
+| Bundle-ID | `com.hellweger.sudoku.app` (aus Schritt 2) |
 | SKU | `SUDOKU-001` |
 | Benutzerzugriff | Vollständiger Zugriff |
 

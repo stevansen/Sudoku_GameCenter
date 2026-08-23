@@ -34,7 +34,7 @@ public struct GameView: View {
         .toolbarTitleDisplayMode(.inline)
         #endif
         // Handoff: the puzzle id is all another device needs to open the same game.
-        .userActivity("com.sudoku.app.playing") { activity in
+        .userActivity("com.hellweger.sudoku.app.playing") { activity in
             activity.title = session.puzzle.difficulty.localizedName
             activity.userInfo = ["puzzleID": session.puzzle.id.description]
             activity.isEligibleForHandoff = true

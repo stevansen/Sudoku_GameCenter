@@ -21,10 +21,10 @@ Erweiterung, Privacy-Manifest und Entitlements liegen im Projekt.
 
 Developer-Portal → *Certificates, Identifiers & Profiles*.
 
-- [ ] **[du]** App-IDs anlegen: `com.sudoku.app` und `com.sudoku.app.widgets`.
+- [ ] **[du]** App-IDs anlegen: `com.hellweger.sudoku.app` und `com.hellweger.sudoku.app.widgets`.
       (Kein `.tv`, kein `.watchkitapp` — tvOS läuft unter derselben Bundle-ID,
       watchOS und visionOS sind nicht im Umfang.)
-- [ ] **[du]** Für `com.sudoku.app`: **Game Center** und **iCloud (Key-Value
+- [ ] **[du]** Für `com.hellweger.sudoku.app`: **Game Center** und **iCloud (Key-Value
       Storage)** aktivieren. Mehr nicht — die App verwendet weder CloudKit noch
       App-Groups noch Push, und was man deklariert und nicht benutzt, fällt bei
       der Prüfung auf.
@@ -65,7 +65,7 @@ Developer-Portal → *Certificates, Identifiers & Profiles*.
 
 ## D — App Store Connect: Eintrag
 
-- [ ] **[du]** App anlegen, Primärsprache **Deutsch**, Bundle-ID `com.sudoku.app`,
+- [ ] **[du]** App anlegen, Primärsprache **Deutsch**, Bundle-ID `com.hellweger.sudoku.app`,
       SKU frei wählbar (z. B. `SUDOKU-001`).
 - [ ] Metadaten aus [de-DE.md](de-DE.md) und [en-US.md](en-US.md) eintragen.
 - [ ] Kategorien: *Spiele → Rätsel*, sekundär *Spiele → Denkspiele*.

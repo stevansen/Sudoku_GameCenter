@@ -15,7 +15,7 @@ simulator cannot run it. See `docs/accessibility.md` and
 ## Layout
 
 ```
-App/                    the Xcode project and app target (com.sudoku.app)
+App/                    the Xcode project and app target (com.hellweger.sudoku.app)
 Packages/SudokuKit/     the engine: grid, solvers, generator, rating, scoring
 Packages/SudokuUI/      game state, persistence and the shared SwiftUI screens
 Packages/SudokuGameCenter/  GameKit behind a protocol, achievement rules, offline retry queue
