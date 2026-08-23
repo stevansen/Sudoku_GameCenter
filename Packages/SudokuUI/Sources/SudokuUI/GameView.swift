@@ -30,6 +30,12 @@ public struct GameView: View {
         .frame(maxWidth: .infinity)
         // Without this the empty large-title area eats a fifth of the screen.
         .toolbarTitleDisplayMode(.inline)
+        // Handoff: the puzzle id is all another device needs to open the same game.
+        .userActivity("com.sudoku.app.playing") { activity in
+            activity.title = session.puzzle.difficulty.localizedName
+            activity.userInfo = ["puzzleID": session.puzzle.id.description]
+            activity.isEligibleForHandoff = true
+        }
         .task {
             // One clock for the whole screen, stopped when the view goes away.
             while !Task.isCancelled {

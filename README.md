@@ -3,7 +3,7 @@
 A procedurally generated sudoku for every Apple platform, with Game Center
 leaderboards, achievements, and a game that follows you across your devices.
 
-Status: **Milestone 3 complete** — playable, with Game Center leaderboards and achievements.
+Status: **Milestone 4 complete** — the game follows you between devices, with a daily puzzle.
 
 ## Layout
 
@@ -12,6 +12,7 @@ App/                    the Xcode project and app target (com.sudoku.app)
 Packages/SudokuKit/     the engine: grid, solvers, generator, rating, scoring
 Packages/SudokuUI/      game state, persistence and the shared SwiftUI screens
 Packages/SudokuGameCenter/  GameKit behind a protocol, achievement rules, offline retry queue
+Packages/SudokuSync/    cross-device handover: conflict resolution and the key-value fast path
 Configuration/          entitlements, privacy manifest, Info.plist and export templates
 docs/decisions.md       why things are the way they are, with the measurements
 docs/gamecenter-setup.md   the leaderboard and achievement IDs to enter in App Store Connect
@@ -19,8 +20,9 @@ docs/app-store/         release checklist, metadata (de/en), age rating, review 
 docs/privacy/           privacy policy (de/en) and the App Privacy questionnaire answers
 ```
 
-Planned, per the build plan: CloudKit-backed storage (Milestone 4), then tvOS
-and watchOS targets (Milestone 5) and the polish pass (Milestone 6).
+Planned, per the build plan: tvOS and watchOS targets (Milestone 5) and the
+polish pass (Milestone 6). Statistics and history do **not** sync between
+devices yet — see `docs/decisions.md`.
 
 ## Build and test
 
@@ -28,6 +30,7 @@ and watchOS targets (Milestone 5) and the polish pass (Milestone 6).
 cd Packages/SudokuKit && swift test
 cd Packages/SudokuUI && swift test
 cd Packages/SudokuGameCenter && swift test
+cd Packages/SudokuSync && swift test
 
 # the app
 cd App && xcodebuild -scheme Sudoku \
@@ -71,6 +74,18 @@ await queue.send(scores: submissions, achievements: progress, using: service)
 
 Anything that cannot be sent is kept on disk and goes out at the next sign-in,
 compacted to the best value per leaderboard.
+
+Handover between devices sends the id and the player's work on top of it —
+a few hundred bytes, small enough for the key-value store, which propagates in
+seconds where CloudKit takes its time. Where two devices genuinely disagree it
+asks rather than guesses:
+
+```swift
+switch ConflictResolver.resolve(local: local, remote: remote) {
+case .useLocal, .useRemote: break          // one is simply further along
+case .ask(let reason): break               // real divergence — the player decides
+}
+```
 
 Solving, hinting and scoring:
 

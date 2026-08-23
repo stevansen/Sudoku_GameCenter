@@ -26,6 +26,7 @@
 				A1000061 /* SudokuUI in Frameworks */,
 				A1000062 /* SudokuKit in Frameworks */,
 				A1000063 /* SudokuGameCenter in Frameworks */,
+				A1000064 /* SudokuSync in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -35,6 +36,7 @@
 		A1000061 /* SudokuUI in Frameworks */ = {isa = PBXBuildFile; productRef = A1000051 /* SudokuUI */; };
 		A1000062 /* SudokuKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1000052 /* SudokuKit */; };
 		A1000063 /* SudokuGameCenter in Frameworks */ = {isa = PBXBuildFile; productRef = A1000055 /* SudokuGameCenter */; };
+		A1000064 /* SudokuSync in Frameworks */ = {isa = PBXBuildFile; productRef = A1000057 /* SudokuSync */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXGroup section */
@@ -77,6 +79,7 @@
 				A1000051 /* SudokuUI */,
 				A1000052 /* SudokuKit */,
 				A1000055 /* SudokuGameCenter */,
+				A1000057 /* SudokuSync */,
 			);
 			productName = Sudoku;
 			productReference = A1000020 /* Sudoku.app */;
@@ -131,6 +134,7 @@
 				A1000053 /* XCLocalSwiftPackageReference "../Packages/SudokuUI" */,
 				A1000054 /* XCLocalSwiftPackageReference "../Packages/SudokuKit" */,
 				A1000056 /* XCLocalSwiftPackageReference "../Packages/SudokuGameCenter" */,
+				A1000058 /* XCLocalSwiftPackageReference "../Packages/SudokuSync" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A1000001 /* Products */;
@@ -155,6 +159,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../Packages/SudokuGameCenter;
 		};
+		A1000058 /* XCLocalSwiftPackageReference "../Packages/SudokuSync" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Packages/SudokuSync;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -169,6 +177,10 @@
 		A1000055 /* SudokuGameCenter */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SudokuGameCenter;
+		};
+		A1000057 /* SudokuSync */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SudokuSync;
 		};
 /* End XCSwiftPackageProductDependency section */
 

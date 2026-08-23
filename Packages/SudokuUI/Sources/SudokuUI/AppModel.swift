@@ -2,6 +2,7 @@ import Foundation
 import Observation
 import SudokuGameCenter
 import SudokuKit
+import SudokuSync
 #if os(iOS)
 import UIKit
 #endif
@@ -18,23 +19,44 @@ public final class AppModel {
 
     public private(set) var isSignedInToGameCenter = false
 
+    /// Set when two devices disagree badly enough that the player has to decide.
+    public private(set) var pendingConflict: SyncConflict?
+
+    /// A disagreement waiting for an answer. Both versions are kept until then —
+    /// picking one for the player is how saved games get lost.
+    public struct SyncConflict: Identifiable, Sendable {
+        public let id = UUID()
+        public let reason: DivergenceReason
+        public let local: SavedGame?
+        public let remote: SavedGame
+    }
+
     private let store: GameStore
     private let factory: PuzzleFactory
     private let gameCenter: any GameCenterService
     private let queue: SubmissionQueue
+    private let sync: GameSyncCoordinator
+    private var remoteWatch: Task<Void, Never>?
     private var moveCount = 0
     private var startedOn = AppModel.deviceName
+    private var isDailyGame = false
     private var autosaveTask: Task<Void, Never>?
 
     public init(
         store: GameStore = GameStore(),
         factory: PuzzleFactory = PuzzleFactory(),
         gameCenter: (any GameCenterService)? = nil,
-        queue: SubmissionQueue = SubmissionQueue()
+        queue: SubmissionQueue = SubmissionQueue(),
+        keyValueStore: (any KeyValueSyncing)? = nil
     ) {
         self.store = store
         self.factory = factory
         self.queue = queue
+        #if canImport(Foundation) && !os(Linux)
+        self.sync = GameSyncCoordinator(store: keyValueStore ?? UbiquitousKeyValueStore())
+        #else
+        self.sync = GameSyncCoordinator(store: keyValueStore ?? InMemoryKeyValueStore())
+        #endif
         if let gameCenter {
             self.gameCenter = gameCenter
         } else {
@@ -46,18 +68,82 @@ public final class AppModel {
         }
     }
 
-    /// Loads the totals and any game that was left running.
+    /// Loads the totals and any game that was left running — local or from
+    /// another device.
     public func load() async {
         stats = await store.loadStats()
-        if let saved = await store.loadCurrentGame(),
-           let restored = GameSession.restore(from: saved) {
-            session = restored
-            moveCount = saved.moveCount
-        }
+        let local = await store.loadCurrentGame()
+        await adopt(local: local)
+        watchForRemoteChanges()
         Task.detached(priority: .background) { [factory] in await factory.refill() }
         // Not awaited: signing in can put a screen in front of the player, and
         // the game must be ready whether or not they ever finish with it.
         Task { await connectGameCenter() }
+    }
+
+    /// Applies whatever the resolver decides about the local and remote records.
+    private func adopt(local: SavedGame?) async {
+        switch await sync.resolution(for: local) {
+        case .useLocal:
+            restore(local)
+        case .useRemote:
+            guard let remote = await sync.remoteGame() else {
+                restore(local)
+                return
+            }
+            restore(remote)
+            await store.save(remote)
+        case .ask(let reason):
+            guard let remote = await sync.remoteGame() else {
+                restore(local)
+                return
+            }
+            restore(local)
+            pendingConflict = SyncConflict(reason: reason, local: local, remote: remote)
+        }
+    }
+
+    private func restore(_ saved: SavedGame?) {
+        guard let saved, let restored = GameSession.restore(from: saved) else {
+            session = nil
+            return
+        }
+        session = restored
+        moveCount = saved.moveCount
+        startedOn = saved.deviceName
+    }
+
+    /// The player's answer to a conflict. Nothing was thrown away before this.
+    public func resolveConflict(keepRemote: Bool) async {
+        guard let conflict = pendingConflict else { return }
+        pendingConflict = nil
+        if keepRemote {
+            restore(conflict.remote)
+            await store.save(conflict.remote)
+        } else {
+            restore(conflict.local)
+            await persist()
+        }
+    }
+
+    private func watchForRemoteChanges() {
+        remoteWatch?.cancel()
+        remoteWatch = Task { [weak self] in
+            guard let stream = await self?.sync.remoteChanges() else { return }
+            for await _ in stream {
+                guard let self else { return }
+                await self.handleRemoteChange()
+            }
+        }
+    }
+
+    private func handleRemoteChange() async {
+        // Ignore anything that arrives mid-game with the board already open:
+        // swapping the grid under the player's hands is worse than being a
+        // little out of date. It is picked up the next time they come back.
+        guard pendingConflict == nil else { return }
+        let local = session.map { $0.saved(deviceName: Self.deviceName, moveCount: moveCount) }
+        await adopt(local: local)
     }
 
     /// Signs in and sends anything that was earned offline. Never blocks play.
@@ -69,21 +155,42 @@ public final class AppModel {
 
     public var canContinue: Bool { session != nil && session?.completedAt == nil }
 
+    /// Today's puzzle — the same one for every player in the world, because the
+    /// seed comes from the UTC date and nothing else.
+    public func startDailyPuzzle(difficulty: Difficulty = .medium, on date: Date = .now) async {
+        isPreparing = true
+        defer { isPreparing = false }
+        let puzzle = PuzzleGenerator.daily(for: date, difficulty: difficulty)
+        await begin(puzzle: puzzle, isDaily: true)
+    }
+
     public func startGame(difficulty: Difficulty) async {
         isPreparing = true
         defer { isPreparing = false }
         let puzzle = await factory.puzzle(for: difficulty)
+        await begin(puzzle: puzzle, isDaily: false)
+        Task.detached(priority: .background) { [factory] in await factory.refill() }
+    }
+
+    public var hasSolvedTodaysPuzzle: Bool {
+        let id = PuzzleGenerator.daily(for: .now).id.description
+        return stats.solvedPuzzleIDs.contains(id)
+    }
+
+    private func begin(puzzle: Puzzle, isDaily: Bool) async {
         session = GameSession(puzzle: puzzle)
         moveCount = 0
         startedOn = Self.deviceName
+        isDailyGame = isDaily
         lastResult = nil
+        pendingConflict = nil
         await persist()
-        Task.detached(priority: .background) { [factory] in await factory.refill() }
     }
 
     public func abandonGame() async {
         session = nil
         await store.clearCurrentGame()
+        await sync.push(nil)
     }
 
     /// Called after every change to the board.
@@ -107,6 +214,13 @@ public final class AppModel {
         if session.elapsedSeconds % 5 == 0 { scheduleAutosave() }
     }
 
+    /// Waits for the debounced autosave, so a test does not have to guess.
+    public func flushPendingWritesForTesting() async {
+        autosaveTask?.cancel()
+        autosaveTask = nil
+        await persist()
+    }
+
     private func scheduleAutosave() {
         autosaveTask?.cancel()
         autosaveTask = Task { [weak self] in
@@ -118,18 +232,21 @@ public final class AppModel {
 
     private func persist() async {
         guard let session, session.completedAt == nil else { return }
-        await store.save(session.saved(deviceName: Self.deviceName, moveCount: moveCount))
+        let saved = session.saved(deviceName: Self.deviceName, moveCount: moveCount)
+        await store.save(saved)
+        await sync.push(saved)
     }
 
     private func finish(_ session: GameSession) async {
         var updated = stats
         let breakdown = updated.record(
             puzzle: session.puzzle, session: session,
-            deviceName: Self.deviceName, isDaily: false)
+            deviceName: Self.deviceName, isDaily: isDailyGame)
         stats = updated
         lastResult = breakdown
         await store.save(updated)
         await store.clearCurrentGame()
+        await sync.push(nil)
         await reportToGameCenter(session: session, breakdown: breakdown, totals: updated.totals)
     }
 
@@ -144,7 +261,7 @@ public final class AppModel {
             pointsScored: breakdown.total,
             techniques: session.puzzle.techniques,
             completedAt: session.completedAt ?? .now,
-            isDaily: false,
+            isDaily: isDailyGame,
             finishedOn: Self.deviceName,
             startedOn: startedOn)
 

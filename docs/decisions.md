@@ -137,6 +137,37 @@ localisation-free and its tests about logic rather than strings.
   Synthesised decoding would reject every file written by the earlier build and
   the player would silently lose their totals.
 
+## Milestone 4 decisions
+
+- **The key-value store, not CloudKit, carries the running game.**
+  `NSUbiquitousKeyValueStore` propagates in seconds where CloudKit takes its
+  time, and the moment the feature has to work is "put the phone down, carry on
+  at the Mac". It only works at all because a saved game is an id plus the
+  player's moves — a few hundred bytes, against a hard 1 MB limit.
+- **Conflict resolution is a pure function**, with one rule behind every branch:
+  never discard work silently. A lost saved game is invisible until it hurts and
+  cannot be undone. So where the records genuinely disagree it asks, and
+  everywhere else it stays out of the way — being asked about a conflict that is
+  not one is its own kind of bad. The cases:
+
+  | Situation | What happens |
+  |---|---|
+  | One side only | that side |
+  | Same puzzle, one strictly further | the further one |
+  | Same digits, different notes or clock | more moves, then newer |
+  | Same puzzle, contradicting digits, clear lead in moves | the leader |
+  | Same puzzle, contradicting digits, close call | **ask** |
+  | Two different puzzles | **ask**, whatever the lead |
+
+- **A remote change mid-game is ignored** until the player leaves the board.
+  Swapping the grid under someone's hands is worse than being briefly out of date.
+- **Statistics and history do not sync yet.** Only the running game does. Merging
+  additive counters across devices without a CRDT or per-record history is a real
+  problem — taking the maximum quietly loses points, taking the sum invents them.
+  Game Center already carries the parts that matter across devices (points,
+  best times, streak), so the gap is local totals only. This needs CloudKit with
+  a proper record per solve, which needs a container that does not exist yet.
+
 ## Known, deliberate, not done yet
 
 - **Generation is a retry loop, not a search.** Roughly one attempt in five is

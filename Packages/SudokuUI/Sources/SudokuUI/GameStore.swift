@@ -1,26 +1,7 @@
 import Foundation
 import SudokuGameCenter
 import SudokuKit
-
-/// A game in progress, in the form that survives quitting the app.
-///
-/// The puzzle itself is not stored — only its id. Everything else is the
-/// player's work on top of it. That is the whole point of the seed design:
-/// this record is a few hundred bytes and regenerates its grid anywhere.
-public struct SavedGame: Codable, Sendable, Equatable {
-    public var puzzleID: String
-    public var entries: [UInt8]
-    public var notes: [Candidates]
-    public var elapsedSeconds: Int
-    public var mistakes: Int
-    public var hintsUsed: Int
-    public var usedAutoCandidates: Bool
-    public var startedAt: Date
-    public var updatedAt: Date
-    /// Monotonic, and the first tie-breaker when two devices disagree.
-    public var moveCount: Int
-    public var deviceName: String
-}
+import SudokuSync
 
 /// Totals and history. Kept separate from the running game because it is
 /// appended to rather than rewritten.

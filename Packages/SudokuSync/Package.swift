@@ -2,28 +2,25 @@
 import PackageDescription
 
 let package = Package(
-    name: "SudokuUI",
-    defaultLocalization: "de",
+    name: "SudokuSync",
     platforms: [
         .iOS(.v18), .macOS(.v15), .tvOS(.v18), .watchOS(.v11), .visionOS(.v2),
     ],
     products: [
-        .library(name: "SudokuUI", targets: ["SudokuUI"]),
+        .library(name: "SudokuSync", targets: ["SudokuSync"]),
     ],
     dependencies: [
         .package(path: "../SudokuKit"),
-        .package(path: "../SudokuGameCenter"),
-        .package(path: "../SudokuSync"),
     ],
     targets: [
         .target(
-            name: "SudokuUI",
-            dependencies: ["SudokuKit", "SudokuGameCenter", "SudokuSync"],
+            name: "SudokuSync",
+            dependencies: ["SudokuKit"],
             swiftSettings: [.swiftLanguageMode(.v6)]
         ),
         .testTarget(
-            name: "SudokuUITests",
-            dependencies: ["SudokuUI"],
+            name: "SudokuSyncTests",
+            dependencies: ["SudokuSync"],
             swiftSettings: [.swiftLanguageMode(.v6)]
         ),
     ]

@@ -7,12 +7,19 @@ public struct HomeView: View {
     var model: AppModel
     var onStart: (Difficulty) -> Void
     var onContinue: () -> Void
+    var onStartDaily: () -> Void
     @State private var showsGameCenter = false
 
-    public init(model: AppModel, onStart: @escaping (Difficulty) -> Void, onContinue: @escaping () -> Void) {
+    public init(
+        model: AppModel,
+        onStart: @escaping (Difficulty) -> Void,
+        onContinue: @escaping () -> Void,
+        onStartDaily: @escaping () -> Void
+    ) {
         self.model = model
         self.onStart = onStart
         self.onContinue = onContinue
+        self.onStartDaily = onStartDaily
     }
 
     public var body: some View {
@@ -20,6 +27,7 @@ public struct HomeView: View {
             VStack(spacing: 24) {
                 statsHeader
                 gameCenterButton
+                dailyButton
 
                 if model.canContinue, let session = model.session {
                     Button(action: onContinue) {
@@ -70,6 +78,28 @@ public struct HomeView: View {
             GameCenterDashboard(page: .leaderboards)
         }
         #endif
+    }
+
+    private var dailyButton: some View {
+        Button(action: onStartDaily) {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(String(localized: "Tagesrätsel")).font(.headline)
+                    Text(model.hasSolvedTodaysPuzzle
+                        ? String(localized: "Heute schon gelöst")
+                        : String(localized: "Für alle das gleiche · doppelte Punkte"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: model.hasSolvedTodaysPuzzle ? "checkmark.circle.fill" : "calendar")
+                    .foregroundStyle(model.hasSolvedTodaysPuzzle ? Color.green : Color.accentColor)
+            }
+            .padding()
+            .background(RoundedRectangle(cornerRadius: 14).fill(Color.accentColor.opacity(0.10)))
+        }
+        .buttonStyle(.plain)
+        .disabled(model.isPreparing)
     }
 
     @ViewBuilder
