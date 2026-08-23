@@ -67,6 +67,10 @@ public struct RootView: View {
         } message: { conflict in
             Text(Self.conflictMessage(conflict))
         }
+        .sheet(isPresented: .constant(model.showsOnboarding)) {
+            OnboardingView { model.dismissOnboarding() }
+                .interactiveDismissDisabled()
+        }
         .sheet(isPresented: .constant(model.lastResult != nil)) {
             if let breakdown = model.lastResult, let session = model.session {
                 ResultSheetView(breakdown: breakdown, session: session) {

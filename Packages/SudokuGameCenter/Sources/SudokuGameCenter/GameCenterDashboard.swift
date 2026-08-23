@@ -1,4 +1,4 @@
-#if canImport(GameKit) && canImport(SwiftUI) && !os(watchOS)
+#if canImport(GameKit) && canImport(SwiftUI)
 import GameKit
 import SwiftUI
 

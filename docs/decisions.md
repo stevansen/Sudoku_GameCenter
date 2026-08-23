@@ -198,6 +198,12 @@ localisation-free and its tests about logic rather than strings.
   put `xros xrsimulator` back in `SUPPORTED_PLATFORMS` with device family 7, and
   add a solid image stack named `AppIcon-vision` with an
   `ASSETCATALOG_COMPILER_APPICON_NAME[sdk=xr*]` setting pointing at it.
+- **watchOS was dropped before it was written.** A 9×9 grid is not usable on a
+  40 mm screen, so a watch app meant a 6×6 variant with its own generator,
+  scoring and hint text — a second game, not a second layout. That is a product
+  decision rather than a porting job, and it was not worth the surface area.
+  The `.watchOS(.v11)` lines in the manifests and the `!os(watchOS)` guards
+  around the Game Center views were removed with it; nothing else referred to it.
 - **The cost of extra platforms is disk, not code.** Each runtime plus its
   simulator data runs to several gigabytes. Nothing in the app had to change for
   visionOS; the machine had to.

@@ -25,6 +25,16 @@ public final class AppModel {
     /// Set when two devices disagree badly enough that the player has to decide.
     public private(set) var pendingConflict: SyncConflict?
 
+    /// First run only.
+    ///
+    /// Written to both stores. The synced one means picking up the iPad does not
+    /// introduce the app a second time; the local one means the introduction
+    /// stays dismissed even when iCloud is switched off, unavailable, or — as in
+    /// an unsigned build — silently dropping every write. Being told what the
+    /// app does on every single launch is worse than seeing it twice.
+    public private(set) var showsOnboarding = false
+    static let onboardingKey = "has-seen-onboarding"
+
     /// A disagreement waiting for an answer. Both versions are kept until then —
     /// picking one for the player is how saved games get lost.
     public struct SyncConflict: Identifiable, Sendable {
@@ -39,6 +49,8 @@ public final class AppModel {
     private let gameCenter: any GameCenterService
     private let queue: SubmissionQueue
     private let sync: GameSyncCoordinator
+    private let flags: any KeyValueSyncing
+    private let defaults: UserDefaults
     private var remoteWatch: Task<Void, Never>?
     private var moveCount = 0
     private var startedOn = AppModel.deviceName
@@ -50,16 +62,20 @@ public final class AppModel {
         factory: PuzzleFactory = PuzzleFactory(),
         gameCenter: (any GameCenterService)? = nil,
         queue: SubmissionQueue = SubmissionQueue(),
-        keyValueStore: (any KeyValueSyncing)? = nil
+        keyValueStore: (any KeyValueSyncing)? = nil,
+        defaults: UserDefaults = .standard
     ) {
+        self.defaults = defaults
         self.store = store
         self.factory = factory
         self.queue = queue
         #if canImport(Foundation) && !os(Linux)
-        self.sync = GameSyncCoordinator(store: keyValueStore ?? UbiquitousKeyValueStore())
+        let resolved = keyValueStore ?? UbiquitousKeyValueStore()
         #else
-        self.sync = GameSyncCoordinator(store: keyValueStore ?? InMemoryKeyValueStore())
+        let resolved = keyValueStore ?? InMemoryKeyValueStore()
         #endif
+        self.flags = resolved
+        self.sync = GameSyncCoordinator(store: resolved)
         if let gameCenter {
             self.gameCenter = gameCenter
         } else {
@@ -82,6 +98,10 @@ public final class AppModel {
         // Not awaited: signing in can put a screen in front of the player, and
         // the game must be ready whether or not they ever finish with it.
         Task { await connectGameCenter() }
+
+        let seen = defaults.bool(forKey: Self.onboardingKey)
+            || flags.flag(forKey: Self.onboardingKey)
+        showsOnboarding = !seen
 
         await handlePendingLaunchRequest()
 
@@ -180,6 +200,12 @@ public final class AppModel {
             await startGame(difficulty: difficulty)
         }
         #endif
+    }
+
+    public func dismissOnboarding() {
+        showsOnboarding = false
+        defaults.set(true, forKey: Self.onboardingKey)
+        flags.setFlag(true, forKey: Self.onboardingKey)
     }
 
     public var canContinue: Bool { session != nil && session?.completedAt == nil }
@@ -318,8 +344,6 @@ public final class AppModel {
         return "Mac"
         #elseif os(tvOS)
         return "Apple TV"
-        #elseif os(watchOS)
-        return "Apple Watch"
         #else
         return "Unbekannt"
         #endif

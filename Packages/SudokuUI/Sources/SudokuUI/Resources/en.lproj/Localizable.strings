@@ -17,6 +17,7 @@
 "Einfaches Färben" = "Simple Colouring";
 "Eingeschränkte Kandidaten" = "Locked Candidates";
 "Eintragen" = "Place it";
+"Erklärt den Schluss, statt nur die Zahl zu setzen" = "Explains the reasoning instead of just filling the cell";
 "Experte" = "Expert";
 "Fehler %lld · Hinweise %lld" = "Mistakes %1$lld · Hints %2$lld";
 "Fehler (%lld)" = "Mistakes (%lld)";
@@ -54,6 +55,7 @@
 "Serie" = "Streak";
 "Spalte %lld" = "Column %lld";
 "Spiel" = "Game";
+"Sudoku" = "Sudoku";
 "Sudoku-Brett" = "Sudoku board";
 "Tagesrätsel" = "Daily Puzzle";
 "Teuflisch" = "Evil";

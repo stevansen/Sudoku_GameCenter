@@ -15,6 +15,19 @@ public protocol KeyValueSyncing: Sendable {
     func externalChanges() -> AsyncStream<Void>
 }
 
+extension KeyValueSyncing {
+    /// A simple on/off flag. Stored as data like everything else so that no
+    /// conformance has to know about it.
+    public func flag(forKey key: String) -> Bool {
+        data(forKey: key).map { $0.first == 1 } ?? false
+    }
+
+    public func setFlag(_ value: Bool, forKey key: String) {
+        set(Data([value ? 1 : 0]), forKey: key)
+        _ = synchronize()
+    }
+}
+
 #if canImport(Foundation) && !os(Linux)
 /// The real store. Needs the `com.apple.developer.ubiquity-kvstore-identifier`
 /// entitlement; without it every write is silently local-only.

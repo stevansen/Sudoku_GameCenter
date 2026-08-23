@@ -17,6 +17,7 @@
 "Einfaches Färben" = "Einfaches Färben";
 "Eingeschränkte Kandidaten" = "Eingeschränkte Kandidaten";
 "Eintragen" = "Eintragen";
+"Erklärt den Schluss, statt nur die Zahl zu setzen" = "Erklärt den Schluss, statt nur die Zahl zu setzen";
 "Experte" = "Experte";
 "Fehler %lld · Hinweise %lld" = "Fehler %lld · Hinweise %lld";
 "Fehler (%lld)" = "Fehler (%lld)";
@@ -54,6 +55,7 @@
 "Serie" = "Serie";
 "Spalte %lld" = "Spalte %lld";
 "Spiel" = "Spiel";
+"Sudoku" = "Sudoku";
 "Sudoku-Brett" = "Sudoku-Brett";
 "Tagesrätsel" = "Tagesrätsel";
 "Teuflisch" = "Teuflisch";

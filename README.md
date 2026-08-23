@@ -4,7 +4,7 @@ A procedurally generated sudoku for every Apple platform, with Game Center
 leaderboards, achievements, and a game that follows you across your devices.
 
 Status: **Milestone 5 complete** — one codebase, four platforms, all built and
-run at least once. visionOS is deliberately out of scope.
+run at least once. watchOS and visionOS are deliberately out of scope.
 
 ## Layout
 
@@ -21,7 +21,7 @@ docs/app-store/         release checklist, metadata (de/en), age rating, review 
 docs/privacy/           privacy policy (de/en) and the App Privacy questionnaire answers
 ```
 
-Planned, per the build plan: tvOS and watchOS targets (Milestone 5) and the
+Planned, per the build plan: widgets, onboarding, and the
 polish pass (Milestone 6). Statistics and history do **not** sync between
 devices yet — see `docs/decisions.md`.
 
@@ -114,7 +114,7 @@ Measured on Apple silicon, release build, 25 puzzles per tier:
 | iPadOS | shared + wide layout | yes | portrait verified; landscape layout unverified |
 | macOS | shared + menu bar + keyboard | yes | launches; window contents not verified (no screen-recording permission here) |
 | tvOS | focus-based board, wider layout, 5x2 keypad | yes | yes, verified in the simulator |
-| watchOS | not started (Milestone 6) | — | — |
+| watchOS | **out of scope** | — | — |
 | visionOS | **out of scope** | — | — |
 
 Each platform family needs its own icon shape, which is why the asset catalog

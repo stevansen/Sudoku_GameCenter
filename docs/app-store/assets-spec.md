@@ -9,7 +9,7 @@ jeweils gültigen Werte am Upload-Feld.
 | Verwendung | Größe | Format |
 |---|---|---|
 | App Store (alle Plattformen) | 1024 × 1024 | PNG, **ohne Alphakanal**, keine runden Ecken, sRGB oder Display P3 |
-| iOS / iPadOS / macOS / watchOS | 1024 × 1024 im Asset-Katalog | Xcode leitet alle weiteren Größen ab |
+| iOS / iPadOS / macOS | 1024 × 1024 im Asset-Katalog | Xcode leitet alle weiteren Größen ab |
 | tvOS | geschichteter Bildstapel, 1280 × 768 | mindestens 2 Ebenen für den Parallaxe-Effekt |
 | tvOS Top Shelf | 1920 × 720 (und 4640 × 1440 für breit) | PNG |
 
@@ -28,7 +28,6 @@ kleinere Geräte herunter — es reicht also je Familie ein Satz.
 | iPad 13" | 2064 × 2752 oder 2048 × 2732 | ja, wenn iPad unterstützt |
 | Mac | 2880 × 1800 (16:10) | ja, wenn macOS unterstützt |
 | Apple TV | 3840 × 2160 oder 1920 × 1080 | ja, wenn tvOS unterstützt |
-| Apple Watch | 410 × 502 (46 mm) | ja, wenn watchOS unterstützt |
 
 Vorschlag für die fünf Motive, in dieser Reihenfolge:
 

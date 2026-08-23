@@ -1292,6 +1292,40 @@
           }
         }
       }
+    },
+    "Sudoku": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sudoku"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sudoku"
+          }
+        }
+      }
+    },
+    "Erklärt den Schluss, statt nur die Zahl zu setzen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erklärt den Schluss, statt nur die Zahl zu setzen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explains the reasoning instead of just filling the cell"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

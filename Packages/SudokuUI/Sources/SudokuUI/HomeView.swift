@@ -73,7 +73,7 @@ public struct HomeView: View {
             .frame(maxWidth: .infinity)
         }
         .navigationTitle("Sudoku")
-        #if canImport(GameKit) && !os(watchOS)
+        #if canImport(GameKit)
         .sheet(isPresented: $showsGameCenter) {
             GameCenterDashboard(page: .leaderboards)
         }
@@ -104,7 +104,7 @@ public struct HomeView: View {
 
     @ViewBuilder
     private var gameCenterButton: some View {
-        #if canImport(GameKit) && !os(watchOS)
+        #if canImport(GameKit)
         Button { showsGameCenter = true } label: {
             Label(
                 model.isSignedInToGameCenter

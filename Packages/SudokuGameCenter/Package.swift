@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "SudokuGameCenter",
     platforms: [
-        .iOS(.v18), .macOS(.v15), .tvOS(.v18), .watchOS(.v11),
+        .iOS(.v18), .macOS(.v15), .tvOS(.v18),
     ],
     products: [
         .library(name: "SudokuGameCenter", targets: ["SudokuGameCenter"]),
