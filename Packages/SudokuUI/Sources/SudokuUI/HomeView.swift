@@ -27,6 +27,7 @@ public struct HomeView: View {
         ScrollView {
             VStack(spacing: 24) {
                 statsHeader
+                preparingNotice
                 gameCenterButton
                 dailyButton
 
@@ -123,6 +124,24 @@ public struct HomeView: View {
         }
         .buttonStyle(.plain)
         #endif
+    }
+
+    /// Generating a puzzle of the harder tiers takes a couple of seconds. Greying
+    /// the buttons out and saying nothing looks like an app that has hung, which
+    /// is exactly how it looked on the Mac.
+    @ViewBuilder
+    private var preparingNotice: some View {
+        if model.isPreparing {
+            HStack(spacing: 8) {
+                ProgressView().controlSize(.small)
+                Text(String(localized: "Rätsel wird vorbereitet …", bundle: .module))
+                    .font(.callout)
+                    .foregroundStyle(Theme.secondaryText)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityElement(children: .combine)
+        }
     }
 
     private var statsHeader: some View {

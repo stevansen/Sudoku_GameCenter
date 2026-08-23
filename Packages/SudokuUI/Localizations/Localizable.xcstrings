@@ -1794,6 +1794,29 @@
           }
         }
       }
+    },
+    "Rätsel wird vorbereitet …": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rätsel wird vorbereitet …"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing a puzzle …"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparo uno schema …"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

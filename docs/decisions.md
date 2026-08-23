@@ -214,6 +214,20 @@ localisation-free and its tests about logic rather than strings.
   with no icon — a grey square on the home screen — and would have failed
   submission. It took looking at the home screen to notice; nothing in the build
   complains.
+- **Pre-warming made the app slow, not fast.** `PuzzleFactory` filled three
+  puzzles of every tier at launch to keep "new game" instant. It is an actor, so
+  the first real request queued behind all of it — around fourteen seconds on a
+  cold start, with the difficulty buttons greyed out the whole time. Three
+  changes: the expensive tiers keep one spare instead of three, the cheap ones
+  are warmed first, and the generating happens in a detached task so the actor
+  is not held while it runs. Yielding between puzzles was not enough on its own,
+  because a single hard puzzle takes over two seconds and holds the actor for all
+  of it. Warm-up is now 1.8 s and a request behind it waits about 0.3 s.
+- **Hard is the most expensive tier to generate**, at roughly 3.9 s per puzzle —
+  ahead of expert and evil. It retries until the puzzle needs more than singles
+  without needing a chain, which is a narrower target than either neighbour.
+  `Difficulty.generationCost` records the measured figures; it exists to order
+  the warm-up, not as a promise about any particular machine.
 - **The cost of extra platforms is disk, not code.** Each runtime plus its
   simulator data runs to several gigabytes. Nothing in the app had to change for
   visionOS; the machine had to.

@@ -84,10 +84,12 @@ iOS **nicht** auftreten:
 | **Der Mac liefert `accessibilityValue` für diese Elemente nicht aus.** Die Zellposition steckte dort. VoiceOver sagte „5, vorgegeben" und nie, wo. | Auf iOS trug der Wert die Position, auf dem Mac fiel sie ersatzlos weg. | Position steht jetzt in der **Beschriftung**: „Zeile 1, Spalte 3, 5, vorgegeben" |
 | **Kopfzahlen ohne Namen und ohne Rolle** („Textelement", später „Unknown role"). | VoiceOver konnte weder Zahl noch Bedeutung nennen. | Je ein Element mit Beschriftung „0 Punkte" und `.isStaticText` |
 
-Nebenbei aufgefallen: Die Mac-App braucht beim ersten Start **rund zwölf
-Sekunden**, um ein Rätsel zu erzeugen, und sperrt die Schwierigkeits-Knöpfe
-solange. Das sieht aus wie eine kaputte App und gehört noch behandelt (ein
-Hinweis statt bloß gesperrter Knöpfe).
+Nebenbei aufgefallen und inzwischen behoben: Die Mac-App brauchte beim ersten
+Start rund zwölf Sekunden und sperrte die Schwierigkeits-Knöpfe solange
+wortlos. Ursache war das Vorwärmen, nicht die Erzeugung — Einzelheiten in
+`docs/decisions.md`. Jetzt ist sie nach gut einer Sekunde bedienbar, und wo
+wirklich gewartet wird, steht „Rätsel wird vorbereitet …" mit einem Fortschritts-
+anzeiger, statt dass nur alles grau ist.
 
 Zwei Ausnahmen sind im Test begründet: die **Touch Bar** gehört dem System, und
 **namenlose Gruppen ohne Kennung** sind SwiftUIs eigene Fenster- und
