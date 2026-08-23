@@ -282,6 +282,24 @@ localisation-free and its tests about logic rather than strings.
   build it is worth a factor of three, and that is the build the tests and every
   development run use. `Difficulty.generationCost` now carries release figures,
   because that is what the app actually does.
+- **The Mac App Store needs the sandbox, and the entitlements have to be baked
+  in at archive time.** Validation rejected the package twice before this was
+  right. `com.apple.security.app-sandbox` is required on the app *and* on the
+  widget extension, and since iOS and tvOS are always sandboxed and have no such
+  key, macOS gets its own entitlements files selected by
+  `CODE_SIGN_ENTITLEMENTS[sdk=macosx*]`. Game Center talks to Apple's servers, so
+  the sandbox also needs `network.client`; the game itself plays offline.
+
+  The second failure was subtler: archiving unsigned and letting the export sign
+  produces entitlements derived from the provisioning profile, not from the
+  project — so the sandbox key silently disappeared. The macOS archive is signed
+  as it is built, which is why that platform uses manual signing where iOS and
+  tvOS do not.
+
+  That manual signing belongs to **Release only**. Applying it to Debug as well
+  made the Mac build fail with "embedded binary is not signed with the same
+  certificate as the parent app", because the widget was then signing for
+  distribution while the app signed ad-hoc.
 - **Totals merge; they are not overwritten.** The obvious way to sync statistics
   is "newest wins", and it loses data: points are a sum of what was earned, not a
   high score. Two devices playing offline for a week, one of them wins, the other

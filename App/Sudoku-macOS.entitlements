@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Der Mac App Store nimmt nur Apps in der Sandbox. Auf iOS und tvOS ist sie
+	     ohnehin immer an, dort gibt es den Schlüssel nicht — deshalb eine eigene
+	     Datei je SDK statt einer gemeinsamen. -->
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<!-- Game Center spricht mit Apples Servern. Ohne diese Erlaubnis schlägt die
+	     Anmeldung in der Sandbox fehl; das Spiel selbst läuft ohne Netz. -->
+	<key>com.apple.security.network.client</key>
+	<true/>
+
+	<key>com.apple.developer.game-center</key>
+	<true/>
+	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
+	<string>$(TeamIdentifierPrefix)com.hellweger.sudoku.app</string>
+</dict>
+</plist>
