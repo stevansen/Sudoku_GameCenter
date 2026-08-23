@@ -16,6 +16,18 @@
 	<array>
 		<string>de</string>
 		<string>en</string>
+		<string>it</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.sudoku.app</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>sudoku</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>

@@ -15,6 +15,12 @@
             "state": "translated",
             "value": ", wrong"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", sbagliato"
+          }
         }
       }
     },
@@ -31,6 +37,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "A different saved game was found"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trovata una partita diversa"
           }
         }
       }
@@ -49,6 +61,12 @@
             "state": "translated",
             "value": "A different puzzle is in progress on “%1$@” (%2$lld of 81 cells, %3$@). Which one would you like to continue?"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Su «%1$@» è in corso un altro schema (%2$lld caselle su 81, %3$@). Quale vuoi riprendere?"
+          }
         }
       }
     },
@@ -65,6 +83,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "The same puzzle stands differently on “%1$@” (%2$lld of 81 cells, %3$lld moves). Which version would you like to keep?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Su «%1$@» lo stesso schema è a un punto diverso (%2$lld caselle su 81, %3$lld mosse). Quale versione vuoi tenere?"
           }
         }
       }
@@ -83,6 +107,12 @@
             "state": "translated",
             "value": "Sign in to Game Center"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accedi a Game Center"
+          }
         }
       }
     },
@@ -99,6 +129,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Leaderboards & Achievements"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Classifiche e obiettivi"
           }
         }
       }
@@ -117,6 +153,12 @@
             "state": "translated",
             "value": "Box %lld"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riquadro %lld"
+          }
         }
       }
     },
@@ -133,6 +175,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "That rules out %lld candidates."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Così cadono %lld candidati."
           }
         }
       }
@@ -151,6 +199,12 @@
             "state": "translated",
             "value": "The %1$lld belongs in %2$@."
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il %1$lld va in %2$@."
+          }
         }
       }
     },
@@ -167,6 +221,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "The %1$lld can only go in %3$@ within %2$@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %2$@ il %1$lld può stare solo in %3$@."
           }
         }
       }
@@ -185,6 +245,12 @@
             "state": "translated",
             "value": "Use this one"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tieni questa"
+          }
         }
       }
     },
@@ -201,6 +267,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "A quiet evening"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una serata tranquilla"
           }
         }
       }
@@ -219,6 +291,12 @@
             "state": "translated",
             "value": "Simple Colouring"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colorazione semplice"
+          }
         }
       }
     },
@@ -235,6 +313,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Locked Candidates"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Candidati vincolati"
           }
         }
       }
@@ -253,6 +337,12 @@
             "state": "translated",
             "value": "Place it"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inserisci"
+          }
         }
       }
     },
@@ -269,6 +359,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Expert"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esperto"
           }
         }
       }
@@ -287,6 +383,12 @@
             "state": "translated",
             "value": "Mistakes %1$lld · Hints %2$lld"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Errori %1$lld · Aiuti %2$lld"
+          }
         }
       }
     },
@@ -303,6 +405,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mistakes (%lld)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Errori (%lld)"
           }
         }
       }
@@ -321,6 +429,12 @@
             "state": "translated",
             "value": "Done"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fatto"
+          }
         }
       }
     },
@@ -337,6 +451,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Resume"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riprendi"
           }
         }
       }
@@ -355,6 +475,12 @@
             "state": "translated",
             "value": "The same for everyone · double points"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uguale per tutti · punti doppi"
+          }
         }
       }
     },
@@ -372,6 +498,12 @@
             "state": "translated",
             "value": "Solved"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Risolti"
+          }
         }
       }
     },
@@ -385,6 +517,12 @@
           }
         },
         "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Base"
@@ -406,6 +544,12 @@
             "state": "translated",
             "value": "Already solved today"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Già risolto oggi"
+          }
         }
       }
     },
@@ -422,6 +566,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hint"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aiuto"
           }
         }
       }
@@ -440,6 +590,12 @@
             "state": "translated",
             "value": "Hints (%lld)"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aiuti (%lld)"
+          }
         }
       }
     },
@@ -456,6 +612,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "That rules out %2$lld candidates in %1$@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %1$@ cadono così %2$lld candidati."
           }
         }
       }
@@ -474,6 +636,12 @@
             "state": "translated",
             "value": "Only the %2$lld is still possible in %1$@."
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %1$@ resta possibile solo il %2$lld."
+          }
         }
       }
     },
@@ -490,6 +658,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fill in candidates"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segna i candidati"
           }
         }
       }
@@ -508,6 +682,12 @@
             "state": "translated",
             "value": "Easy"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Facile"
+          }
         }
       }
     },
@@ -524,6 +704,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Keep the local one"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tieni quella locale"
           }
         }
       }
@@ -542,6 +728,12 @@
             "state": "translated",
             "value": "Erase"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancella"
+          }
         }
       }
     },
@@ -558,6 +750,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Needs more than singles"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non bastano i single"
           }
         }
       }
@@ -576,6 +774,12 @@
             "state": "translated",
             "value": "Medium"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medio"
+          }
         }
       }
     },
@@ -592,6 +796,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Naked Pair"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coppia nuda"
           }
         }
       }
@@ -610,6 +820,12 @@
             "state": "translated",
             "value": "Naked Quad"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quaterna nuda"
+          }
         }
       }
     },
@@ -626,6 +842,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Naked Single"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Single nudo"
           }
         }
       }
@@ -644,6 +866,12 @@
             "state": "translated",
             "value": "Naked Triple"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terna nuda"
+          }
         }
       }
     },
@@ -660,6 +888,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "New Game"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuova partita"
           }
         }
       }
@@ -678,6 +912,12 @@
             "state": "translated",
             "value": "Note %lld"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annota %lld"
+          }
         }
       }
     },
@@ -694,6 +934,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notes"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appunti"
           }
         }
       }
@@ -712,6 +958,12 @@
             "state": "translated",
             "value": "Toggle Notes"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attiva o disattiva gli appunti"
+          }
         }
       }
     },
@@ -728,6 +980,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pause"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausa"
           }
         }
       }
@@ -746,6 +1004,12 @@
             "state": "translated",
             "value": "Pause, %@"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausa, %@"
+          }
         }
       }
     },
@@ -762,6 +1026,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Paused"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In pausa"
           }
         }
       }
@@ -780,6 +1050,12 @@
             "state": "translated",
             "value": "Points"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Punti"
+          }
         }
       }
     },
@@ -796,6 +1072,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Undo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annulla"
           }
         }
       }
@@ -814,6 +1096,12 @@
             "state": "translated",
             "value": "Hard"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Difficile"
+          }
         }
       }
     },
@@ -830,6 +1118,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hardest technique required: %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tecnica più difficile richiesta: %@"
           }
         }
       }
@@ -848,6 +1142,12 @@
             "state": "translated",
             "value": "Streak"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serie"
+          }
         }
       }
     },
@@ -864,6 +1164,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Column %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colonna %lld"
           }
         }
       }
@@ -882,6 +1188,12 @@
             "state": "translated",
             "value": "Game"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partita"
+          }
         }
       }
     },
@@ -898,6 +1210,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sudoku board"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Griglia del sudoku"
           }
         }
       }
@@ -916,6 +1234,12 @@
             "state": "translated",
             "value": "Daily Puzzle"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schema del giorno"
+          }
         }
       }
     },
@@ -932,6 +1256,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Evil"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diabolico"
           }
         }
       }
@@ -950,6 +1280,12 @@
             "state": "translated",
             "value": "Got it"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ho capito"
+          }
         }
       }
     },
@@ -966,6 +1302,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hidden Pair"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coppia nascosta"
           }
         }
       }
@@ -984,6 +1326,12 @@
             "state": "translated",
             "value": "Hidden Quad"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quaterna nascosta"
+          }
         }
       }
     },
@@ -1000,6 +1348,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hidden Single"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Single nascosto"
           }
         }
       }
@@ -1018,6 +1372,12 @@
             "state": "translated",
             "value": "Hidden Triple"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terna nascosta"
+          }
         }
       }
     },
@@ -1034,6 +1394,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Continue"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continua"
           }
         }
       }
@@ -1052,6 +1418,12 @@
             "state": "translated",
             "value": "Redo"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ripristina"
+          }
         }
       }
     },
@@ -1068,6 +1440,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wings and colouring"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wing e colorazione"
           }
         }
       }
@@ -1086,6 +1464,12 @@
             "state": "translated",
             "value": "Row %lld"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riga %lld"
+          }
         }
       }
     },
@@ -1102,6 +1486,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Row %1$lld, column %2$lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riga %1$lld, colonna %2$lld"
           }
         }
       }
@@ -1120,6 +1510,12 @@
             "state": "translated",
             "value": "Time factor"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fattore tempo"
+          }
         }
       }
     },
@@ -1136,6 +1532,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Digit %lld"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cifra %lld"
           }
         }
       }
@@ -1154,6 +1556,12 @@
             "state": "translated",
             "value": "To settle in"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per iniziare con calma"
+          }
         }
       }
     },
@@ -1170,6 +1578,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back to Overview"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torna alla panoramica"
           }
         }
       }
@@ -1188,6 +1602,12 @@
             "state": "translated",
             "value": "Back"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indietro"
+          }
         }
       }
     },
@@ -1204,6 +1624,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Forcing Chain"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catena forzata"
           }
         }
       }
@@ -1222,6 +1648,12 @@
             "state": "translated",
             "value": "Forcing chains"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catene forzate"
+          }
         }
       }
     },
@@ -1238,6 +1670,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "entered"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "inserito"
           }
         }
       }
@@ -1256,6 +1694,12 @@
             "state": "translated",
             "value": "empty"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vuota"
+          }
         }
       }
     },
@@ -1272,6 +1716,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "empty, notes %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vuota, appunti %@"
           }
         }
       }
@@ -1290,6 +1740,12 @@
             "state": "translated",
             "value": "given"
           }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "data"
+          }
         }
       }
     },
@@ -1303,6 +1759,12 @@
           }
         },
         "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sudoku"
+          }
+        },
+        "it": {
           "stringUnit": {
             "state": "translated",
             "value": "Sudoku"
@@ -1323,6 +1785,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Explains the reasoning instead of just filling the cell"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spiega il ragionamento, non riempie solo la casella"
           }
         }
       }

@@ -48,9 +48,15 @@ struct LocalizationTests {
             == "Die %lld kann in %@ nur in %@ stehen.")
     }
 
-    /// A key present in one language but not the other means a German word
-    /// appearing mid-sentence in an English app.
-    @Test func bothLanguagesCoverTheSameKeys() throws {
+    @Test func italianTranslates() {
+        #expect(Self.string("Tagesrätsel", in: "it") == "Schema del giorno")
+        #expect(Self.string("Zurück", in: "it") == "Indietro")
+        #expect(Self.string("Hinweis", in: "it") == "Aiuto")
+    }
+
+    /// A key present in one language but not another means a German word
+    /// appearing mid-sentence in an Italian or English app.
+    @Test func everyLanguageCoversTheSameKeys() throws {
         func keys(_ language: String) throws -> Set<String> {
             let path = try #require(Bundle.module.path(forResource: language, ofType: "lproj"))
             let file = URL(fileURLWithPath: path).appendingPathComponent("Localizable.strings")
@@ -61,9 +67,12 @@ struct LocalizationTests {
             })
         }
         let german = try keys("de")
-        let english = try keys("en")
         #expect(german.count >= 70)
-        #expect(german == english, "nur in einer Sprache: \(german.symmetricDifference(english))")
+        for language in ["en", "it"] {
+            let other = try keys(language)
+            #expect(german == other,
+                    "\(language) weicht ab: \(german.symmetricDifference(other))")
+        }
     }
 
     /// Every difficulty and technique the player can see must have a name in both

@@ -10,7 +10,7 @@ Stand 2026-08-23, Meilenstein 6. Geprüft gegen Apples Richtlinien und die
 | **Fehler nur über Farbe** | Falsche Ziffer rot auf rotem Grund | Zusätzlich ein Dreieck in der Zellenecke — Form trägt die Information mit |
 | **VoiceOver kennt die Position nicht** | Zelle las nur „5, eingetragen“ | `accessibilityValue` nennt Zeile und Spalte |
 | **Ziffernblock ignoriert Textgröße** | Feste 28 pt | Skaliert mit `.title2` und der Systemeinstellung |
-| **Englisch fehlte vollständig** | Nur Deutsch, obwohl der Store-Text Englisch verspricht | 76 Strings in beiden Sprachen, per Test abgesichert |
+| **Nur Deutsch** | Der Store-Text versprach Englisch, die App konnte es nicht | 78 Strings in **Deutsch, Italienisch und Englisch**, per Test abgesichert |
 
 Zur Farbmarkierung: Rot auf Grau ist für rot-grün-blinde Menschen unsichtbar,
 und das betrifft etwa jeden zwölften Mann. Ein Sudoku, das einem nichts über
@@ -42,7 +42,7 @@ seine Fehler sagt, ist ein anderes, schlechteres Spiel.
 
 ## Lokalisierung
 
-Quellsprache ist Deutsch. Der Katalog
+Drei Sprachen: Deutsch, Italienisch, Englisch. Quellsprache ist Deutsch. Der Katalog
 `Packages/SudokuUI/Localizations/Localizable.xcstrings` ist die editierbare
 Wahrheit; `Scripts/generate-strings.py` erzeugt daraus die `.strings`-Dateien,
 die tatsächlich ausgeliefert werden.
@@ -61,4 +61,5 @@ Zwei Fallen, die dabei auffielen und beide lautlos scheitern:
 2. **Die App muss ihre Sprachen deklarieren.** Ohne `CFBundleLocalizations` in
    der `Info.plist` gilt sie als einsprachig deutsch, egal wie viele
    Übersetzungen in den Packages liegen. Genau das war der Zustand, bis es
-   auffiel.
+   auffiel. Das gilt auch für die Widget-Erweiterung, die ihre eigene
+   `Info.plist` hat.

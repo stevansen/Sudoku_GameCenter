@@ -48,6 +48,9 @@ public struct RootView: View {
             }
         }
         .task { await model.load() }
+        .onOpenURL { url in
+            Task { await model.open(url) }
+        }
         .onChange(of: scenePhase) { _, phase in
             // An intent may have run while the app sat in the background.
             guard phase == .active else { return }

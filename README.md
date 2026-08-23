@@ -4,7 +4,8 @@ A procedurally generated sudoku for every Apple platform, with Game Center
 leaderboards, achievements, and a game that follows you across your devices.
 
 Status: **Milestone 5 complete** — one codebase, four platforms, all built and
-run at least once. watchOS and visionOS are deliberately out of scope.
+run at least once, in German, Italian and English. watchOS and visionOS are
+deliberately out of scope.
 
 ## Layout
 

@@ -55,6 +55,9 @@ public final class AppModel {
     private var moveCount = 0
     private var startedOn = AppModel.deviceName
     private var isDailyGame = false
+    /// Set when a widget tap or an intent started this game, as opposed to it
+    /// being restored from disk.
+    private var startedOnDemand = false
     private var autosaveTask: Task<Void, Never>?
 
     public init(
@@ -119,22 +122,35 @@ public final class AppModel {
 
     /// Applies whatever the resolver decides about the local and remote records.
     private func adopt(local: SavedGame?) async {
+        // A widget tap or an intent can start a game while this is still reading
+        // from disk. Putting the saved game on top of it left the app showing
+        // the overview with a back button and nothing behind it. The comparison
+        // against other devices still has to run — only the replacing is
+        // skipped, so a genuine conflict is still raised.
+        let keepWhatIsPlaying = startedOnDemand
+        func put(_ saved: SavedGame?) {
+            guard !keepWhatIsPlaying else { return }
+            restore(saved)
+        }
+
         switch await sync.resolution(for: local) {
         case .useLocal:
-            restore(local)
+            put(local)
         case .useRemote:
             guard let remote = await sync.remoteGame() else {
-                restore(local)
+                put(local)
                 return
             }
-            restore(remote)
-            await store.save(remote)
+            put(remote)
+            if !keepWhatIsPlaying {
+                await store.save(remote)
+            }
         case .ask(let reason):
             guard let remote = await sync.remoteGame() else {
-                restore(local)
+                put(local)
                 return
             }
-            restore(local)
+            put(local)
             pendingConflict = SyncConflict(reason: reason, local: local, remote: remote)
         }
     }
@@ -189,6 +205,21 @@ public final class AppModel {
         await queue.flush(using: gameCenter)
     }
 
+    /// Handles a `sudoku://` link — today only the widget's, which opens the
+    /// daily puzzle. Returns whether the link meant anything.
+    @discardableResult
+    public func open(_ url: URL) async -> Bool {
+        guard url.scheme == "sudoku" else { return false }
+        switch url.host() {
+        case "daily":
+            await startDailyPuzzle()
+            startedOnDemand = true
+            return true
+        default:
+            return false
+        }
+    }
+
     /// Acts on whatever a Shortcuts or Siri intent asked for before the app was
     /// running. Call it on launch and whenever the app comes to the front.
     public func handlePendingLaunchRequest() async {
@@ -196,8 +227,10 @@ public final class AppModel {
         guard let request = PendingLaunchRequest.take() else { return }
         if request == PendingLaunchRequest.Request.daily.rawValue {
             await startDailyPuzzle()
+            startedOnDemand = true
         } else if let difficulty = Difficulty(rawValue: request) {
             await startGame(difficulty: difficulty)
+            startedOnDemand = true
         }
         #endif
     }
