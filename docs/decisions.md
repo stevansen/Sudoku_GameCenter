@@ -204,6 +204,16 @@ localisation-free and its tests about logic rather than strings.
   decision rather than a porting job, and it was not worth the surface area.
   The `.watchOS(.v11)` lines in the manifests and the `!os(watchOS)` guards
   around the Game Center views were removed with it; nothing else referred to it.
+- **The icon is a 3x3 grid, not a 9x9 one.** At 40 points a full sudoku grid is
+  grey mush. Three by three still reads as "sudoku" and stays legible down to the
+  16-point macOS size. It is rendered by `Scripts/render-icons.swift` rather than
+  drawn by hand, so every size comes from one description and the tvOS layers
+  cannot drift from the flat one.
+- **The catalogues were empty until Milestone 6.** They had the placeholder
+  entries an Xcode template writes and no image files at all, so the app shipped
+  with no icon — a grey square on the home screen — and would have failed
+  submission. It took looking at the home screen to notice; nothing in the build
+  complains.
 - **The cost of extra platforms is disk, not code.** Each runtime plus its
   simulator data runs to several gigabytes. Nothing in the app had to change for
   visionOS; the machine had to.
