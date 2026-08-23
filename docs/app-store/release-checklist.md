@@ -4,9 +4,8 @@ Von null bis zur Veröffentlichung. Was du selbst tun musst, ist mit **[du]**
 markiert — das sind Schritte, die einen Apple-Account, ein Passwort oder eine
 Zahlungsmethode brauchen und deshalb nicht automatisierbar sind.
 
-**Vorbedingung**: Meilensteine 2 bis 6 des [Build-Prompts](../../README.md) sind
-fertig. Stand heute existiert nur die Engine — es gibt noch kein App-Target und
-damit nichts einzureichen.
+**Vorbedingung**: Meilensteine 2 bis 6 sind fertig. App-Target, Widget-
+Erweiterung, Privacy-Manifest und Entitlements liegen im Projekt.
 
 ---
 
@@ -22,29 +21,41 @@ damit nichts einzureichen.
 
 Developer-Portal → *Certificates, Identifiers & Profiles*.
 
-- [ ] **[du]** App-IDs anlegen: `com.sudoku.app`, `com.sudoku.app.tv`,
-      `com.sudoku.app.watchkitapp`, `com.sudoku.app.widgets`.
-- [ ] **[du]** Für jede: **Game Center**, **iCloud**, **App Groups**,
-      **Push Notifications** aktivieren.
-- [ ] **[du]** iCloud-Container `iCloud.com.sudoku.app` erstellen und den App-IDs
-      zuordnen.
-- [ ] **[du]** App-Group `group.com.sudoku.app` erstellen und zuordnen.
+- [ ] **[du]** App-IDs anlegen: `com.sudoku.app` und `com.sudoku.app.widgets`.
+      (Kein `.tv`, kein `.watchkitapp` — tvOS läuft unter derselben Bundle-ID,
+      watchOS und visionOS sind nicht im Umfang.)
+- [ ] **[du]** Für `com.sudoku.app`: **Game Center** und **iCloud (Key-Value
+      Storage)** aktivieren. Mehr nicht — die App verwendet weder CloudKit noch
+      App-Groups noch Push, und was man deklariert und nicht benutzt, fällt bei
+      der Prüfung auf.
 
 ## C — Xcode-Projekt
 
-- [ ] Bundle-IDs der Targets stimmen mit B überein.
-- [ ] `Configuration/Sudoku.entitlements.example` als echte `.entitlements`
-      übernommen und dem Target zugewiesen.
-- [ ] Schlüssel aus `Configuration/Info-additions.plist.example` in die
-      `Info.plist` übernommen — besonders `ITSAppUsesNonExemptEncryption`,
-      sonst fragt jeder Upload nach der Exportkonformität.
-- [ ] `Configuration/PrivacyInfo.xcprivacy` in **jedem** ausgelieferten Target
-      eingebunden (App, Widget, Watch-App).
+- [x] Bundle-IDs der Targets stimmen mit B überein.
+- [x] `App/Sudoku.entitlements` liegt im Projekt und ist zugewiesen — Game Center
+      und der Schlüsselwertspeicher, sonst nichts.
+- [x] `ITSAppUsesNonExemptEncryption`, `LSApplicationCategoryType` und
+      `NSUserActivityTypes` stehen in der `Info.plist`.
+- [x] `PrivacyInfo.xcprivacy` liegt in **beiden** ausgelieferten Targets
+      (App und Widget) und landet im Bundle.
+- [ ] **[du]** `DEVELOPMENT_TEAM` setzen. Ohne Team verwirft Xcode die
+      Entitlements beim Signieren (ad-hoc), und `$(TeamIdentifierPrefix)` bleibt
+      leer — der Schlüsselwertspeicher schreibt dann ins Nichts.
 - [ ] `MARKETING_VERSION = 1.0.0`, `CURRENT_PROJECT_VERSION` monoton steigend.
       Regel: Build-Nummer bei jedem Upload erhöhen, auch bei identischem Code —
       App Store Connect nimmt dieselbe Nummer kein zweites Mal an.
 - [ ] Release-Build mit aktivierten Optimierungen, Bitcode ist irrelevant
       (abgeschafft), Debug-Symbole werden hochgeladen.
+
+      Die Entitlements hängen an der **Release**-Konfiguration. Im Debug sind sie
+      abgeschaltet, weil macOS ohne Entwicklerzertifikat gar nicht baut, sobald
+      welche gesetzt sind — ohne Team wäre sonst nichts mehr zu testen. Mit Team
+      schaltet man sie im Debug so dazu:
+
+      ```bash
+      xcodebuild -scheme Sudoku -configuration Debug \
+        SUDOKU_ENTITLEMENTS=Sudoku.entitlements build
+      ```
 - [ ] `swift test -c release -Xswiftc -enable-testing` grün.
 
 ## D — App Store Connect: Eintrag

@@ -255,6 +255,17 @@ localisation-free and its tests about logic rather than strings.
   that takes 0.6 s on its own takes eight seconds under that load. The tests
   count attempts instead, which is what the cost is actually made of and does not
   move with the machine.
+- **Only the capabilities the app actually uses are declared.** The templates
+  carried CloudKit, App Groups and push notifications; none of them is used.
+  Statistics do not sync, the widget derives the daily puzzle from the date and
+  needs no shared container, and there are no notifications. What ships is Game
+  Center and the ubiquitous key-value store, which are the two the code genuinely
+  reaches for. Declaring more invites a reviewer to ask what it is for.
+- **The entitlements hang off the Release configuration.** macOS refuses to build
+  at all with entitlements present and no development certificate, so leaving them
+  on in Debug would mean nobody without a paid team could build or test the Mac
+  app. Release carries them — you cannot ship without a team anyway — and Debug
+  takes them on request with `SUDOKU_ENTITLEMENTS=Sudoku.entitlements`.
 - **A hint has to end in something the player can do.** The board holds digits;
   candidates live in the player's own notes, if they keep any. So a step that
   only rules candidates out — locked candidates, a naked pair, an X-wing —

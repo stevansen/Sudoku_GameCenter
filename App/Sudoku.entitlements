@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Bestenlisten und Erfolge. -->
+	<key>com.apple.developer.game-center</key>
+	<true/>
+
+	<!-- Die laufende Partie wandert über NSUbiquitousKeyValueStore mit. Das
+	     Präfix ist die Team-ID und wird von Xcode eingesetzt.
+
+	     Bewusst nicht enthalten: CloudKit, App-Groups, Push. Nichts davon wird
+	     verwendet — Statistiken syncen noch nicht, das Widget leitet das
+	     Tagesrätsel selbst aus dem Datum ab und braucht keinen geteilten
+	     Container, und es gibt keine Benachrichtigungen. Was man deklariert und
+	     nicht benutzt, fällt bei der Prüfung auf. -->
+	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
+	<string>$(TeamIdentifierPrefix)com.sudoku.app</string>
+</dict>
+</plist>

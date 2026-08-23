@@ -3,9 +3,15 @@
 A procedurally generated sudoku for every Apple platform, with Game Center
 leaderboards, achievements, and a game that follows you across your devices.
 
-Status: **Milestone 5 complete** — one codebase, four platforms, all built and
-run at least once, in German, Italian and English. watchOS and visionOS are
-deliberately out of scope.
+Status: **Milestone 6 complete** — one codebase, four platforms, all built and
+run at least once, in German, Italian and English, with a daily-puzzle widget,
+Shortcuts and Siri intents, onboarding and an accessibility pass behind it.
+watchOS and visionOS are deliberately out of scope.
+
+Not yet done: statistics and history do not sync between devices, there are no
+store screenshots, and nobody has played it with VoiceOver switched on for real —
+the simulator cannot run it. See `docs/accessibility.md` and
+`docs/app-store/release-checklist.md`.
 
 ## Layout
 
@@ -22,9 +28,8 @@ docs/app-store/         release checklist, metadata (de/en), age rating, review 
 docs/privacy/           privacy policy (de/en) and the App Privacy questionnaire answers
 ```
 
-Planned, per the build plan: widgets, onboarding, and the
-polish pass (Milestone 6). Statistics and history do **not** sync between
-devices yet — see `docs/decisions.md`.
+Statistics and history do **not** sync between devices yet — only the game in
+progress follows you. See `docs/decisions.md`.
 
 ## Build and test
 
