@@ -19,37 +19,37 @@ public struct ResultSheetView: View {
     public var body: some View {
         VStack(spacing: 20) {
             VStack(spacing: 6) {
-                Text(String(localized: "Gelöst"))
+                Text(String(localized: "Gelöst", bundle: .module))
                     .font(.largeTitle.weight(.semibold))
                 Text("\(session.puzzle.difficulty.localizedName) · \(session.elapsedSeconds.asClock)")
                     .foregroundStyle(.secondary)
             }
 
             VStack(spacing: 0) {
-                row(String(localized: "Grundwert"), String(breakdown.base))
-                row(String(localized: "Zeitfaktor"), factor(breakdown.timeFactor))
+                row(String(localized: "Grundwert", bundle: .module), String(breakdown.base))
+                row(String(localized: "Zeitfaktor", bundle: .module), factor(breakdown.timeFactor))
                 if breakdown.mistakeFactor < 1 {
-                    row(String(localized: "Fehler (\(session.mistakes))"), factor(breakdown.mistakeFactor))
+                    row(String(localized: "Fehler (\(session.mistakes))", bundle: .module), factor(breakdown.mistakeFactor))
                 }
                 if breakdown.hintFactor < 1 {
-                    row(String(localized: "Hinweise (\(session.hintsUsed))"), factor(breakdown.hintFactor))
+                    row(String(localized: "Hinweise (\(session.hintsUsed))", bundle: .module), factor(breakdown.hintFactor))
                 }
                 if breakdown.streakBonus > 0 {
-                    row(String(localized: "Serie"), "+\(Int(breakdown.streakBonus * 100)) %")
+                    row(String(localized: "Serie", bundle: .module), "+\(Int(breakdown.streakBonus * 100)) %")
                 }
                 Divider().padding(.vertical, 6)
-                row(String(localized: "Punkte"), String(breakdown.total), emphasised: true)
+                row(String(localized: "Punkte", bundle: .module), String(breakdown.total), emphasised: true)
             }
             .padding()
             .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
 
             if let hardest = session.puzzle.hardestTechnique {
-                Text(String(localized: "Schwerste nötige Technik: \(HintText.name(for: hardest))"))
+                Text(String(localized: "Schwerste nötige Technik: \(HintText.name(for: hardest))", bundle: .module))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
 
-            Button(String(localized: "Fertig"), action: onDone)
+            Button(String(localized: "Fertig", bundle: .module), action: onDone)
                 .buttonStyle(.borderedProminent)
         }
         .padding()

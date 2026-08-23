@@ -8,24 +8,24 @@ struct ControlBarView: View {
 
     var body: some View {
         HStack(spacing: 20) {
-            control("arrow.uturn.backward", String(localized: "Rückgängig")) {
+            control("arrow.uturn.backward", String(localized: "Rückgängig", bundle: .module)) {
                 session.undo()
                 onPlay()
             }
             .disabled(!session.canUndo)
 
-            control("eraser", String(localized: "Löschen")) {
+            control("eraser", String(localized: "Löschen", bundle: .module)) {
                 session.clear()
                 onPlay()
             }
 
             control(session.inputMode == .note ? "pencil.circle.fill" : "pencil.circle",
-                    String(localized: "Notizen")) {
+                    String(localized: "Notizen", bundle: .module)) {
                 session.inputMode = session.inputMode == .note ? .digit : .note
             }
             .tint(session.inputMode == .note ? .accentColor : .primary)
 
-            control("lightbulb", String(localized: "Hinweis")) {
+            control("lightbulb", String(localized: "Hinweis", bundle: .module)) {
                 session.requestHint()
             }
         }

@@ -15,9 +15,9 @@ public struct RootView: View {
         let filled = remote.filledCells
         switch conflict.reason {
         case .differentPuzzle:
-            return String(localized: "Auf \u{201E}\(remote.deviceName)\u{201C} läuft ein anderes Rätsel (\(filled) von 81 Feldern, \(remote.elapsedSeconds.asClock)). Welches möchtest du fortsetzen?")
+            return String(localized: "Auf \u{201E}\(remote.deviceName)\u{201C} läuft ein anderes Rätsel (\(filled) von 81 Feldern, \(remote.elapsedSeconds.asClock)). Welches möchtest du fortsetzen?", bundle: .module)
         case .contradictingEntries:
-            return String(localized: "Auf \u{201E}\(remote.deviceName)\u{201C} steht dasselbe Rätsel anders (\(filled) von 81 Feldern, \(remote.moveCount) Züge). Welchen Stand möchtest du behalten?")
+            return String(localized: "Auf \u{201E}\(remote.deviceName)\u{201C} steht dasselbe Rätsel anders (\(filled) von 81 Feldern, \(remote.moveCount) Züge). Welchen Stand möchtest du behalten?", bundle: .module)
         }
     }
 
@@ -41,21 +41,21 @@ public struct RootView: View {
             .toolbar {
                 if model.isPlaying {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button(String(localized: "Zurück")) { model.isPlaying = false }
+                        Button(String(localized: "Zurück", bundle: .module)) { model.isPlaying = false }
                     }
                 }
             }
         }
         .task { await model.load() }
         .alert(
-            String(localized: "Anderer Spielstand gefunden"),
+            String(localized: "Anderer Spielstand gefunden", bundle: .module),
             isPresented: .constant(model.pendingConflict != nil),
             presenting: model.pendingConflict
         ) { conflict in
-            Button(String(localized: "Diesen übernehmen")) {
+            Button(String(localized: "Diesen übernehmen", bundle: .module)) {
                 Task { await model.resolveConflict(keepRemote: true) }
             }
-            Button(String(localized: "Lokalen behalten"), role: .cancel) {
+            Button(String(localized: "Lokalen behalten", bundle: .module), role: .cancel) {
                 Task { await model.resolveConflict(keepRemote: false) }
             }
         } message: { conflict in

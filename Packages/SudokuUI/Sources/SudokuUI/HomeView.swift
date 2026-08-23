@@ -32,7 +32,7 @@ public struct HomeView: View {
                 if model.canContinue, let session = model.session {
                     Button(action: onContinue) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(String(localized: "Weiterspielen"))
+                            Text(String(localized: "Weiterspielen", bundle: .module))
                                 .font(.headline)
                             Text("\(session.puzzle.difficulty.localizedName) · \(session.elapsedSeconds.asClock) · \(session.filledCount)/81")
                                 .font(.caption)
@@ -84,10 +84,10 @@ public struct HomeView: View {
         Button(action: onStartDaily) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(String(localized: "Tagesrätsel")).font(.headline)
+                    Text(String(localized: "Tagesrätsel", bundle: .module)).font(.headline)
                     Text(model.hasSolvedTodaysPuzzle
-                        ? String(localized: "Heute schon gelöst")
-                        : String(localized: "Für alle das gleiche · doppelte Punkte"))
+                        ? String(localized: "Heute schon gelöst", bundle: .module)
+                        : String(localized: "Für alle das gleiche · doppelte Punkte", bundle: .module))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -108,8 +108,8 @@ public struct HomeView: View {
         Button { showsGameCenter = true } label: {
             Label(
                 model.isSignedInToGameCenter
-                    ? String(localized: "Bestenlisten & Erfolge")
-                    : String(localized: "Bei Game Center anmelden"),
+                    ? String(localized: "Bestenlisten & Erfolge", bundle: .module)
+                    : String(localized: "Bei Game Center anmelden", bundle: .module),
                 systemImage: "trophy")
                 .font(.subheadline)
                 .frame(maxWidth: .infinity)
@@ -122,9 +122,9 @@ public struct HomeView: View {
 
     private var statsHeader: some View {
         HStack(spacing: 0) {
-            statistic(String(localized: "Punkte"), String(model.stats.totalPoints))
-            statistic(String(localized: "Gelöst"), String(model.stats.solvedPuzzleIDs.count))
-            statistic(String(localized: "Serie"), String(model.stats.streakDays))
+            statistic(String(localized: "Punkte", bundle: .module), String(model.stats.totalPoints))
+            statistic(String(localized: "Gelöst", bundle: .module), String(model.stats.solvedPuzzleIDs.count))
+            statistic(String(localized: "Serie", bundle: .module), String(model.stats.streakDays))
         }
     }
 

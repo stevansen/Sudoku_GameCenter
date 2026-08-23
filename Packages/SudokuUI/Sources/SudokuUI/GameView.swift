@@ -79,7 +79,7 @@ public struct GameView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(session.puzzle.difficulty.localizedName)
                     .font(.headline)
-                Text(String(localized: "Fehler \(session.mistakes) · Hinweise \(session.hintsUsed)"))
+                Text(String(localized: "Fehler \(session.mistakes) · Hinweise \(session.hintsUsed)", bundle: .module))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
@@ -95,8 +95,8 @@ public struct GameView: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel(session.isPaused
-                ? String(localized: "Fortsetzen")
-                : String(localized: "Pausieren, \(session.elapsedSeconds.asClock)"))
+                ? String(localized: "Fortsetzen", bundle: .module)
+                : String(localized: "Pausieren, \(session.elapsedSeconds.asClock)", bundle: .module))
         }
     }
 
@@ -109,10 +109,10 @@ public struct GameView: View {
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             HStack {
-                Button(String(localized: "Verstanden")) { session.dismissHint() }
+                Button(String(localized: "Verstanden", bundle: .module)) { session.dismissHint() }
                     .buttonStyle(.bordered)
                 if hint.placements.first != nil {
-                    Button(String(localized: "Eintragen")) {
+                    Button(String(localized: "Eintragen", bundle: .module)) {
                         session.applyHint()
                         _ = model.didPlay()
                     }

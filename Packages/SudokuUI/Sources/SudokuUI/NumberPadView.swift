@@ -32,7 +32,9 @@ struct NumberPadView: View {
                     onPlay()
                 } label: {
                     Text(String(digit))
-                        .font(.system(size: 28, weight: .medium, design: .rounded))
+                        // Scales with the system text size instead of ignoring it.
+                        .font(.system(.title2, design: .rounded).weight(.medium))
+                        .minimumScaleFactor(0.6)
                         .frame(maxWidth: .infinity, minHeight: minimumButtonHeight)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
@@ -44,8 +46,8 @@ struct NumberPadView: View {
                 .disabled(session.completedDigits.contains(digit))
                 .opacity(session.completedDigits.contains(digit) ? 0.25 : 1)
                 .accessibilityLabel(session.inputMode == .note
-                    ? String(localized: "Notiz \(digit)")
-                    : String(localized: "Ziffer \(digit)"))
+                    ? String(localized: "Notiz \(digit)", bundle: .module)
+                    : String(localized: "Ziffer \(digit)", bundle: .module))
             }
         }
     }

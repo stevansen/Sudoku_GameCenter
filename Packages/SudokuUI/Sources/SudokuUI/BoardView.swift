@@ -47,7 +47,7 @@ public struct BoardView: View {
             if let new { session.selection = new }
         }
         #endif
-        .accessibilityLabel(String(localized: "Sudoku-Brett"))
+        .accessibilityLabel(String(localized: "Sudoku-Brett", bundle: .module))
     }
 
     @ViewBuilder
@@ -63,13 +63,19 @@ public struct BoardView: View {
             isConflicting: isConflicting,
             isHinted: isHinted)
 
+        // Without its coordinates a cell read aloud is just a digit with no
+        // place — VoiceOver users navigate the grid by row and column.
+        let positioned = view.accessibilityValue(
+            String(localized: "Zeile \(Units.rowOf[index] + 1), Spalte \(Units.columnOf[index] + 1)",
+                   bundle: .module))
+
         #if os(tvOS)
         // The remote has no pointer: every cell has to be somewhere focus can go.
-        Button { session.selection = index } label: { view }
+        Button { session.selection = index } label: { positioned }
             .buttonStyle(.plain)
             .focused($focusedCell, equals: index)
         #else
-        view.onTapGesture { session.selection = index }
+        positioned.onTapGesture { session.selection = index }
         #endif
     }
 
@@ -78,7 +84,7 @@ public struct BoardView: View {
         if session.isPaused {
             ZStack {
                 Rectangle().fill(.regularMaterial)
-                Label(String(localized: "Pausiert"), systemImage: "pause.fill")
+                Label(String(localized: "Pausiert", bundle: .module), systemImage: "pause.fill")
                     .font(.title2)
             }
         }

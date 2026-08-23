@@ -25,6 +25,23 @@ struct CellView: View {
             } else if notes != 0 {
                 notesGrid
             }
+            // A wrong digit is marked by shape as well as colour. Red on grey is
+            // invisible to a red-green colour blind player, and roughly one man in
+            // twelve is — a game that tells you nothing about your mistakes is a
+            // different, worse game.
+            if isWrong || isConflicting {
+                GeometryReader { geometry in
+                    Path { path in
+                        let size = geometry.size.width * 0.28
+                        path.move(to: CGPoint(x: 0, y: geometry.size.height))
+                        path.addLine(to: CGPoint(x: size, y: geometry.size.height))
+                        path.addLine(to: CGPoint(x: 0, y: geometry.size.height - size))
+                        path.closeSubpath()
+                    }
+                    .fill(Theme.wrongDigit)
+                }
+                .allowsHitTesting(false)
+            }
         }
         .contentShape(Rectangle())
         .accessibilityElement()
@@ -71,15 +88,17 @@ struct CellView: View {
     private var accessibilityLabel: String {
         if value != 0 {
             let kind = isGiven
-                ? String(localized: "vorgegeben")
-                : String(localized: "eingetragen")
-            let wrong = isWrong ? String(localized: ", falsch") : ""
+                ? String(localized: "vorgegeben", bundle: .module)
+                : String(localized: "eingetragen", bundle: .module)
+            let wrong = isWrong || isConflicting
+                ? String(localized: ", falsch", bundle: .module)
+                : ""
             return "\(value), \(kind)\(wrong)"
         }
         if notes != 0 {
             let list = notes.digits.map(String.init).joined(separator: " ")
-            return String(localized: "leer, Notizen \(list)")
+            return String(localized: "leer, Notizen \(list)", bundle: .module)
         }
-        return String(localized: "leer")
+        return String(localized: "leer", bundle: .module)
     }
 }

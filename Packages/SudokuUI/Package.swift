@@ -19,6 +19,7 @@ let package = Package(
         .target(
             name: "SudokuUI",
             dependencies: ["SudokuKit", "SudokuGameCenter", "SudokuSync"],
+            resources: [.process("Resources")],
             swiftSettings: [.swiftLanguageMode(.v6)]
         ),
         .testTarget(
