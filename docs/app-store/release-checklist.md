@@ -130,6 +130,32 @@ beziehungsweise `'generic/platform=tvOS'`.
 
 ## I — Einreichen
 
+**Was eine Einreichung blockiert, in der Reihenfolge, in der es auffiel.** Die API
+meldet immer nur „appStoreVersions … is not in valid state", nie welches Feld
+fehlt — man beseitigt die Gründe also einzeln und probiert erneut.
+
+| Voraussetzung | über API? | Stand |
+|---|---|---|
+| Build hochgeladen **und der Version zugeordnet** | ja | ✅ |
+| Prüfangaben: Name, **Telefon mit Ländervorwahl**, E-Mail, Hinweise | ja | ✅ |
+| `contentRightsDeclaration` beantwortet | ja | ✅ |
+| **Preisplan** — ohne ihn geht nichts | ja | ✅ kostenlos |
+| **Verfügbarkeit** (Territorien) | entsteht mit dem Preisplan | ✅ 175 Länder |
+| **Game Center mit der Version verknüpft** (`gameCenterAppVersions`, danach `enabled`) | ja, aber zweistufig | ✅ |
+| **App-Datenschutz** („Werden Daten erfasst?") | **nein — nur Weboberfläche** | ⬜ **[du]** |
+
+Der Datenschutz-Fragebogen ist in dieser API-Version schlicht nicht vorhanden:
+der App-Eintrag hat 41 Beziehungen, keine davon betrifft ihn. Antworten liegen
+fertig in [app-privacy-answers.md](../privacy/app-privacy-answers.md) — durchweg
+„keine Daten erhoben".
+
+Zwei Fallstricke beim Anlegen über die API:
+
+- `gameCenterAppVersions` nimmt `enabled` **nicht** beim Anlegen an; erst
+  erzeugen, dann per PATCH aktivieren.
+- `reviewSubmissions` erlaubt **kein DELETE**. Ein Entwurf, der beim ersten
+  Versuch entsteht, bleibt stehen — er lässt sich aber wiederverwenden.
+
 - [ ] Version zur Prüfung einreichen, Freigabe **manuell** wählen — dann
       entscheidest du, wann sie erscheint.
 - [ ] Erwartete Dauer: 24 bis 48 Stunden.

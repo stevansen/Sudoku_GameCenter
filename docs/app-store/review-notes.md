@@ -11,9 +11,10 @@ Game Center: Bestenlisten und Erfolge werden nach der Anmeldung mit einer
 beliebigen Sandbox-Apple-ID sichtbar. Wird die Anmeldung abgelehnt, läuft die App
 im Offline-Modus vollständig weiter.
 
-iCloud: Spielstände werden in der privaten CloudKit-Datenbank der Nutzerin oder
-des Nutzers abgelegt, damit eine Partie auf einem anderen Gerät fortgesetzt
-werden kann. Es gibt keinen eigenen Server und keine Datenerhebung.
+iCloud: Die laufende Partie und die Statistiken liegen im privaten
+Schlüsselwertspeicher (NSUbiquitousKeyValueStore) der Nutzerin oder des Nutzers,
+damit eine Partie auf einem anderen Gerät fortgesetzt werden kann. Kein CloudKit,
+kein eigener Server, keine Datenerhebung.
 
 Die Rätsel werden auf dem Gerät erzeugt, nicht heruntergeladen. Das Tagesrätsel
 wird aus dem UTC-Datum abgeleitet und ist deshalb ohne Netzwerkverbindung für
@@ -26,7 +27,9 @@ Keine. Feld *Sign-in required* auf **Nein**.
 
 ## Kontakt
 
-Vor- und Nachname, Telefonnummer und E-Mail sind Pflichtfelder: `<TODO>`.
+Vor- und Nachname, Telefonnummer und E-Mail sind Pflichtfelder.
+Name und E-Mail: Stefan Hellweger, `stefan.hellweger@mac.com`.
+Telefonnummer: `+39 3346067998`.
 
 ## Was die Prüfung erfahrungsgemäß bemängelt
 
