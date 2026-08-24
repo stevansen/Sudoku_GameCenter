@@ -1,7 +1,7 @@
 # Datenschutzerklärung — Sudoku
 
-Stand: <TODO: Datum der Veröffentlichung>
-Verantwortlich: <TODO: Name, Anschrift, E-Mail>
+Stand: 24. August 2026
+Verantwortlich: Stefan Hellweger, stefan.hellweger@mac.com
 
 Diese Erklärung muss unter einer öffentlich erreichbaren URL liegen; die URL ist
 in App Store Connect ein Pflichtfeld.
@@ -17,7 +17,8 @@ keine Werbung, kein Tracking, keine Analyse-SDKs und keine Nutzerkonten.
 Diese Daten verlassen dein Gerät nur, wenn iCloud aktiviert ist.
 
 **In deiner iCloud** (nur bei aktiviertem iCloud): Dieselben Daten werden über
-Apples CloudKit in deiner **privaten** iCloud-Datenbank abgelegt, damit du auf
+Apples Schlüsselwertspeicher (NSUbiquitousKeyValueStore) in deinem **privaten**
+iCloud-Bereich abgelegt, damit du auf
 einem anderen Gerät weiterspielen kannst. Wir haben auf diese Datenbank keinen
 Zugriff — technisch nicht und rechtlich nicht. Verantwortlich für die Speicherung
 ist Apple; es gelten Apples Datenschutzbestimmungen. Du kannst die
@@ -55,4 +56,4 @@ und im App-Store-Eintrag vermerkt.
 
 ## Kontakt
 
-<TODO: E-Mail-Adresse>
+stefan.hellweger@mac.com

@@ -1,7 +1,7 @@
 # Privacy Policy — Sudoku
 
-Effective: <TODO: publication date>
-Controller: <TODO: name, address, email>
+Effective: 24 August 2026
+Controller: Stefan Hellweger, stefan.hellweger@mac.com
 
 This document must be reachable at a public URL; App Store Connect requires it.
 
@@ -16,7 +16,8 @@ no tracking, no analytics SDKs and no user accounts.
 leaves your device only if iCloud is enabled.
 
 **In your iCloud** (only with iCloud enabled): the same data is stored in your
-**private** iCloud database through Apple's CloudKit so you can continue on
+**private** iCloud area through Apple's key-value store
+(NSUbiquitousKeyValueStore) so you can continue on
 another device. We have no access to that database, neither technically nor
 legally. Apple operates the storage and Apple's privacy policy applies. You can
 turn synchronisation off at any time in your device's system settings.
@@ -50,4 +51,4 @@ listing.
 
 ## Contact
 
-<TODO: email address>
+stefan.hellweger@mac.com
