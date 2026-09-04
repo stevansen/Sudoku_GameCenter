@@ -293,8 +293,20 @@ localisation-free and its tests about logic rather than strings.
   The second failure was subtler: archiving unsigned and letting the export sign
   produces entitlements derived from the provisioning profile, not from the
   project — so the sandbox key silently disappeared. The macOS archive is signed
-  as it is built, which is why that platform uses manual signing where iOS and
-  tvOS do not.
+  as it is built.
+
+  **The same mistake was still sitting in the tvOS build.** It was archived
+  unsigned for a different reason — automatic signing wanted a development profile
+  and there is no registered device — and nobody checked what came out. The
+  uploaded tvOS build had *no entitlements at all*: no Game Center, no key-value
+  store. It uploaded and validated cleanly; App Store Connect only refused at
+  submission, with "add the com.apple.developer.game-center entitlement". tvOS now
+  signs at archive time too, like macOS. iOS was unaffected — it was archived with
+  signing from the start, and its uploaded binary carries the entitlements.
+
+  The lesson generalises: **check the artefact, not the build log.**
+  `codesign -d --entitlements :-` on what is actually going to be uploaded takes
+  five seconds and is the only thing that answers the question.
 
   That manual signing belongs to **Release only**. Applying it to Debug as well
   made the Mac build fail with "embedded binary is not signed with the same

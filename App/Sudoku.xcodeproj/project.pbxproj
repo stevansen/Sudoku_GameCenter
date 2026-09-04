@@ -421,7 +421,7 @@
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "$(SUDOKU_ENTITLEMENTS)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JF8N3J347R;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;
@@ -446,12 +446,16 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Sudoku.entitlements;
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Sudoku-macOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=appletvos*]" = Sudoku.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "Apple Distribution";
+				"CODE_SIGN_STYLE[sdk=appletvos*]" = Manual;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=appletvos*]" = "com.hellweger.sudoku.app tvOS App Store";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";
 				"CODE_SIGN_STYLE[sdk=macosx*]" = Manual;
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "com.hellweger.sudoku.app Mac App Store";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JF8N3J347R;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;
@@ -473,7 +477,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JF8N3J347R;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = SudokuWidgets/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -496,7 +500,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JF8N3J347R;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = SudokuWidgets/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -523,7 +527,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JF8N3J347R;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hellweger.sudoku.app.uitests;
@@ -540,7 +544,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JF8N3J347R;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hellweger.sudoku.app.uitests;
