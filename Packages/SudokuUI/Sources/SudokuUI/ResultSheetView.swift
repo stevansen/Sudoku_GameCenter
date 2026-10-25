@@ -41,7 +41,7 @@ public struct ResultSheetView: View {
                 row(String(localized: "Punkte", bundle: .module), String(breakdown.total), emphasised: true)
             }
             .padding()
-            .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
+            .background(RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Color.primary.opacity(0.06)))
 
             if let hardest = session.puzzle.hardestTechnique {
                 Text(String(localized: "Schwerste nötige Technik: \(HintText.name(for: hardest))", bundle: .module))

@@ -39,11 +39,11 @@ struct NumberPadView: View {
                         // keypad smaller than the default one.
                         .minimumScaleFactor(0.85)
                         .frame(maxWidth: .infinity, minHeight: minimumButtonHeight)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(session.inputMode == .note
-                                      ? Color.secondary.opacity(0.15)
-                                      : Color.accentColor.opacity(0.15)))
+                        .controlSurface(
+                            cornerRadius: 10,
+                            tint: session.inputMode == .note
+                                ? Color.secondary.opacity(0.15)
+                                : Color.accentColor.opacity(0.15))
                 }
                 .buttonStyle(.plain)
                 .disabled(session.completedDigits.contains(digit))

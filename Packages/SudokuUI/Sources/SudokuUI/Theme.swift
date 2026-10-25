@@ -61,6 +61,29 @@ public enum Theme {
     }
 }
 
+extension View {
+    /// The surface behind a tappable control.
+    ///
+    /// From iOS 26 that is Liquid Glass, tinted and reacting to touch, as system
+    /// controls are; before that, the flat tinted fill the app always had. Glass
+    /// belongs on controls that float over content, so cards that only display
+    /// something keep the flat fill.
+    @ViewBuilder
+    func controlSurface(cornerRadius: CGFloat, tint: Color) -> some View {
+        let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        #if os(tvOS)
+        // The focus engine already lifts and highlights a focused control.
+        background(shape.fill(tint))
+        #else
+        if #available(iOS 26, macOS 26, *) {
+            glassEffect(.regular.tint(tint).interactive(), in: shape)
+        } else {
+            background(shape.fill(tint))
+        }
+        #endif
+    }
+}
+
 extension Int {
     /// `12:34` — the timer format.
     var asClock: String {

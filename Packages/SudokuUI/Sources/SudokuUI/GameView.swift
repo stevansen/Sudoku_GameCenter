@@ -33,6 +33,13 @@ public struct GameView: View {
         #if !os(tvOS)
         .toolbarTitleDisplayMode(.inline)
         #endif
+        #if os(iOS)
+        // Haptics say what happened without the player having to look away from
+        // the board: a tap on a cell, a mistake, the puzzle done.
+        .sensoryFeedback(.selection, trigger: session.selection)
+        .sensoryFeedback(.error, trigger: session.mistakes)
+        .sensoryFeedback(.success, trigger: session.completedAt)
+        #endif
         // Handoff: the puzzle id is all another device needs to open the same game.
         .userActivity("com.hellweger.sudoku.app.playing") { activity in
             activity.title = session.puzzle.difficulty.localizedName
@@ -97,6 +104,9 @@ public struct GameView: View {
                     .font(.system(.headline, design: .rounded).monospacedDigit())
             }
             .buttonStyle(.plain)
+            // Apple's minimum touch target is 44 x 44 pt; the label alone is less.
+            .frame(minWidth: 44, minHeight: 44)
+            .contentShape(Rectangle())
             .accessibilityLabel(session.isPaused
                 ? String(localized: "Fortsetzen", bundle: .module)
                 : String(localized: "Pausieren, \(session.elapsedSeconds.asClock)", bundle: .module))
@@ -134,7 +144,7 @@ public struct GameView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color.yellow.opacity(0.15)))
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color.yellow.opacity(0.15)))
     }
 
     #if os(macOS)

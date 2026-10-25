@@ -42,7 +42,7 @@ public struct HomeView: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        .background(RoundedRectangle(cornerRadius: 14).fill(Color.accentColor.opacity(0.15)))
+                        .controlSurface(cornerRadius: 14, tint: Color.accentColor.opacity(0.15))
                     }
                     .buttonStyle(.plain)
                 }
@@ -64,7 +64,7 @@ public struct HomeView: View {
                                     .foregroundStyle(Theme.secondaryText)
                             }
                             .padding()
-                            .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
+                            .controlSurface(cornerRadius: 14, tint: Color.primary.opacity(0.06))
                         }
                         .buttonStyle(.plain)
                         .disabled(model.isPreparing)
@@ -102,7 +102,7 @@ public struct HomeView: View {
                     .foregroundStyle(model.hasSolvedTodaysPuzzle ? Color.green : Color.accentColor)
             }
             .padding()
-            .background(RoundedRectangle(cornerRadius: 14).fill(Color.accentColor.opacity(0.10)))
+            .controlSurface(cornerRadius: 14, tint: Color.accentColor.opacity(0.10))
         }
         .buttonStyle(.plain)
         .disabled(model.isPreparing)
@@ -120,7 +120,7 @@ public struct HomeView: View {
                 .font(.subheadline)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 10)
-                .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.06)))
+                .controlSurface(cornerRadius: 12, tint: Color.primary.opacity(0.06))
         }
         .buttonStyle(.plain)
         #endif

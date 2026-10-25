@@ -41,7 +41,7 @@ public struct RootView: View {
             }
             .toolbar {
                 if model.isPlaying {
-                    ToolbarItem(placement: .cancellationAction) {
+                    ToolbarItem(placement: .navigation) {
                         Button(String(localized: "Zurück", bundle: .module)) { model.isPlaying = false }
                     }
                 }
